@@ -1,0 +1,77 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+taps=(
+	omair-inam/tap
+)
+
+formulae=(
+	eza
+	fzf
+	gh
+ 	nvm
+	pyenv
+ 	tealdeer
+	wget
+	yarn
+	zoxide
+)
+casks=(
+	battery
+	beyond-compare-4
+	chatgpt
+	cleanshot
+	craft
+	forklift3
+	google-chrome
+	iterm2
+	meetingbar
+	microsoft-remote-desktop
+	raycast
+	rectangle-pro
+	signal
+	slack
+	tower
+	visual-studio-code
+	whatsapp
+	zoom
+)
+
+{{ if .personal_device}}
+	casks+=(
+		discord
+		steam
+	)	
+{{ end }}
+
+{{ if .work_device }}
+	formulae+=(
+		docker
+		go
+		mitmproxy
+		rancher
+		TomAnthony/brews/itermocil
+		x3270
+	)
+	casks+=(
+		hex-fiend
+		p4v
+		postman
+		stats
+	)
+{{ end }}
+
+# Install taps
+for tap in "${taps[@]}"; do
+    brew tap "$tap"
+done
+
+brew update
+
+brew install ${formulae[@]}
+brew install --cask ${casks[@]}
+
+brew cleanup
+{{ end }}
