@@ -5,13 +5,6 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-#if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-#fi
-
 ### Alias to list active network interfaces
 alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
 alias ssh-hosts="grep -hE 'Host (.+)' ~/.ssh/config | sed 's/Host //'"
@@ -25,25 +18,16 @@ function . {
     fi
 }
 
-# include php-version
-# source $(brew --prefix php-version)/php-version.sh && php-version 7.4
-
-# export PHPENV_ROOT="/Users/omairinam/.phpenv"
-# if [ -d "${PHPENV_ROOT}" ]; then
-#   export PATH="${PHPENV_ROOT}/bin:${PATH}"
-#   eval "$(phpenv init -)"
-# fi
-
 export NVM_DIR="$HOME/.nvm"
   [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && . "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
   [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && . "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
 
 export HOMEBREW_NO_AUTO_UPDATE=1
 
+{{- if .work_device }}
 #####  AWS Configuration
 export AWS_DEFAULT_PROFILE=us-east-1
 
-{{- if .work_device }}
 # this will only be included in ~/.bashrc on work-laptop
 export SPLASH_ROOT=$HOME/sites/splash
 export SPLASH_BITBUCKET_USER=omairinam
@@ -242,8 +226,10 @@ export PATH="$GOROOT/bin:$PATH"
 export PATH="$PATH:$GOPATH/bin:/Users/omairinam/development/flutter/bin"
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
-# Initialize rbenv
-eval "$(rbenv init - zsh)"
+# Initialize rbenv if it exists
+if command -v rbenv >/dev/null 2>&1; then
+  eval "$(rbenv init - zsh)"
+fi
 
 # Created by `pipx` on 2024-06-23 20:44:40
 export PATH="$PATH:/Users/omairinam/.local/bin"
