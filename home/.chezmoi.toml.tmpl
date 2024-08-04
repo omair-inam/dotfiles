@@ -6,11 +6,14 @@
 {{- $personal_device = promptBool "personal_device" -}}
 {{- $work_device = promptBool "work_device" -}}
 
-encryption = "age"
+encryption = "age" 
 [age]
     identity = "~/.config/chezmoi/key.txt"
     recipient = "age1qllxw9qmk5e5cv5yj92pkhar9j7rv2hx2e3m6gpdmhly5rl4zueq8fffl4"
 
+{{- $email := promptStringOnce . "email" "What is your email address?" -}}
+
 [data]
   personal_device = {{ $personal_device }}
   work_device = {{ $work_device }}
+  email = "{{ $email }}"
