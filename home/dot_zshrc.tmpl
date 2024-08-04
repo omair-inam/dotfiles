@@ -202,7 +202,8 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Enable autojump
 [ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# shell integration for fzf
+source <(fzf --zsh)
 
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down

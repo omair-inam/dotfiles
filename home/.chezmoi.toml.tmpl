@@ -5,7 +5,9 @@
 
 {{- $personal_device = promptBool "personal_device" -}}
 {{- $work_device = promptBool "work_device" -}}
+{{- $email := promptStringOnce . "email" "What is your email address?" -}}
 
 [data]
   personal_device = {{ $personal_device }}
   work_device = {{ $work_device }}
+  email = "{{ $email }}"
