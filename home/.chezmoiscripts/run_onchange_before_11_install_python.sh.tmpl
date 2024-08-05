@@ -1,0 +1,12 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+
+#!/bin/bash
+
+set -eufo pipefail
+
+#### Configure pipx
+pipx ensurepath
+
+pipx install poetry
+
+{{ end }}
