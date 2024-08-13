@@ -39,6 +39,11 @@ export NPM_TOKEN_SPLASH_WEB={{ dashlaneNote "NPM_TOKEN_SPLASH_WEB" }}
 export JIRA_API_TOKEN={{ dashlaneNote "JIRA_API_TOKEN" }}
 {{- end }}
 
+### NVM installation
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
+
 # Python SSL Certs
 # export SSL_CERT_FILE=~/all_mac_certs.pem
 # export REQUESTS_CA_BUNDLE=~/all_mac_certs.pem
