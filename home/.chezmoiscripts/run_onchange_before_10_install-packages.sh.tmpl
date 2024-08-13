@@ -14,6 +14,9 @@ formulae=(
 	eza
 	fzf
 	gh
+	jq
+	mas
+	nvm
 	pipx
 	pyenv
  	tealdeer
@@ -28,13 +31,16 @@ casks=(
 	beyond-compare-4
 	chatgpt
 	cleanshot
+	clickup
 	craft
 	forklift3
-	google-chrome
+	intellij-idea
 	iterm2
+	logi-options-plus
 	meetingbar
 	microsoft-remote-desktop
 	pycharm
+	qbserve
 	raycast
 	rectangle-pro
 	signal
@@ -78,6 +84,11 @@ brew update
 
 brew install ${formulae[@]}
 brew install --cask ${casks[@]}
+
+brew bundle --no-lock --file=/dev/stdin << Brewfile
+mas "Yubico Authenticator", id: 1497506650
+mas "Things 3", id: 904280696
+Brewfile
 
 brew cleanup
 {{ end }}
