@@ -3,3 +3,5 @@
 set -eufo pipefail
 
 sudo softwareupdate --agree-to-license --install-rosetta
+
+mkdir -p ~/.nvm
