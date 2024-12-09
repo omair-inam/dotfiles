@@ -7,11 +7,18 @@ taps=(
 	omair-inam/tap
 )
 
+# Some casks must be removed prior to be reinstalled
+casks_to_remove=(
+	chatgpt
+)
+
 formulae=(
+	act
 	age
 	bat
 	docker
 	eza
+	ffmpeg
 	fzf
 	gh
 	jq
@@ -27,34 +34,41 @@ formulae=(
 	zoxide
 )
 casks=(
+	1password
 	battery
 	beyond-compare-4
 	chatgpt
 	cleanshot
 	clickup
+	cursor
 	craft
 	forklift3
+	google-cloud-sdk
 	intellij-idea
 	iterm2
-	logi-options-plus
+	logi-options+
 	meetingbar
 	microsoft-remote-desktop
+	onedrive
+	orbstack
 	pycharm
-	qbserve
+#	qbserve
 	raycast
 	rectangle-pro
-	signal
 	slack
 	tower
+	via
 	visual-studio-code
-	whatsapp
 	zoom
 )
 
 {{ if .personal_device}}
 	casks+=(
 		discord
+		insomnia2023
+		signal
 		steam
+    	whatsapp
 	)	
 {{ end }}
 
@@ -75,13 +89,14 @@ casks=(
 	)
 {{ end }}
 
-# Install taps
+# Install tapsss
 for tap in "${taps[@]}"; do
     brew tap "$tap"
 done
 
 brew update
 
+brew uninstall --cask ${casks_to_remove[@]} || true
 brew install ${formulae[@]}
 brew install --cask ${casks[@]}
 
