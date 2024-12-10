@@ -24,21 +24,6 @@ export NVM_DIR="$HOME/.nvm"
 
 export HOMEBREW_NO_AUTO_UPDATE=1
 
-{{- if .work_device }}
-#####  AWS Configuration
-export AWS_DEFAULT_PROFILE=us-east-1
-
-# this will only be included in ~/.bashrc on work-laptop
-export SPLASH_ROOT=$HOME/sites/splash
-export SPLASH_BITBUCKET_USER=omairinam
-source $SPLASH_ROOT/splash_web/docker/.splash_profile.bash
-source $SPLASH_ROOT/splash_web/docker/.splash_aliases.bash
-export NPM_TOKEN_SPLASH_WEB={{ dashlaneNote "NPM_TOKEN_SPLASH_WEB" }}
-
-##### JIRA-CLI configuration
-export JIRA_API_TOKEN={{ dashlaneNote "JIRA_API_TOKEN" }}
-{{- end }}
-
 ### NVM installation
 export NVM_DIR="$HOME/.nvm"
 [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
