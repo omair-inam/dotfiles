@@ -9,7 +9,7 @@ taps=(
 
 # Some casks must be removed prior to be reinstalled
 casks_to_remove=(
-	chatgpt
+	figma
 )
 
 formulae=(
@@ -47,12 +47,11 @@ casks=(
 	intellij-idea
 	iterm2
 	logi-options+
-	meetingbar
 	microsoft-remote-desktop
 	onedrive
 	orbstack
-	pycharm
-#	qbserve
+#	pycharm
+# 	qbserve
 	raycast
 	rectangle-pro
 	slack
@@ -75,16 +74,11 @@ casks=(
 {{ if .work_device }}
 	formulae+=(
 		docker
-		go
-		mitmproxy
-		rancher
 		TomAnthony/brews/itermocil
-		x3270
 	)
 	casks+=(
-		hex-fiend
-		p4v
-		postman
+		figma
+		meetingbar
 		stats
 	)
 {{ end }}
@@ -96,7 +90,9 @@ done
 
 brew update
 
-brew uninstall --cask ${casks_to_remove[@]} || true
+if [ ${#casks_to_remove[@]} -ne 0 ]; then
+	brew uninstall --cask "${casks_to_remove[@]}" || true
+fi
 brew install ${formulae[@]}
 brew install --cask ${casks[@]}
 
