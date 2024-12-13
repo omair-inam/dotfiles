@@ -13,3 +13,17 @@ mkdir -p ~/.nvm
 # It sets the "Natural" scrolling direction to false, which means that the scroll direction will be reversed.
 # This is equivalent to unchecking the "Scroll direction: Natural" option in System Preferences > Trackpad.
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
+
+{{ if .work_device }}
+
+
+# Enable automatic macOS updates
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticDownload -bool true
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate CriticalUpdateInstall -bool true
+sudo defaults write /Library/Preferences/com.apple.commerce AutoUpdate -bool true
+
+# Enable automatic macOS updates
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticallyInstallMacOSUpdates -bool true
+
+{{ end }}
