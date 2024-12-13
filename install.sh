@@ -16,6 +16,29 @@ if [ ! -f ~/.oh-my-zsh/oh-my-zsh.sh ]; then
   (echo '💰  Installing oh-my-zsh' && yes | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)")
 fi
 
+# Function to install a plugin if it doesn't exist
+install_plugin() {
+  local plugin_name=$1
+  local plugin_repo=$2
+  local plugin_dir="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/$3"
+  local clone_options=${4:-""}
+
+  if [ ! -d "$plugin_dir" ]; then
+    (echo "🚀  Installing $plugin_name" && git clone $clone_options "$plugin_repo" "$plugin_dir")
+  fi
+}
+
+# Install Powerlevel10k
+install_plugin "Powerlevel10k" "https://github.com/romkatv/powerlevel10k.git" "themes/powerlevel10k" "--depth=1"
+
+# Install custom plugins
+install_plugin "zsh-autosuggestions" "https://github.com/zsh-users/zsh-autosuggestions" "plugins/zsh-autosuggestions"
+install_plugin "alias-tips" "https://github.com/djui/alias-tips.git" "plugins/alias-tips"
+install_plugin "zsh-history-substring-search" "https://github.com/zsh-users/zsh-history-substring-search" "plugins/zsh-history-substring-search"
+install_plugin "forgit" "https://github.com/wfxr/forgit.git" "plugins/forgit"
+install_plugin "zsh-completions" "https://github.com/zsh-users/zsh-completions" "plugins/zsh-completions"
+install_plugin "k" "https://github.com/supercrabtree/k" "plugins/k"
+
 # Install chezmoi
 command -v chezmoi >/dev/null 2>&1 || \
   (echo '👊  Installing chezmoi' && brew install chezmoi)
