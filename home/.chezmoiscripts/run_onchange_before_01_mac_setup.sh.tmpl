@@ -29,3 +29,12 @@ sudo defaults write /Library/Preferences/com.apple.commerce AutoUpdate -bool tru
 sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticallyInstallMacOSUpdates -bool true
 
 {{ end }}
+
+# Restart the Dock to apply changes
+killall Dock
+
+# Restart the Finder to apply changes
+killall Finder
+
+# Restart the SystemUIServer to apply changes
+killall SystemUIServer
