@@ -8,3 +8,8 @@ sudo softwareupdate --agree-to-license --install-rosetta
 defaults write com.apple.dock orientation -string left 
 
 mkdir -p ~/.nvm
+
+# This script changes the macOS system preference for the scroll direction.
+# It sets the "Natural" scrolling direction to false, which means that the scroll direction will be reversed.
+# This is equivalent to unchecking the "Scroll direction: Natural" option in System Preferences > Trackpad.
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
