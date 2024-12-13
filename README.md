@@ -12,7 +12,12 @@ brew install --cask rectangle-pro
 brew install --cask google-chrome
 ```
 
-## Notes
+## Installation directions
+###  Install Homebrew, chezmoi and ohmyzsh
+```
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/omair-inam/dotfiles/refs/heads/main/install.sh)"
+```
+
 ### Run Mac commands requiring authentication
 
 The following steps require the user to authenticate with their password and should be completed manually
