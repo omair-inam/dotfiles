@@ -4,4 +4,7 @@ set -eufo pipefail
 
 sudo softwareupdate --agree-to-license --install-rosetta
 
+# move dock to the left
+defaults write com.apple.dock orientation -string left 
+
 mkdir -p ~/.nvm
