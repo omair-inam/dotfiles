@@ -1,0 +1,11 @@
+#!/bin/bash
+{{ if .work_device }}
+set -eufo pipefail
+
+# add Java plugin
+asdf plugin add java
+
+# install JDK 21
+asdf install java adoptopenjdk-21.0.5+11.0.LTS
+
+{{ end }}
