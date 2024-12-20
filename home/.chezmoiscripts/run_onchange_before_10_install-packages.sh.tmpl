@@ -7,81 +7,83 @@ taps=(
 	omair-inam/tap
 )
 
-# Some casks must be removed prior to be reinstalled
-casks_to_remove=(
-	1password
-	figma
-)
+{{ $brews := list	
+	"act"
+	"age"
+	"asdf"
+	"bat"
+	"docker"
+	"eza"
+	"ffmpeg"
+	"fzf"
+	"gh"
+	"jq"
+	"mas"
+	"nvm"
+	"pipx"
+	"pyenv"
+ 	"tealdeer"
+	"tree"
+	"wget"
+	"yarn"
+	"zsh-syntax-highlighting"
+	"zoxide" -}}
 
-formulae=(
-	act
-	age
-	asdf
-	bat
-	docker
-	eza
-	ffmpeg
-	fzf
-	gh
-	jq
-	mas
-	nvm
-	pipx
-	pyenv
- 	tealdeer
-	tree
-	wget
-	yarn
-	zsh-syntax-highlighting
-	zoxide
-)
-casks=(
-	1password
-	battery
-	beyond-compare-4
-	chatgpt
-	cleanshot
-	craft
-	forklift3
-	google-cloud-sdk
-	intellij-idea
-	iterm2
-	logi-options+
-	microsoft-remote-desktop
-	onedrive
-	orbstack
-#	pycharm
-# 	qbserve
-	raycast
-	rectangle-pro
-	slack
-	tower
-	via
-	visual-studio-code
-	zoom
-)
+{{ $casks := list
+	"1password"
+	"battery"
+	"beyond-compare-4"
+	"chatgpt"
+	"cleanshot"
+	"craft"
+	"forklift3"
+	"google-cloud-sdk"
+	"intellij-idea"
+	"iterm2"
+	"logi-options+"
+	"microsoft-remote-desktop"
+	"onedrive"
+	"orbstack"
+	"pycharm"
+	"raycast"
+	"rectangle-pro"
+	"slack"
+	"tower"
+	"via"
+	"visual-studio-code"
+	"zoom"
+-}}
 
 {{ if .personal_device}}
-	casks+=(
-		discord
-		insomnia2023
-		signal
-		steam
-		whatsapp
-	)	
+{{
+	$casks = concat $casks
+	( list
+		"discord"
+		"insomnia2023"
+		"signal"
+		"steam"
+		"whatsapp"
+	)	 	
+-}}
 {{ end }}
 
 {{ if .work_device }}
-	formulae+=(
-		docker
-		TomAnthony/brews/itermocil
+{{
+	$brews = concat $brews 
+	( list
+		"docker"
+		"TomAnthony/brews/itermocil"
 	)
-	casks+=(
-		clickup
-		figma
-		meetingbar
-		stats
+-}}
+{{
+	$casks = concat $casks
+	( list
+		"clickup"
+		"figma"
+		"meetingbar"
+		"stats"
 	)
+-}}
 {{ end }}
 
 # Install taps
@@ -89,18 +91,15 @@ for tap in "${taps[@]}"; do
     brew tap "$tap"
 done
 
-brew update
-
-if [ ${#casks_to_remove[@]} -ne 0 ]; then
-	brew uninstall --cask "${casks_to_remove[@]}" || true
-fi
-brew install ${formulae[@]}
-brew install --cask ${casks[@]}
-
-brew bundle --no-lock --file=/dev/stdin << Brewfile
+brew bundle --no-lock --file=/dev/stdin << EOF
+{{ range ($brews | sortAlpha | uniq) -}}
+brew "{{ . }}"
+{{ end -}}
+{{ range ($casks | sortAlpha | uniq) -}}
+cask "{{ . }}"
+{{ end -}}
 mas "Yubico Authenticator", id: 1497506650
 mas "Things 3", id: 904280696
-Brewfile
 
-brew cleanup
+EOF
 {{ end }}
