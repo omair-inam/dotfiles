@@ -107,6 +107,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
+  asdf
   aws
   # composer
   git 
@@ -211,6 +212,8 @@ export PYENV_ROOT="$HOME/.pyenv"
 eval "$(pyenv init -)"
 
 export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+export JAVA_HOME=$(asdf where java)
 
 # Initialize rbenv if it exists
 if command -v rbenv >/dev/null 2>&1; then
