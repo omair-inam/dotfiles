@@ -38,6 +38,12 @@ terminal and the `softwareupdate` command.
    see the prompt and button to **reboot** the machine in
    **System Settings** > **General** > **Software Update**
 
+### iTerm2 updates
+#### Enable natural text editing
+In version 3.4, open iTerm preferences. Select Profiles > Keys > Key Mappings > Presets > Natural Text Editing.
+
+![alt text](Natural text editing.png)
+
 
 ### Apps pinned to older versions
 
