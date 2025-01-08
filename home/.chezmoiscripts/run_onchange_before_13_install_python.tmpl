@@ -1,0 +1,12 @@
+#!/bin/bash
+{{ if .work_device }}
+set -eufo pipefail
+
+# add Python plugin
+asdf plugin add python
+
+asdf install python 3.13.1
+
+asdf global python 3.13.1
+
+{{ end }}
