@@ -1,0 +1,76 @@
+{
+    "$schema": "https://lnav.org/schemas/format-v1.schema.json",
+    "spring_logback": {
+        "title": "Spring Boot Logback Format",
+        "description": "Format for Spring Boot application logs using default Logback pattern",
+        "regex": {
+            "base-without-trace-id": {
+                "pattern": "^(?<timestamp>\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{2}:\\d{2})\\s+(?<level>\\w+)\\s+(?<pid>\\d+)\\s+---\\s+\\[(?<application>[^\\]]+)\\]\\s+\\[(?<thread>[^\\]]+)\\]\\s+\\[\\s+\\]\\s+(?<logger>[^\\s:]+)\\s+:\\s+(?<body>.+)$"
+            },
+            "base-with-trace-id": {
+                "pattern": "^(?<timestamp>\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{2}:\\d{2})\\s+(?<level>\\w+)\\s+(?<pid>\\d+)\\s+---\\s+\\[(?<application>[^\\]]+)\\]\\s+\\[(?<thread>[^\\]]+)\\]\\s+\\[(?<trace_id>[^-\\]]+)-(?<span_id>[^\\]]+)\\]\\s+(?<logger>[^\\s:]+)\\s+:\\s+(?<body>.+)$"
+            },
+            "custom-logback-format-1": {
+                "pattern": "^(?<timestamp>\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}[+-]\\d{2}:\\d{2})\\s+(?<level>\\w+)\\s+\\[(?<application>[^,]+),(?<trace_id>[^,]+),(?<span_id>[^\\]]+)\\]\\s+(?<pid>\\d+)\\s+---\\s+\\[(?<app_name>[^\\]]+)\\]\\s+\\[(?<thread>[^\\]]+)\\]\\s+\\[(?<trace_id_repeat>[^-]+)-(?<span_id_repeat>[^\\]]+)\\]\\s+(?<logger>[^\\s:]+)\\s+:\\s+(?<body>.+)$"
+            }
+        },
+        "timestamp-field": "timestamp",
+        "timestamp-format": [
+            "%Y-%m-%dT%H:%M:%S.%L%z"
+        ],
+        "opid-field": "trace_id",
+        "body-field": "body",
+        "module-field": "logger",
+        "level-field": "level",
+        "level": {
+            "error": "ERROR",
+            "warning": "WARN",
+            "info": "INFO",
+            "debug": "DEBUG",
+            "trace": "TRACE"
+        },
+        "value": {
+            "timestamp": {
+                "kind": "string",
+                "identifier": true
+            },
+            "pid": {
+                "kind": "integer",
+                "identifier": true
+            },
+            "application": {
+                "kind": "string",
+                "identifier": true
+            },
+            "thread": {
+                "kind": "string"
+            },
+            "trace_id": {
+                "kind": "string",
+                "identifier": true
+            },
+            "span_id": {
+                "kind": "string",
+                "identifier": true
+            },
+            "logger": {
+                "kind": "string",
+                "identifier": true
+            },
+            "body": {
+                "kind": "string"
+            }
+        },
+        "sample": [
+            {
+                "line": "2025-01-07T11:21:27.541-05:00  INFO [ExampleApp,677d54877e548400786d0965195d1117,fc8e129e5d1aa078] 18148 --- [ExampleApp] [nio-9095-exec-4] [677d54877e548400786d0965195d1117-fc8e129e5d1aa078] com.example.consumer.FakeConsumerService    : (Topic: 'example-topic' | Group: 'example-group' | Sub: '51') Claimed 0 messages with ids: []'"
+            },
+            {
+                "line": "2025-01-07T02:56:32.600-05:00  WARN 20031 --- [example-connect] [l-1 housekeeper] [                                                 ] com.example.pool.FakePool        : FakePool-1 - Thread starvation or clock leap detected (housekeeper delta=15m26s792ms)."
+            },
+            {
+                "line": "2025-01-07T08:30:32.004-05:00  INFO 16939 --- [example-wallet] [taskScheduler-1] [677d2c78e668c926e06c444418d4e2e1-e06c444418d4e2e1] com.example.scheduler.FakeScheduler   : Deleted 0 entities from 'fake_table' table"
+            }
+        ]
+    }
+}
