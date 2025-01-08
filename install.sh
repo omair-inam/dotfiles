@@ -38,6 +38,7 @@ install_plugin "zsh-history-substring-search" "https://github.com/zsh-users/zsh-
 install_plugin "forgit" "https://github.com/wfxr/forgit.git" "plugins/forgit"
 install_plugin "zsh-completions" "https://github.com/zsh-users/zsh-completions" "plugins/zsh-completions"
 install_plugin "k" "https://github.com/supercrabtree/k" "plugins/k"
+install_plugin "eza" https://github.com/z-shell/zsh-eza "plugins/zsh-eza"
 
 # Install chezmoi
 command -v chezmoi >/dev/null 2>&1 || \
