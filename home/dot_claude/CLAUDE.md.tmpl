@@ -1,0 +1,18 @@
+
+## Dotfile Management
+* To edit a dotfile (e.g. .zshrc):
+  1. Check if the file is being managed by chezmoi
+  2. If it is not being managed, add it to chezmoi
+  3. If it is being managed, edit the file in chezmoi
+  4. Once editing is complete, prompt the user to apply the chezmoi changes
+* zsh aliases are managed by chezmoi in ~/.local/share/chezmoi/home/dot_zsh_aliases.tmpl
+
+## Github CLI (`gh`) tips
+`gh` only supports adding a comment to a pull request (https://cli.github.com/manual/gh_pr_comment).  If asked to create, update, delete or reply to a PR review comment, prefer using `gh api` (https://cli.github.com/manual/gh_api) and the REST API for review commments (https://docs.github.com/en/rest/pulls/comments?apiVersion=2022-11-28#about-pull-request-review-comments)
+
+## Clickup MCP Server tips
+* Always specify Clickup ticket details using rich formatting
+
+## Github Actions
+* To run `uv`, refer to the docs here: https://docs.astral.sh/uv/guides/integration/github/
+* To run `uv`'s `ruff` within a Github action, use the official Github action documented here: https://github.com/astral-sh/ruff-action/blob/main/README.md
