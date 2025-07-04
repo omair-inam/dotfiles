@@ -200,6 +200,10 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # shell integration for fzf
 source <(fzf --zsh)
 
+if hash jwt > /dev/null; then
+  source <(jwt completion zsh)
+fi
+
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
