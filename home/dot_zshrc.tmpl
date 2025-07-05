@@ -220,7 +220,7 @@ eval "$(pyenv init -)"
 
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
-export JAVA_HOME=$(asdf where java)
+export JAVA_HOME=$(asdf where java 2>/dev/null)
 
 # Initialize rbenv if it exists
 if command -v rbenv >/dev/null 2>&1; then
