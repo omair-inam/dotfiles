@@ -7,6 +7,28 @@
   4. Once editing is complete, prompt the user to apply the chezmoi changes
 * zsh aliases are managed by chezmoi in ~/.local/share/chezmoi/home/dot_zsh_aliases.tmpl
 
+## Scripts
+### Working with JWTs
+Decode a JWT:
+```shell
+jwt decode jwt_string
+```
+
+Decode a JWT as a JSON string:
+```shell
+jwt decode [-j|--json] jwt_string
+```
+
+Encode a JSON string to a JWT:
+```shell
+jwt encode [-A|--alg] HS256 [-S|--secret] 1234567890 'json_string'
+```
+
+Encode key pair payload to JWT:
+```shell
+jwt encode [-A|--alg] HS256 [-S|--secret] 1234567890 [-P|--payload] key=value
+```
+
 ## Github CLI (`gh`) tips
 `gh` only supports adding a comment to a pull request (https://cli.github.com/manual/gh_pr_comment).  If asked to create, update, delete or reply to a PR review comment, prefer using `gh api` (https://cli.github.com/manual/gh_api) and the REST API for review commments (https://docs.github.com/en/rest/pulls/comments?apiVersion=2022-11-28#about-pull-request-review-comments)
 
