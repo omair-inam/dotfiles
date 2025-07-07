@@ -1,0 +1,57 @@
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+   <profiles>
+       <!--Override the repository (and pluginRepository) "central" from the Maven Super POM -->
+       <profile>
+           <id>securecentral</id>
+           <repositories>
+               <repository>
+                   <id>central</id>
+                   <url>https://repo1.maven.org/maven2</url>
+                   <releases>
+                       <enabled>true</enabled>
+                   </releases>
+               </repository>
+           </repositories>
+           <pluginRepositories>
+               <pluginRepository>
+                   <id>central</id>
+                   <url>https://repo1.maven.org/maven2</url>
+                   <releases>
+                       <enabled>true</enabled>
+                   </releases>
+               </pluginRepository>
+           </pluginRepositories>
+       </profile>
+{{ if .work_device }}
+       <profile>
+           <id>github</id>
+           <repositories>
+               <repository>
+                   <id>github</id>
+                   <name>DNAstack Private Github Packages</name>
+                   <url>https://maven.pkg.github.com/DNAstack/dnastack-packages</url>
+               </repository>
+           </repositories>
+       </profile>
+{{ end }}
+   </profiles>
+{{ if .work_device }}
+   <servers>
+       <server>
+           <id>github</id>
+           <username>omairvalence</username>
+           <password>{{ onepasswordRead .secrets.github.tokens.maven_settings }}</password>
+       </server>
+   </servers>
+{{ end }}
+   <activeProfiles>
+       <activeProfile>securecentral</activeProfile>
+{{ if .work_device }}
+       <activeProfile>github</activeProfile>
+{{ end }}
+   </activeProfiles>
+</settings>
+
