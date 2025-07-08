@@ -1,0 +1,224 @@
+### Alias to list active network interfaces
+alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
+alias ssh-hosts="grep -hE 'Host (.+)' ~/.ssh/config | sed 's/Host //'"
+alias kenv='function _k8s_env() { kubectl exec -it $(kubectl get pods -l app=$1 -o jsonpath="{.items[0].metadata.name}") -- env; }; _k8s_env'
+alias claude="/Users/omair/.claude/local/claude"
+
+### Typing '.' will source ~/.zshrc
+function . {
+    if [[ $# -eq 0 ]]; then
+        builtin . ~/.zshrc
+    else
+        builtin . "$@"
+    fi
+}
+
+# searches all Kubernetes services for specific environment variables.
+
+# Utility function to list available services
+function _list_k8s_services() {
+  echo "Available services:"
+  kubectl get svc --no-headers -o custom-columns=":metadata.name" | grep -v kubernetes | sed 's/^/  /'
+}
+
+# Generic function to run a command for all Kubernetes services
+# Usage: kall "kubectl command with SERVICE_NAME placeholder"
+function _k8s_all() {
+  if [ -z "$1" ]; then
+    echo "Error: No command template provided."
+    echo "Usage: kall \"command with SERVICE_NAME placeholder\""
+    echo "Example: kall \"kubectl get pods -l app=SERVICE_NAME -o jsonpath='{.items[0].metadata.annotations.admission\.datadoghq\.com/java-lib\.version}'\""
+    return 1
+  fi
+  
+  # Get the command template
+  CMD_TEMPLATE="$1"
+  
+  echo "Running command for all services:"
+  echo "$CMD_TEMPLATE"
+  
+  # Get all services
+  SERVICES=($(kubectl get svc --no-headers -o custom-columns=":metadata.name"))
+  echo "Found ${#SERVICES[@]} services to process..."
+  
+  # Track if we found any results
+  FOUND_RESULTS=0
+  
+  # Process each service
+  for SVC in "${SERVICES[@]}"; do
+    # Skip kubernetes service (default service)
+    if [ "$SVC" = "kubernetes" ]; then
+      continue
+    fi
+    
+    # Replace placeholder with service name
+    CMD=$(echo "$CMD_TEMPLATE" | sed "s/SERVICE_NAME/$SVC/g")
+    
+    # Run the command
+    OUTPUT=$(eval "$CMD" 2>/dev/null)
+    EXIT_CODE=$?
+    
+    # Handle command result
+    if [ $EXIT_CODE -ne 0 ]; then
+      echo -e "\n\033[1;33m### Service: $SVC ###\033[0m"
+      echo -e "\033[0;33m  Command failed for this service\033[0m"
+      continue
+    fi
+    
+    # Only show output if there is any
+    if [ -n "$OUTPUT" ]; then
+      echo -e "\n\033[1;36m### Service: $SVC ###\033[0m"
+      echo "$OUTPUT" | sed "s/^/  /"
+      FOUND_RESULTS=1
+    fi
+  done
+  
+  # Message if no results found
+  if [ $FOUND_RESULTS -eq 0 ]; then
+    echo -e "\n\033[0;33mNo results found from any service.\033[0m"
+  fi
+}
+
+alias kall=_k8s_all
+
+# Function for searching environment variables across all services
+function _kenv_all() {
+  echo "Searching environment variables across all services..."
+  
+  # Handle optional grep pattern
+  GREP_PATTERN="$1"
+  if [ -n "$GREP_PATTERN" ]; then
+    echo "Filtering for pattern: \"$GREP_PATTERN\" (case insensitive)"
+    
+    # Run command with grep pattern
+    _k8s_all "kubectl exec \$(kubectl get pods -l app=SERVICE_NAME -o jsonpath=\"{.items[0].metadata.name}\") -- env | grep -i \"$GREP_PATTERN\""
+  else
+    # Run command without grep pattern
+    _k8s_all "kubectl exec \$(kubectl get pods -l app=SERVICE_NAME -o jsonpath=\"{.items[0].metadata.name}\") -- env"
+  fi
+}
+
+alias kenv-all=_kenv_all
+
+function _kexec_all() {
+  if [ -z "$1" ]; then
+    echo "Error: No command provided."
+    echo "Usage: kexecall \"command to execute in pods\""
+    echo "Example: kexecall env"
+    echo "Example: kexecall \"rm -rf /tmp/test\""
+    return 1
+  fi
+  
+  # Get the command to execute - escape it properly for the template
+  EXEC_CMD="$*"
+  
+  echo "Executing command in all pods: $EXEC_CMD"
+  
+  # Use _k8s_all with a kubectl exec template
+  # The template gets the first pod for each service and executes the command
+  _k8s_all "kubectl exec \$(kubectl get pods -l app=SERVICE_NAME -o jsonpath=\"{.items[0].metadata.name}\" 2>/dev/null) -- $EXEC_CMD 2>&1"
+}
+
+alias kexecall=_kexec_all
+
+function _kexec_svc() {
+  if [ -z "$1" ] || [ -z "$2" ]; then
+    echo "Error: Service name and command are required."
+    echo "Usage: kexecsvc <service-name> <command>"
+    echo "Example: kexecsvc collection-service env"
+    echo "Example: kexecsvc collection-service \"ls -la /tmp\""
+    return 1
+  fi
+  
+  # Get the service name and command
+  SERVICE_NAME="$1"
+  shift
+  EXEC_CMD="$*"
+  
+  echo "Executing command in all pods for service '$SERVICE_NAME': $EXEC_CMD"
+  
+  # Get all pods for the specified service
+  PODS=($(kubectl get pods -l app=$SERVICE_NAME --no-headers -o custom-columns=":metadata.name" 2>/dev/null))
+  
+  if [ ${#PODS[@]} -eq 0 ]; then
+    echo -e "\033[0;31mError: No pods found for service '$SERVICE_NAME'\033[0m"
+    _list_k8s_services
+    return 1
+  fi
+  
+  echo "Found ${#PODS[@]} pod(s) for service '$SERVICE_NAME'"
+  
+  # Track if we found any results
+  FOUND_RESULTS=0
+  
+  # Process each pod
+  for POD in "${PODS[@]}"; do
+    # Execute the command in the pod
+    echo -e "\n\033[1;36m### Pod: $POD ###\033[0m"
+    
+    OUTPUT=$(kubectl exec "$POD" -- $EXEC_CMD 2>&1)
+    EXIT_CODE=$?
+    
+    # Handle command result
+    if [ $EXIT_CODE -ne 0 ]; then
+      echo -e "\033[0;33m  Command failed for this pod\033[0m"
+      echo "$OUTPUT" | sed "s/^/  /" | head -10  # Show first 10 lines of error
+    else
+      echo "$OUTPUT" | sed "s/^/  /"
+      FOUND_RESULTS=1
+    fi
+  done
+  
+  # Message if no results found
+  if [ $FOUND_RESULTS -eq 0 ]; then
+    echo -e "\n\033[0;33mNo successful executions found.\033[0m"
+  fi
+}
+
+alias kexecsvc=_kexec_svc
+
+# unset GITHUB_TOKEN from gh's process environment and run gh command.
+# see https://stackoverflow.com/a/41749660 & https://github.com/cli/cli/issues/3799 for more.
+# alias gh="op plugin run -- gh" 
+
+# Copy a string to the clipboard using pbcopy -- enables adding this command to allowed-tools in claude code
+function pbcopystr() { pbcopy <<< "$*"; }
+
+# Claude Code command failure analyzer
+# Usage: why-fail "command" or command 2>&1 | why-fail
+why-fail() {
+    if [ -t 0 ]; then
+        # If called with arguments, run the command and capture output
+        local cmd="$*"
+        local output
+        output=$(eval "$cmd" 2>&1)
+        local exit_code=$?
+        
+        if [ $exit_code -eq 0 ]; then
+            echo "Command succeeded!"
+            echo "$output"
+        else
+            echo "Command failed with exit code $exit_code. Analyzing..."
+            claude -p "The following command failed: \`$cmd\`
+
+Exit code: $exit_code
+
+Output:
+\`\`\`
+$output
+\`\`\`
+
+Please explain why this command failed and suggest how to fix it." --allowedTools "Read Grep Glob WebSearch"
+        fi
+    else
+        # If receiving piped input
+        local output=$(cat)
+        claude -p "The following command output indicates a failure:
+
+\`\`\`
+$output
+\`\`\`
+
+Please analyze this output, explain why the command failed, and suggest how to fix it." --allowedTools "Read Grep Glob WebSearch"
+    fi
+} 
