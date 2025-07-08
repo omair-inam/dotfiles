@@ -1,0 +1,191 @@
+# Claude Code functions for zsh
+# This file provides three main functions:
+# - ccs (Claude Code Suggest) - suggest commands based on descriptions
+# - cce (Claude Code Explain) - explain what commands do
+# - ccef (Claude Code Explain Failure) - analyze why commands failed
+
+# Claude Code Explain Failure - analyze command failures
+# Usage: ccef "command" or command 2>&1 | ccef
+ccef() {
+    if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+        echo "Claude Code Explain Failure - Analyze why commands failed"
+        echo ""
+        echo "Usage:"
+        echo "  ccef <command>           Run command and analyze if it fails"
+        echo "  command 2>&1 | ccef      Analyze failure output from piped input"
+        echo ""
+        echo "Examples:"
+        echo "  ccef \"npm install nonexistent-package\""
+        echo "  ccef \"git push origin nonexistent-branch\""
+        echo "  some-failing-command 2>&1 | ccef"
+        echo ""
+        echo "Note: If the command succeeds, it just shows the output without analysis."
+        echo "      Claude analysis is only triggered for failed commands."
+        return 0
+    fi
+
+    if [ -t 0 ]; then
+        # If called with arguments, run the command and capture output
+        if [ $# -eq 0 ]; then
+            echo "Error: Please provide a command to execute and analyze"
+            echo "Usage: ccef \"command\" or command 2>&1 | ccef"
+            return 1
+        fi
+        local cmd="$*"
+        local output
+        output=$(eval "$cmd" 2>&1)
+        local exit_code=$?
+        
+        if [ $exit_code -eq 0 ]; then
+            echo "Command succeeded!"
+            echo "$output"
+        else
+            echo "Command failed with exit code $exit_code. Analyzing..."
+            claude -p "The following command failed: \`$cmd\`
+
+Exit code: $exit_code
+
+Output:
+\`\`\`
+$output
+\`\`\`
+
+Please explain why this command failed and suggest how to fix it." --allowedTools "Read Grep Glob WebSearch"
+        fi
+    else
+        # If receiving piped input
+        local output=$(cat)
+        claude -p "The following command output indicates a failure:
+
+\`\`\`
+$output
+\`\`\`
+
+Please analyze this output, explain why the command failed, and suggest how to fix it." --allowedTools "Read Grep Glob WebSearch"
+    fi
+}
+
+# Claude Code suggest - suggest a command based on description
+# Usage: ccs "install git lfs" or echo "install git lfs" | ccs
+ccs() {
+    if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+        echo "Claude Code Suggest - Get command suggestions from Claude"
+        echo ""
+        echo "Usage:"
+        echo "  ccs <description>         Suggest a command for the given task"
+        echo "  echo <description> | ccs  Suggest a command from piped input"
+        echo ""
+        echo "Examples:"
+        echo "  ccs \"install git lfs\""
+        echo "  ccs \"find all Python files modified in the last week\""
+        echo "  echo \"compress all images in current directory\" | ccs"
+        return 0
+    fi
+
+    local description
+    if [ -t 0 ]; then
+        # Direct arguments
+        if [ $# -eq 0 ]; then
+            echo "Error: Please provide a command description"
+            echo "Usage: ccs \"description\" or echo \"description\" | ccs"
+            return 1
+        fi
+        description="$*"
+    else
+        # Piped input
+        description=$(cat)
+    fi
+
+    # Get suggestion from Claude
+    local response
+    response=$(claude -p --model sonnet "Please suggest a shell command to: $description
+
+Provide ONLY the command itself, no explanation or additional text." --allowedTools "Read Grep Glob WebSearch")
+    
+    # Display the suggestion
+    echo ""
+    echo "Suggestion:"
+    echo ""
+    echo "  $response"
+    echo ""
+    echo "Press <Enter> to copy the suggested command to the clipboard or any other key to exit."
+    
+    # Save current terminal settings and set raw mode
+    if [ -n "$ZSH_VERSION" ]; then
+        # Zsh approach
+        local key
+        read -r -s -k 1 key
+    elif [ -n "$BASH_VERSION" ]; then
+        # Bash approach - need to handle terminal settings
+        local old_tty_settings=$(stty -g)
+        stty raw -echo
+        local key=$(dd bs=1 count=1 2>/dev/null)
+        stty "$old_tty_settings"
+    else
+        # POSIX fallback
+        local old_tty_settings=$(stty -g)
+        stty -icanon -echo min 1 time 0
+        local key=$(dd bs=1 count=1 2>/dev/null)
+        stty "$old_tty_settings"
+    fi
+    
+    # Check if Enter was pressed (carriage return or newline)
+    if [ "$key" = $'\r' ] || [ "$key" = $'\n' ] || [ -z "$key" ]; then
+        # Copy to clipboard
+        echo -n "$response" | pbcopy
+        echo "Command copied to clipboard!"
+    else
+        # Any other key was pressed - exit without copying
+        echo "Exiting without copying."
+        return 0
+    fi
+}
+
+# Claude Code explain - explain what a command does
+# Usage: cce "git rebase -i HEAD~3" or echo "git rebase -i HEAD~3" | cce
+cce() {
+    if [ "$1" = "-h" ] || [ "$1" = "--help" ]; then
+        echo "Claude Code Explain - Get command explanations from Claude"
+        echo ""
+        echo "Usage:"
+        echo "  cce <command>         Explain what the given command does"
+        echo "  echo <command> | cce  Explain a command from piped input"
+        echo ""
+        echo "Examples:"
+        echo "  cce \"git rebase -i HEAD~3\""
+        echo "  cce \"find . -name '*.log' -mtime +30 -delete\""
+        echo "  echo \"tar -czf backup.tar.gz --exclude='*.tmp' /home\" | cce"
+        echo ""
+        echo "Note: Always quote commands containing special characters or backticks"
+        echo "  WRONG: cce \`kubectl get pods\`  (executes kubectl first)"
+        echo "  RIGHT: cce \"kubectl get pods\"   (explains the command)"
+        return 0
+    fi
+
+    local command
+    if [ -t 0 ]; then
+        # Direct arguments
+        if [ $# -eq 0 ]; then
+            echo "Error: Please provide a command to explain"
+            echo "Usage: cce \"command\" or echo \"command\" | cce"
+            return 1
+        fi
+        command="$*"
+    else
+        # Piped input
+        command=$(cat)
+    fi
+
+    # Get explanation from Claude
+    claude -p --model sonnet "Analyze and explain this CLI command: \`$command\`
+
+Please provide a comprehensive explanation that includes:
+
+1. **Purpose**: What this command does and when you'd use it
+2. **Syntax breakdown**: Explain each part of the command, including flags, options, and arguments
+3. **Key behavior**: Important details about how it works, including any default behaviors
+4. **Common use cases**: 2-3 practical examples of when this command is typically used
+5. **Important notes**: Any gotchas, side effects, or important considerations
+
+Format your response to be scannable and practical for someone learning or troubleshooting this command. If you need additional context about the command or its options, use the available tools to look up documentation." --allowedTools "Read Grep Glob WebSearch"
+}

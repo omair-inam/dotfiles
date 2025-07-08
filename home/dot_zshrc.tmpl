@@ -8,6 +8,10 @@ fi
 ### Alias to list active network interfaces
 alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
 alias ssh-hosts="grep -hE 'Host (.+)' ~/.ssh/config | sed 's/Host //'"
+source ~/.zsh_aliases
+
+# Source Claude Code functions
+source ~/.zsh_claude_code_functions
 
 ### Typing '.' will source ~/.zshrc
 function . {
