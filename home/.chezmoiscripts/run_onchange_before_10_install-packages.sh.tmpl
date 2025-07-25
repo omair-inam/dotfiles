@@ -3,138 +3,32 @@
 
 set -eufo pipefail
 
+{{ $taps := .packages.homebrew.taps -}}
 taps=(
-	omair-inam/tap
+{{ range $taps -}}
+	{{ . }}
+{{ end -}}
 )
 
-{{ $brews := list	
-	"act"
-	"age"
-	"allure"
-	"asciinema"
-	"asdf"
-	"azure-cli"
-	"bash"
-	"bat"
-	"chezmoi"
-	"cloud-sql-proxy"
-	"craft-to-logseq"
-	"csvlens"
-	"derailed/k9s/k9s"
-	"docker"
-	"dust"
-	"eza"
-	"ffmpeg"
-	"fzf"
-	"gh"
-	"git-filter-repo"
-	"go"
-	"helm"
-	"hey"
-	"itermocil"
-	"jbang"
-	"jq"
-	"kubectx"
-	"kubelogin"
-	"kubernetes-cli"
-	"kubespy"
-	"lnav"
-	"mas"
-	"maven"
-	"mike-engel/jwt-cli/jwt-cli"
-	"moar"
-	"nmap"
-	"nvm"
-	"pipx"
-	"postgresql@14"
-	"pyenv"
-	"python@3.13"
-	"remotemobprogramming/brew/mob"
-	"ripgrep"
-	"ripgrep-all"
-	"tealdeer"
-	"temporal"
-	"tree"
-	"wget"
-	"xclip"
-	"yarn"
-	"yq"
-	"zoxide"
-	"zsh-syntax-highlighting" -}}
+{{ $brews := .packages.homebrew.common.formulae -}}
 
-{{ $casks := list
-	"1password"
-	"1password-cli"
-	"arc"
-	"battery"
-	"beyond-compare"
-	"brave-browser"
-	"chatgpt"
-	"claude"
-	"cleanshot"
-	"clickup"
-	"craft"
-	"cursor"
-	"figma"
-	"forklift3"
-	"ghostty"
-	"google-chrome"
-	"google-cloud-sdk"
-	"hyperkey"
-	"insomnia"
-	"intellij-idea"
-	"iterm2"
-	"logi-options+"
-	"logseq"
-	"macwhisper"
-	"meetingbar"
-	"microsoft-remote-desktop"
-	"ollama"
-	"onedrive"
-	"openlens"
-	"orbstack"
-	"pycharm"
-	"raycast"
-	"rectangle-pro"
-	"slack"
-	"stats"
-	"tableplus"
-	"thingsmacsandboxhelper"
-	"tower"
-	"via"
-	"visual-studio-code"
-	"zoom"
--}}
+{{ $casks := .packages.homebrew.common.casks -}}
 
 {{ if .personal_device}}
 {{
-	$casks = concat $casks
-	( list
-		"discord"
-		"insomnia2023"
-		"signal"
-		"steam"
-		"whatsapp"
-	)	 	
+	$brews = concat $brews .packages.homebrew.personal.formulae
+-}}
+{{
+	$casks = concat $casks .packages.homebrew.personal.casks
 -}}
 {{ end }}
 
 {{ if .work_device }}
 {{
-	$brews = concat $brews 
-	( list
-		"docker"
-		"TomAnthony/brews/itermocil"
-	)
+	$brews = concat $brews .packages.homebrew.work.formulae
 -}}
 {{
-	$casks = concat $casks
-	( list
-		"clickup"
-		"figma"
-		"meetingbar"
-		"stats"
-	)
+	$casks = concat $casks .packages.homebrew.work.casks
 -}}
 {{ end }}
 
@@ -144,14 +38,25 @@ for tap in "${taps[@]}"; do
 done
 
 brew bundle --file=/dev/stdin << EOF
-mas "Things 3", id: 904280696
+{{ range .packages.mas.common.apps -}}
+mas "{{ .name }}", id: {{ .id }}
+{{ end -}}
+{{ if .work_device }}
+{{ range .packages.mas.work.apps -}}
+mas "{{ .name }}", id: {{ .id }}
+{{ end -}}
+{{ end }}
+{{ if .personal_device }}
+{{ range .packages.mas.personal.apps -}}
+mas "{{ .name }}", id: {{ .id }}
+{{ end -}}
+{{ end }}
 {{ range ($brews | sortAlpha | uniq) -}}
 brew "{{ . }}"
 {{ end -}}
 {{ range ($casks | sortAlpha | uniq) -}}
 cask "{{ . }}"
 {{ end -}}
-mas "Yubico Authenticator", id: 1497506650
 
 EOF
 {{ end }}
