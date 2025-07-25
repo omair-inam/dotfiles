@@ -7,7 +7,7 @@ description: Comprehensive technical debt analysis with actionable remediation s
 
 - Session ID: !`gdate +%s%N`
 - Project root: !`pwd`
-- Technology stack: !`fd "(Cargo\.toml|go\.mod|pom\.xml|deno\.json|package\.json)" . -d 2 | head -5 || echo "No technology files detected"`
+- Technology stack: !`fd "(Cargo\.toml|pom\.xml|deno\.json|package\.json)" . -d 2 | head -5 || echo "No technology files detected"`
 - Project structure: !`fd . -t d -d 3 | head -10 || echo "No directories found"`
 - Git status: !`git status --porcelain | head -5 || echo "Not a git repository"`
 - Recent commits: !`git log --oneline -5 2>/dev/null || echo "No git history"`
@@ -73,7 +73,7 @@ STEP 3: Parallel Debt Discovery & Analysis
 ```bash
 # Code quality and complexity patterns
 rg "if|else|while|for|match|switch|case|catch|\?\?" --count-matches
-fd "\.(rs|go|java|ts|js|py)$" . --exec wc -l {} \; | rg "^\s*[5-9][0-9]{2,}"
+fd "\.(rs|java|ts|js|py)$" . --exec wc -l {} \; | rg "^\s*[5-9][0-9]{2,}"
 
 # Dependency and security patterns
 fd "(Cargo\.toml|go\.mod|pom\.xml|package\.json|requirements\.txt)" . -d 2
@@ -147,10 +147,10 @@ CREATE debt priority matrix:
 
 ```bash
 # Source files by language
-fd "\.(rs|go|java|ts|js|py)$" src/
+fd "\.(rs|java|ts|js|py)$" src/
 
 # Large files identification
-fd "\.(rs|go|java|ts)$" . --exec wc -l {} \; | rg "^\s*[5-9][0-9]{2,}" | head -20
+fd "\.(rs|java|ts)$" . --exec wc -l {} \; | rg "^\s*[5-9][0-9]{2,}" | head -20
 
 # Configuration files
 fd "(config|\.env|\.yml|\.yaml|\.toml|\.json)$" . -d 3
@@ -164,7 +164,6 @@ rg "if|else|while|for|match|switch|case|catch|\?\?" --count-matches
 
 # Anti-patterns
 rg "unwrap\(\)|expect\(|panic!" --type rust -n
-rg "interface\{\}" --type go -n
 rg "instanceof|\.getClass\(\)" --type java -n
 
 # Security patterns
@@ -178,10 +177,6 @@ rg "eval\(|exec\(|system\(" -n
 # Rust
 cargo outdated --root-deps-only 2>/dev/null || echo "Cargo not available"
 cargo audit 2>/dev/null || echo "cargo-audit not installed"
-
-# Go
-go list -u -m all 2>/dev/null | rg "\[" || echo "Go modules not available"
-govulncheck ./... 2>/dev/null || echo "govulncheck not installed"
 
 # Java Maven
 ./mvnw versions:display-dependency-updates 2>/dev/null || echo "Maven not available"
