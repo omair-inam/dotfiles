@@ -28,7 +28,7 @@ gh pr create --title "<descriptive title based on changes>" --body "$(cat <<'EOF
 ## Test plan
 <Based on the changes, suggest appropriate testing steps>
 
-> Generated with [Claude Code](https://claude.ai/code)
+🤖 Generated with [Claude Code](https://claude.ai/code)
 EOF
 )"
 ```

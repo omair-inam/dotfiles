@@ -12,6 +12,6 @@ description: Commit all staged changes
 
 ## Your task
 Think.
-Based on the staged changes shown above, create a git commit for ONLY the staged changes. Do not stage any additional files.
+Create a git commit for ONLY the staged changes. Do not stage any additional files. 
 
 $ARGUMENTS
