@@ -29,8 +29,94 @@ Encode key pair payload to JWT:
 jwt encode [-A|--alg] HS256 [-S|--secret] 1234567890 [-P|--payload] key=value
 ```
 
-## Github CLI (`gh`) tips
-`gh` only supports adding a comment to a pull request (https://cli.github.com/manual/gh_pr_comment).  If asked to create, update, delete or reply to a PR review comment, prefer using `gh api` (https://cli.github.com/manual/gh_api) and the REST API for review commments (https://docs.github.com/en/rest/pulls/comments?apiVersion=2022-11-28#about-pull-request-review-comments)
+## Working with Github
+### Pull requests
+- Pull requests created by Claude Code MUST begin with the following alert at the beginning of the description:
+
+```
+> [!IMPORTANT]
+> *This PR was developed with AI assistance provided by [Claude Code](https://claude.ai/code)*
+```
+
+#### Review comments
+* Review comments added by Claude Code MUST begin with the following alert at the beginning of the comment body:
+
+```
+> [!IMPORTANT]
+> *This review comment was developed with AI assistance provided by [Claude Code](https://claude.ai/code)*
+```
+
+* When asked to list, get, update, delete, create or reply to PR review comment, use the commands below:
+
+Examples:
+* List review comments in a repo in ascending order by ID:
+```shell
+gh api \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  /repos/OWNER/REPO/pulls/comments
+```
+
+* Get a review comment for a PR
+
+```shell
+gh api \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  /repos/OWNER/REPO/pulls/comments/COMMENT_ID
+```
+
+* Update a review comment for a PR
+
+```shell
+gh api \
+  --method PATCH \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  /repos/OWNER/REPO/pulls/comments/COMMENT_ID \
+   -f 'body=I like this too!'
+```
+
+* Delete a review comment for a PR
+
+```shell
+gh api \
+  --method DELETE \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  /repos/OWNER/REPO/pulls/comments/COMMENT_ID
+```
+
+* List review comments on a PR
+
+```shell
+gh api \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  /repos/OWNER/REPO/pulls/PULL_NUMBER/comments
+```
+
+* Create a review comment on a PR
+
+```shell
+gh api \
+  --method POST \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  /repos/OWNER/REPO/pulls/PULL_NUMBER/comments \
+   -f 'body=Great stuff!' -f 'commit_id=6dcb09b5b57875f334f61aebed695e2e4193db5e' -f 'path=file1.txt' -F "start_line=1" -f 'start_side=RIGHT' -F "line=2" -f 'side=RIGHT'
+```
+
+* Create a reply to a review comment on a PR
+
+```shell
+gh api \
+  --method POST \
+  -H "Accept: application/vnd.github+json" \
+  -H "X-GitHub-Api-Version: 2022-11-28" \
+  /repos/OWNER/REPO/pulls/PULL_NUMBER/comments/COMMENT_ID/replies \
+   -f 'body=Great stuff!'
+```
 
 ## Clickup MCP Server tips
 * Always specify Clickup ticket details using rich formatting
