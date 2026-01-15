@@ -13,7 +13,8 @@ $ARGUMENTS
 Variables will be prefixed with `$` and should be used to dynamically generate file names and content.
 
 $YYYYmmdd_hhmmsss := Current date and time in YYYYmmdd_hhmmsss format, e.g., 20231001_123456
-$tasks_file := "tasks/" + [prd-file-name-with-date-time-removed] + "_tasks_" + $YYYYmmdd_hhmmsss + ".md"
+$filePrefix := [prd file name with "_prd_" and date time removed]
+$tasks_file := "tasks/" + $filePrefix + "_tasks_" + $YYYYmmdd_hhmmsss + ".md"
 
 ## Output
 

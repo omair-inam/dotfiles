@@ -9,23 +9,26 @@ $ARGUMENTS
 ## Variables
 Variables will be prefixed with `$` and should be used to dynamically generate file names and content.
 
+```
 $task_name := Suitable task name in snake_case format, derived from the prompt.
 $YYYYmmdd_hhmmsss := Current date and time in YYYYmmdd_hhmmsss format, e.g., 20231001_123456
-$questions_file := "tasks/prd-" + $task_name + "_questions_" + $YYYYmmdd_hhmmsss + ".md"
-$prd_file := "tasks/prd-" + $task_name + $YYYYmmdd_hhmmsss + ".md"
+$questions_file := "tasks/" $task_name + "_prd_questions_" + $YYYYmmdd_hhmmsss + ".md"
+$prd_file := "tasks/" $task_name + "_prd_" + $YYYYmmdd_hhmmsss + ".md"
+```
 
 ## Process
 * **Prepare Clarifying Questions:** AI *must* ask clarifying questions to gather sufficient detail: Analyze the user prompt
 and think carefully about it from each dimension. Itemize every single point of uncertainty. Then, prepare a list of clarifying 
 questions that remove all of these uncertainties. The goal is to understand the "what" and "why" of the feature, not necessarily 
-the "how" (which the developer will figure out). Provide options in letter/number lists so I can respond easily with my selections.  
-Each clarifying question should list out reasonable options for the user to choose from and allow them to specify their own answer.  
+the "how" (which the developer will figure out). Provide options in letter/number lists so I can respond easily with my selections.
+Each clarifying question should list out reasonable options for the user to choose from, tag recommended options and  allow them 
+to specify their own answer.  
 
 Use the format below:
 
 ```markdown
 * Question: Since @PreAuthorize with .block() can cause thread blocking in reactive applications, which approach should we take?
-[ ] Option A: Create a custom @RateLimited annotation with a reactive WebFilter that processes before the controller method
+[ ] (Recommended) Option A: Create a custom @RateLimited annotation with a reactive WebFilter that processes before the controller method
 [ ] Option B: Use a reactive service method in @PreAuthorize that returns Mono<Boolean> without blocking
 [ ] Option C: Accept the blocking behavior for now and optimize later
 [ ] Other:
