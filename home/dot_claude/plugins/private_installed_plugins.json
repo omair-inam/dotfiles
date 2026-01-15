@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "plugins": {
+    "explanatory-output-style@claude-code-plugins": [
+      {
+        "scope": "user",
+        "installPath": "/Users/omair/.claude/plugins/cache/claude-code-plugins/explanatory-output-style/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-12T13:00:32.010Z",
+        "lastUpdated": "2026-01-12T13:00:32.010Z"
+      }
+    ],
+    "code-review@claude-code-plugins": [
+      {
+        "scope": "user",
+        "installPath": "/Users/omair/.claude/plugins/cache/claude-code-plugins/code-review/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-12T13:00:32.135Z",
+        "lastUpdated": "2026-01-12T13:00:32.135Z"
+      }
+    ]
+  }
+}
