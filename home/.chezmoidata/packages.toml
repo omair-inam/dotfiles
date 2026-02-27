@@ -92,11 +92,12 @@
             "craft",                       # Note-taking and writing app
             "figma",                       # Design and prototyping tool
             "google-cloud-sdk",            # Google Cloud command-line tools
-            "meetingbar"                   # Meeting management in menu bar
+            "meetingbar",                  # Meeting management in menu bar
         ]
         formulae = [
             "allure",                      # Test reporting framework
             "azure-cli",                   # Azure command-line interface
+            "bats-core",                   # Bash Automated Testing System
             "cloud-sql-proxy",             # Google Cloud SQL proxy
             "craft-to-logseq",             # Craft to Logseq converter
             "derailed/k9s/k9s",            # Kubernetes CLI manager
