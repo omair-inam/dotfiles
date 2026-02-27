@@ -1,1 +1,12 @@
 /home/key.txt.age
+
+# OS artifacts
+.DS_Store
+
+# IDE
+.idea/
+
+# Temp files
+chezmoi_diff.txt
+demo.gif
+fix-zsh-java-init-conversation.md
