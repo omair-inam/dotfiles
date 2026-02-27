@@ -1,0 +1,34 @@
+# Added by OrbStack: 'orb' SSH host for Linux machines
+# This only works if it's at the top of ssh_config (before any Host blocks).
+# This won't be added again if you remove it.
+Include ~/.orbstack/ssh/config
+
+Host *
+	IdentityAgent "~/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
+# omair-inam
+Host omairinam
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/omairinam.pub
+	IdentitiesOnly yes
+
+Host omairdna
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/omairdna.pub
+	IdentitiesOnly yes
+
+# Alias to ensure existing repos continue working
+Host omairvalence
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/omairdna.pub
+	IdentitiesOnly yes
+
+# omairiai
+Host omairiai
+	HostName github.com
+	User git
+	IdentityFile ~/.ssh/omairiai.pub
+	IdentitiesOnly yes
