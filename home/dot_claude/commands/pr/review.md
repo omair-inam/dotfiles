@@ -1,5 +1,5 @@
 ---
-allowed-tools: Task, Bash(gh pr view:*), Bash(gh pr list:*), Bash(gh pr review:*), Bash(gh pr diff:*), Bash(gh pr checks:*), Bash(gh pr edit:*), Bash(gh api:*), Bash(git branch:*), Bash(rg:*), Bash(delta:*), Bash(jq:*), Bash(date:*), Read, Write, Grep
+allowed-tools: Task, Bash(echo:*), Bash(gh auth status:*), Bash(gh pr view:*), Bash(gh repo view:*), Bash(gh pr list:*), Bash(gh pr diff:*), Bash(gh pr checks:*), Bash(gh api:*), Bash(git branch:*), Bash(rg:*), Bash(delta:*), Bash(jq:*), Bash(date:*), Read, Write, Grep
 description: Ultra-fast PR review with 8-10x speedup through parallel sub-agent analysis
 ---
 
@@ -7,11 +7,10 @@ description: Ultra-fast PR review with 8-10x speedup through parallel sub-agent 
 
 - Session ID: !`date +%s%N`
 - Current branch: !`git branch --show-current 2>/dev/null || echo "detached-head"`
-- Current branch PR: !`gh pr list --head "$(git branch --show-current 2>/dev/null || echo none)" --json number,title,state | jq -r '.[0].number // "none"' 2>/dev/null || echo "none"`
-- PRs for review: !`gh pr list --search "review-requested:@me" --json number,title,author | jq length 2>/dev/null || echo "0"`
-- Mentioned in PRs: !`gh pr list --search "mentions:@me" --json number,title | jq length 2>/dev/null || echo "0"`
-- Open PRs count: !`gh pr list --state open --json number | jq length 2>/dev/null || echo "0"`
-- Repository: !`gh repo view --json nameWithOwner,url | jq -r '.nameWithOwner // "unknown"' 2>/dev/null || echo "unknown"`
+- PRs for review: !`gh pr list --search "review-requested:@me" --json number,title,author --jq 'length' 2>/dev/null || echo "0"`
+- Mentioned in PRs: !`gh pr list --search "mentions:@me" --json number,title --jq 'length' 2>/dev/null || echo "0"`
+- Open PRs count: !`gh pr list --state open --json number --jq 'length' 2>/dev/null || echo "0"`
+- Repository: !`gh repo view --json nameWithOwner,url --jq '.nameWithOwner // "unknown"' 2>/dev/null || echo "unknown"`
 - GitHub auth status: !`gh auth status 2>&1 | head -1 || echo "Not authenticated"`
 
 ## Your task

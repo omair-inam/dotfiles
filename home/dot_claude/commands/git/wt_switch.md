@@ -7,7 +7,6 @@ description: Create a new branch with worktree
 
 - Current branch: !`git branch --show-current`
 - Existing worktrees: !`git worktree list`
-- Repository name: !`basename $(pwd)`
 
 ## Your task
 
