@@ -5,7 +5,7 @@
       "repo": "anthropics/claude-code"
     },
     "installLocation": "/Users/omair/.claude/plugins/marketplaces/claude-code-plugins",
-    "lastUpdated": "2026-01-15T12:54:33.911Z"
+    "lastUpdated": "2026-02-27T14:08:37.551Z"
   },
   "claude-plugins-official": {
     "source": {
@@ -13,6 +13,38 @@
       "repo": "anthropics/claude-plugins-official"
     },
     "installLocation": "/Users/omair/.claude/plugins/marketplaces/claude-plugins-official",
-    "lastUpdated": "2026-01-12T16:29:10.194Z"
+    "lastUpdated": "2026-02-27T11:48:00.866Z"
+  },
+  "superpowers-marketplace": {
+    "source": {
+      "source": "github",
+      "repo": "obra/superpowers-marketplace"
+    },
+    "installLocation": "/Users/omair/.claude/plugins/marketplaces/superpowers-marketplace",
+    "lastUpdated": "2026-01-15T15:03:16.032Z"
+  },
+  "anthropic-agent-skills": {
+    "source": {
+      "source": "github",
+      "repo": "anthropics/skills"
+    },
+    "installLocation": "/Users/omair/.claude/plugins/marketplaces/anthropic-agent-skills",
+    "lastUpdated": "2026-01-22T23:11:01.806Z"
+  },
+  "every-marketplace": {
+    "source": {
+      "source": "git",
+      "url": "https://github.com/EveryInc/compound-engineering-plugin.git"
+    },
+    "installLocation": "/Users/omair/.claude/plugins/marketplaces/every-marketplace",
+    "lastUpdated": "2026-01-30T13:00:44.553Z"
+  },
+  "cc-conversation-search": {
+    "source": {
+      "source": "github",
+      "repo": "akatz-ai/cc-conversation-search"
+    },
+    "installLocation": "/Users/omair/.claude/plugins/marketplaces/cc-conversation-search",
+    "lastUpdated": "2026-02-04T14:07:51.503Z"
   }
 }

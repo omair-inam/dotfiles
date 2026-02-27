@@ -18,6 +18,86 @@
         "installedAt": "2026-01-12T13:00:32.135Z",
         "lastUpdated": "2026-01-12T13:00:32.135Z"
       }
+    ],
+    "superpowers@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/omair/.claude/plugins/cache/claude-plugins-official/superpowers/4.3.1",
+        "version": "4.3.1",
+        "installedAt": "2026-01-15T15:03:30.151Z",
+        "lastUpdated": "2026-02-22T13:42:50.897Z",
+        "gitCommitSha": "a08f088968d0789a44a4f5f5f7d8d6bbe46a0b44"
+      }
+    ],
+    "commit-commands@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/omair/.claude/plugins/cache/claude-plugins-official/commit-commands/55b58ec6e564",
+        "version": "55b58ec6e564",
+        "installedAt": "2026-01-18T15:41:08.071Z",
+        "lastUpdated": "2026-02-25T11:42:41.653Z",
+        "gitCommitSha": "96276205880a60fd66bbae981f5ab568e70c4cbf"
+      }
+    ],
+    "elements-of-style@superpowers-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/omair/.claude/plugins/cache/superpowers-marketplace/elements-of-style/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-21T12:33:05.229Z",
+        "lastUpdated": "2026-01-21T12:33:05.229Z",
+        "gitCommitSha": "6099c505c2a8eb066f3777f83a97d9d828f7954c"
+      }
+    ],
+    "example-skills@anthropic-agent-skills": [
+      {
+        "scope": "user",
+        "installPath": "/Users/omair/.claude/plugins/cache/anthropic-agent-skills/example-skills/69c0b1a06741",
+        "version": "69c0b1a06741",
+        "installedAt": "2026-01-22T23:11:52.674Z",
+        "lastUpdated": "2026-01-22T23:11:52.674Z",
+        "gitCommitSha": "69c0b1a0674149f27b61b2635f935524b6add202"
+      }
+    ],
+    "conversation-search@cc-conversation-search": [
+      {
+        "scope": "user",
+        "installPath": "/Users/omair/.claude/plugins/cache/cc-conversation-search/conversation-search/0.5.3",
+        "version": "0.5.3",
+        "installedAt": "2026-02-04T14:09:23.392Z",
+        "lastUpdated": "2026-02-04T14:09:23.392Z",
+        "gitCommitSha": "bd8bfb762e00a4795226a523f316a569b3e9fc7d"
+      }
+    ],
+    "claude-md-management@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/omair/.claude/plugins/cache/claude-plugins-official/claude-md-management/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-02-12T20:23:18.465Z",
+        "lastUpdated": "2026-02-12T20:23:18.465Z",
+        "gitCommitSha": "2cd88e7947b7382e045666abee790c7f55f669f3"
+      }
+    ],
+    "episodic-memory@superpowers-marketplace": [
+      {
+        "scope": "user",
+        "installPath": "/Users/omair/.claude/plugins/cache/superpowers-marketplace/episodic-memory/1.0.15",
+        "version": "1.0.15",
+        "installedAt": "2026-02-12T20:24:23.382Z",
+        "lastUpdated": "2026-02-12T20:24:23.382Z",
+        "gitCommitSha": "6feaa5bd8752ae104c88d251e68ce19c30a1bd2f"
+      }
+    ],
+    "document-skills@anthropic-agent-skills": [
+      {
+        "scope": "user",
+        "installPath": "/Users/omair/.claude/plugins/cache/anthropic-agent-skills/document-skills/69c0b1a06741",
+        "version": "69c0b1a06741",
+        "installedAt": "2026-02-13T03:02:25.480Z",
+        "lastUpdated": "2026-02-13T03:02:25.480Z",
+        "gitCommitSha": "69c0b1a0674149f27b61b2635f935524b6add202"
+      }
     ]
   }
 }
