@@ -2,7 +2,7 @@
 alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
 alias ssh-hosts="grep -hE 'Host (.+)' ~/.ssh/config | sed 's/Host //'"
 alias kenv='function _k8s_env() { kubectl exec -it $(kubectl get pods -l app=$1 -o jsonpath="{.items[0].metadata.name}") -- env; }; _k8s_env'
-alias claude="/Users/omair/.claude/local/claude"
+alias yolo="claude --dangerously-skip-permissions"
 
 ### Typing '.' will source ~/.zshrc
 function . {
@@ -177,6 +177,39 @@ function _kexec_svc() {
 
 alias kexecsvc=_kexec_svc
 
+# Chezmoi aliases (OMZ-style: cm + subcommand letters + flag letters)
+# Base
+alias cm=chezmoi
+# File operations
+alias cma="chezmoi add"
+alias cmat="chezmoi add --template"
+alias cmra="chezmoi re-add"
+alias cme="chezmoi edit"
+alias cmf="chezmoi forget"
+# Diff, apply & merge
+alias cmd="chezmoi diff"
+alias cmdf="chezmoi diff | grep ^diff"
+alias cmdr="chezmoi diff --reverse"
+alias cmap="chezmoi apply"
+alias cmapv="chezmoi apply -v"
+alias cmapn="chezmoi apply -v -n"
+alias cmapf="chezmoi apply --force"
+alias cmm="chezmoi merge"
+alias cmma="chezmoi merge-all"
+# Navigation, status & sync
+alias cmcd="chezmoi cd"
+alias cmst="chezmoi status"
+alias cmu="chezmoi update"
+alias cmg="chezmoi git"
+alias cmi="chezmoi init"
+alias cmia="chezmoi init --apply"
+# Maintenance & verification
+alias cmup="chezmoi upgrade"
+alias cmv="chezmoi verify"
+alias cmec="chezmoi edit-config"
+alias cmh="chezmoi help"
+alias cmdoc="chezmoi doctor"
+
 # unset GITHUB_TOKEN from gh's process environment and run gh command.
 # see https://stackoverflow.com/a/41749660 & https://github.com/cli/cli/issues/3799 for more.
 # alias gh="op plugin run -- gh" 
@@ -184,3 +217,5 @@ alias kexecsvc=_kexec_svc
 # Copy a string to the clipboard using pbcopy -- enables adding this command to allowed-tools in claude code
 function pbcopystr() { pbcopy <<< "$*"; }
 
+export OP_PLUGIN_ALIASES_SOURCED=1
+alias gh="op plugin run -- gh"

@@ -158,6 +158,10 @@ plugins=(
 
   # zoxide
   zoxide
+
+  # auto-load .envrc (direnv) and .env (dotenv) per directory
+  direnv
+  dotenv
 )
 
 autoload -U compinit && compinit
@@ -236,3 +240,4 @@ export PATH="$PATH:$HOME/.local/bin"
 # chezmoi customizations 2
 export EDITOR="code --wait"
 export VISUAL="code --wait"
+export WORKSPACE="$HOME/workspace"
