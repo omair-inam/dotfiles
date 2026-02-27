@@ -1,4 +1,7 @@
 
+## About Me
+* Full name: Omair-Inam Abdul-Matin
+
 ## Dotfile Management
 * To edit a dotfile (e.g. .zshrc):
   1. Check if the file is being managed by chezmoi
@@ -30,12 +33,29 @@ jwt encode [-A|--alg] HS256 [-S|--secret] 1234567890 [-P|--payload] key=value
 ```
 
 ## Working with Github
+### 1Password CLI Plugin for gh
+* The `op plugin init gh` command creates a shell alias (`alias gh="op plugin run -- gh"`) that only works in interactive shells
+* Bash scripts calling `gh` directly bypass the alias and have no credentials
+* In scripts, detect and extract the token: `GITHUB_TOKEN=$(op plugin run -- gh auth token)`
+* Plugin config: `~/.config/op/plugins.sh`, alias sourced via `~/.zsh_aliases`
+
 ### Pull requests
 - Pull requests created by Claude Code MUST begin with the following alert at the beginning of the description:
 
 ```
 > [!IMPORTANT]
-> *This PR was developed with AI assistance provided by [Claude Code](https://claude.ai/code)*
+> *This PR was developed with AI assistance provided by [Claude Code](https://claude.ai/code)* 
+```
+- If accessing the gh CLI fails with an authentication error, e.g.:
+
+```
+Error: To get started with GitHub CLI, please run:  gh auth login
+     Alternatively, populate the GH_TOKEN environment variable with a GitHub API authentication token.
+```
+
+Show the user the message below:
+```
+Authenticate into github by exiting Claude Code and running ghinit / ghinitdna for a personal / DNAstack repo
 ```
 
 #### Review comments
@@ -43,10 +63,10 @@ jwt encode [-A|--alg] HS256 [-S|--secret] 1234567890 [-P|--payload] key=value
 
 ```
 > [!IMPORTANT]
-> *This review comment was developed with AI assistance provided by [Claude Code](https://claude.ai/code)*
+> *This review comment was developed with AI assistance provided by [Claude Code](https://claude.ai/code)* 
 ```
 
-* When asked to list, get, update, delete, create or reply to PR review comment, use the commands below:
+* When asked to list, get, update, delete, create or reply to PR review comment, use the commands below: 
 
 Examples:
 * List review comments in a repo in ascending order by ID:
@@ -128,3 +148,19 @@ gh api \
 ## Mockito directions
 * Instead of @MockBean (deprecated) use @MockitoBean
 * Instead of @SpyBean (deprecated) use @MockitoSpyBean
+- Writing Python CLI tools:
+
+You write Python tools as single files. They always start with this comment:
+
+# /// script
+# requires-python = ">=3.14"
+# ///
+These files can include dependencies on libraries such as Click. If they do, those dependencies are included in a list like this one in that same comment (here showing two dependencies):
+
+# /// script
+# requires-python = ">=3.14"
+# dependencies = [
+#     "click",
+#     "sqlite-utils",
+# ]
+# ///
