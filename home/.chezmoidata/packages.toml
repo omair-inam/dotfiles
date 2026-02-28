@@ -72,10 +72,11 @@
             "mas",                         # Mac App Store CLI
             "maven",                       # Java build tool
             "mike-engel/jwt-cli/jwt-cli",  # JWT CLI tool
+            "mise",                        # Polyglot runtime manager
             "moar",                        # Pager with syntax highlighting
             "nmap",                        # Network mapper
-            "nvm",                         # Node Version Manager
             "oha",                         # HTTP load generator
+            "pnpm",                        # Fast, disk-efficient package manager
             "uv",                          # Fast Python package manager and tool runner
             "postgresql@14",               # PostgreSQL database
             "python@3.13",                 # Python programming language

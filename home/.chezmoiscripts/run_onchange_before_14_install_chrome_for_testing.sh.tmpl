@@ -1,0 +1,16 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+# Add Homebrew to PATH for the current session (required on Apple Silicon)
+if [[ -f /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# Install Node.js LTS via mise
+mise install node@lts
+
+# Install Chrome for Testing using pnpm dlx
+mise exec node@lts -- pnpm dlx @puppeteer/browsers install chrome@stable
+{{ end }}
