@@ -76,7 +76,7 @@
             "nmap",                        # Network mapper
             "nvm",                         # Node Version Manager
             "oha",                         # HTTP load generator
-            "pipx",                        # Install Python applications in isolated environments
+            "uv",                          # Fast Python package manager and tool runner
             "postgresql@14",               # PostgreSQL database
             "pyenv",                       # Python version manager
             "python@3.13",                 # Python programming language

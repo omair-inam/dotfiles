@@ -4,9 +4,12 @@
 
 set -eufo pipefail
 
-#### Configure pipx
-pipx ensurepath
+# Add Homebrew to PATH for the current session (required on Apple Silicon)
+if [[ -f /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
-pipx install poetry
+#### Configure uv
+uv tool update-shell
 
 {{ end }}
