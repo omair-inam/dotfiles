@@ -31,12 +31,19 @@
   - Used in `private_dot_npmrc.tmpl` and `dot_m2/settings.xml.tmpl` via `onepasswordRead`
 
 ### Script Execution Order
-Scripts in `home/.chezmoiscripts/` run in numbered order, all `run_onchange_before`:
-* `01_mac_setup` — Dock prefs, macOS updates (work only)
+Scripts in `home/.chezmoiscripts/` run in alphabetical order within each phase:
+* **`run_before_`** — runs every `chezmoi apply` (environment-dependent logic)
+* **`run_onchange_before_`** — runs only when rendered content changes (idempotent config)
+* **`run_after_`** — runs every `chezmoi apply`, after file updates (restart services)
+
+Current scripts:
+* `run_before_00_dock_position` — auto-position Dock based on monitor count
+* `run_onchange_before_01_mac_setup` — Dock tile size, scroll direction, macOS updates (work only)
 * `10_install-packages` — Homebrew taps + `brew bundle` (common + device-specific)
 * `11_install_python` — uv tool management
 * `12_install_java` — mise java, JDK 21/24 (work only)
 * `13_install_python` — mise python, Python 3.13 (work only)
+* `run_after_99_restart_ui` — restart Dock, Finder, SystemUIServer
 
 ### Template Conventions
 * `{{ if .work_device }}` / `{{ if .personal_device }}` gate sections
@@ -65,3 +72,5 @@ Scripts in `home/.chezmoiscripts/` run in numbered order, all `run_onchange_befo
 * `gh` CLI requires 1Password plugin alias; scripts need `GITHUB_TOKEN=$(op plugin run -- gh auth token)`
 * Git commits are GPG-signed via 1Password SSH — signing failures may mean 1Password is locked
 * `run_onchange` scripts re-run when template *output* changes, not just source edits
+* Use `run_before_`/`run_after_` (not `run_onchange_`) for scripts that depend on runtime environment (e.g., monitor count)
+* chezmoi source is available locally at `/Users/omair/libs/chezmoi` for reference
