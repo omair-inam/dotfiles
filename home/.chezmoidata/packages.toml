@@ -78,7 +78,6 @@
             "oha",                         # HTTP load generator
             "uv",                          # Fast Python package manager and tool runner
             "postgresql@14",               # PostgreSQL database
-            "pyenv",                       # Python version manager
             "python@3.13",                 # Python programming language
             "rclone",                      # Cloud storage sync tool
             "ripgrep",                     # Fast text search tool

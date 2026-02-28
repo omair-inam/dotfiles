@@ -2,11 +2,16 @@
 {{ if .work_device }}
 set -eufo pipefail
 
+# Add Homebrew to PATH for the current session (required on Apple Silicon)
+if [[ -f /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # add Python plugin
 asdf plugin add python
 
 asdf install python 3.13.1
 
-asdf global python 3.13.1
+asdf set python 3.13.1
 
 {{ end }}
