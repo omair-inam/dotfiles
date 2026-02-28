@@ -1,0 +1,16 @@
+#!/bin/bash
+# Cache JWT CLI completions for ZSH so we don't spawn a subprocess on every shell start.
+# Regenerates when jwt binary changes (chezmoi detects via hash comment below).
+# hash: {{ if lookPath "jwt" }}{{ output "jwt" "--version" | trim }}{{ else }}not-installed{{ end }}
+
+set -euo pipefail
+
+COMP_DIR="$HOME/.zsh_completions"
+mkdir -p "$COMP_DIR"
+
+if command -v jwt >/dev/null 2>&1; then
+  echo "Caching JWT ZSH completions to $COMP_DIR/_jwt..."
+  jwt completion zsh > "$COMP_DIR/_jwt"
+else
+  echo "jwt not found, skipping completion cache"
+fi
