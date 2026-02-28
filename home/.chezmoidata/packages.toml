@@ -23,7 +23,6 @@
             "hyperkey",                    # Keyboard modifier key utility
             "insomnia",                    # API testing and development tool
             "intellij-idea",               # Java IDE
-            "iterm2",                      # Terminal emulator
             "logi-options+",               # Logitech device configuration
             "logseq",                      # Knowledge management and note-taking
             "macwhisper",                  # AI transcription tool
@@ -117,7 +116,6 @@
             "derailed/popeye/popeye",      # Kubernetes cluster sanitizer
             "docker",                      # Container platform
             "helm",                        # Kubernetes package manager
-            "itermocil",                   # iTerm2 session manager
             "k6",                          # Load testing tool
             "kubectx",                     # Kubernetes context switcher
             "kubelogin",                   # Kubernetes login helper
@@ -135,9 +133,7 @@
             "steam",                      # Gaming platform
             "whatsapp"                    # Messaging app
         ]
-        formulae = [
-            "TomAnthony/brews/itermocil"  # Alternative iTerm2 session manager
-        ]
+        formulae = []
 
 [packages.mas]
     [packages.mas.common]

@@ -1,10 +1,11 @@
-/home/key.txt.age
-
 # OS artifacts
 .DS_Store
 
 # IDE
 .idea/
+
+# Worktrees
+.worktrees/
 
 # Temp files
 chezmoi_diff.txt
