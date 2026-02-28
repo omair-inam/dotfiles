@@ -4,9 +4,6 @@
 # IDE
 .idea/
 
-# Worktrees
-.worktrees/
-
 # Temp files
 chezmoi_diff.txt
 demo.gif
