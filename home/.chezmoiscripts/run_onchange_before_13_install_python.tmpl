@@ -7,11 +7,7 @@ if [[ -f /opt/homebrew/bin/brew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# add Python plugin
-asdf plugin add python
-
-asdf install python 3.13.1
-
-asdf set python 3.13.1
+# install and set Python 3.13 as global default
+mise use -g python@3.13
 
 {{ end }}

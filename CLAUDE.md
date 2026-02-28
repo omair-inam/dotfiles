@@ -32,11 +32,11 @@
 
 ### Script Execution Order
 Scripts in `home/.chezmoiscripts/` run in numbered order, all `run_onchange_before`:
-* `01_mac_setup` — Dock prefs, NVM dir, macOS updates (work only)
+* `01_mac_setup` — Dock prefs, macOS updates (work only)
 * `10_install-packages` — Homebrew taps + `brew bundle` (common + device-specific)
-* `11_install_python` — pipx, poetry
-* `12_install_java` — asdf java plugin, JDK 21/24 (work only)
-* `13_install_python` — asdf python plugin, Python 3.13.1 (work only)
+* `11_install_python` — uv tool management
+* `12_install_java` — mise java, JDK 21/24 (work only)
+* `13_install_python` — mise python, Python 3.13 (work only)
 
 ### Template Conventions
 * `{{ if .work_device }}` / `{{ if .personal_device }}` gate sections
@@ -47,7 +47,7 @@ Scripts in `home/.chezmoiscripts/` run in numbered order, all `run_onchange_befo
 * Data accessed as `.packages.*`, `.secrets.*`, `.email`, `.chezmoi.os`
 
 ### Key Managed Files
-* `dot_zshrc.tmpl` — main shell config (Oh-My-Zsh, Powerlevel10k, asdf, nvm, pyenv, fzf)
+* `dot_zshrc.tmpl` — main shell config (Oh-My-Zsh, Powerlevel10k, mise, fzf)
 * `dot_zsh_aliases.tmpl` — aliases: chezmoi (`cm*`), kubernetes (`k*`), 1Password gh plugin
 * `dot_zsh_claude_code_functions.tmpl` — `ccs` (suggest), `cce` (explain), `ccef` (explain failure)
 * `dot_gitconfig.tmpl` — git config with 1Password SSH signing, Beyond Compare merge tool
