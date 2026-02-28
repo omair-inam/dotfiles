@@ -2,37 +2,38 @@
     to_remove = []
     taps = [
         "derailed/popeye",
-        "omair-inam/tap"
+        "mike-engel/jwt-cli",
+        "omair-inam/tap",
+        "raine/claude-history"
     ]
     
     [packages.homebrew.common]
         casks = [
             "1password",                   # Password manager
             "1password-cli",               # 1Password command line interface
+            "alfred",                      # Productivity launcher and workflow tool
+            "aptakube",                    # Kubernetes desktop client
             "arc",                         # Modern web browser
             "battery",                     # Battery health monitoring
             "beyond-compare",              # File and folder comparison tool
-            "brave-browser",               # Privacy-focused web browser
             "chatgpt",                     # OpenAI ChatGPT desktop app
             "claude",                      # Anthropic Claude desktop app
+            "claude-code",                 # Anthropic Claude Code CLI
             "cleanshot",                   # Advanced screenshot and screen recording
-            "cursor",                      # AI-powered code editor
             "forklift3",                   # File manager and FTP client
             "ghostty",                     # Terminal emulator
             "google-chrome",               # Google web browser
-            "hyperkey",                    # Keyboard modifier key utility
             "insomnia",                    # API testing and development tool
+            "superkey",                    # Keyboard modifier key utility
             "intellij-idea",               # Java IDE
+            "logitech-g-hub",              # Logitech gaming peripheral software
             "logi-options+",               # Logitech device configuration
             "logseq",                      # Knowledge management and note-taking
             "macwhisper",                  # AI transcription tool
             "microsoft-remote-desktop",    # Remote desktop client
-            "ollama",                      # Local AI model runner
-            "ollama-app",                  # Ollama companion GUI app
+            "ollama-app",                  # Local AI model runner
             "onedrive",                    # Microsoft cloud storage
-            "openlens",                    # Kubernetes IDE
             "orbstack",                    # Docker and Linux container runtime
-            "pycharm",                     # Python IDE
             "raycast",                     # Productivity launcher
             "rectangle-pro",               # Window management utility
             "slack",                       # Team communication
@@ -46,13 +47,13 @@
         ]
         formulae = [
             "act",                         # Run GitHub Actions locally
-            "age",                         # Simple, modern file encryption
             "agg",                         # asciinema GIF generator
             "asciinema",                   # Terminal session recorder
             "asdf",                        # Version manager for multiple languages
             "bash",                        # Bourne Again SHell
             "bat",                         # cat with syntax highlighting
             "chezmoi",                     # Dotfile manager
+            "claude-history",              # Claude Code conversation history viewer
             "coreutils",                   # GNU File, Shell, and Text utilities
             "csvlens",                     # CSV file viewer
             "d2",                          # Declarative diagramming language
@@ -63,7 +64,7 @@
             "ffmpeg",                      # Multimedia framework
             "fzf",                         # Fuzzy finder
             "gh",                          # GitHub CLI
-            "git-filter-repo",             # Git repository rewriting tool
+            "glow",                        # Terminal Markdown renderer
             "go",                          # Go programming language
             "hey",                         # HTTP load testing tool
             "jbang",                       # Java scripting tool
@@ -100,29 +101,23 @@
     [packages.homebrew.work]
         casks = [
             "clickup",                     # Project management and productivity
-            "craft",                       # Note-taking and writing app
             "figma",                       # Design and prototyping tool
-            "google-cloud-sdk",            # Google Cloud command-line tools
+            "gcloud-cli",                  # Google Cloud command-line tools
             "meetingbar",                  # Meeting management in menu bar
         ]
         formulae = [
-            "allure",                      # Test reporting framework
             "azure-cli",                   # Azure command-line interface
             "bats-core",                   # Bash Automated Testing System
             "bcftools",                    # Bioinformatics SAM/BAM/VCF tools
             "cloud-sql-proxy",             # Google Cloud SQL proxy
-            "craft-to-logseq",             # Craft to Logseq converter
-            "derailed/k9s/k9s",            # Kubernetes CLI manager
+            "k9s",                         # Kubernetes CLI manager
             "derailed/popeye/popeye",      # Kubernetes cluster sanitizer
             "docker",                      # Container platform
             "helm",                        # Kubernetes package manager
             "k6",                          # Load testing tool
             "kubectx",                     # Kubernetes context switcher
             "kubelogin",                   # Kubernetes login helper
-            "kubernetes-cli",              # Kubernetes command-line tool
-            "kubespy",                     # Kubernetes resource watcher
-            "remotemobprogramming/brew/mob", # Mob programming tool
-            "temporal"                     # Temporal workflow engine CLI
+            "kubernetes-cli"               # Kubernetes command-line tool
         ]
     
     [packages.homebrew.personal]
