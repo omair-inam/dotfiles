@@ -1,0 +1,18 @@
+#!/bin/bash
+# Cache GitHub CLI completions for ZSH so we don't spawn a subprocess on every shell start.
+# The OMZ gh plugin runs `gh completion --shell zsh` on every shell start, which triggers
+# a 1Password biometric auth prompt because gh is aliased through `op plugin run -- gh`.
+# Regenerates when gh binary changes (chezmoi detects via hash comment below).
+# hash: {{ if lookPath "gh" }}{{ output "gh" "--version" | trim }}{{ else }}not-installed{{ end }}
+
+set -euo pipefail
+
+COMP_DIR="$HOME/.zsh_completions"
+mkdir -p "$COMP_DIR"
+
+if command -v gh >/dev/null 2>&1; then
+  echo "Caching GitHub CLI ZSH completions to $COMP_DIR/_gh..."
+  gh completion --shell zsh > "$COMP_DIR/_gh"
+else
+  echo "gh not found, skipping completion cache"
+fi

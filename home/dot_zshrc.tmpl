@@ -20,7 +20,7 @@ export POETRY_VIRTUALENVS_IN_PROJECT=true
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Cached CLI completions (op, jwt, etc.)
+# Cached CLI completions (gh, op, jwt, etc.)
 fpath=(~/.zsh_completions $fpath)
 
 # Path to your oh-my-zsh installation.
@@ -112,7 +112,7 @@ plugins=(
   # Git & GitHub
   git
   forgit
-  gh
+  # gh  # removed — triggers 1Password prompt via op plugin alias; completions cached to ~/.zsh_completions/_gh
 
   # Zsh extensions
   aliases
