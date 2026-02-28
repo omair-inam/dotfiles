@@ -5,22 +5,10 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-### Alias to list active network interfaces
-alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
-alias ssh-hosts="grep -hE 'Host (.+)' ~/.ssh/config | sed 's/Host //'"
 source ~/.zsh_aliases
 
 # Source Claude Code functions
 source ~/.zsh_claude_code_functions
-
-### Typing '.' will source ~/.zshrc
-function . {
-    if [[ $# -eq 0 ]]; then
-        builtin . ~/.zshrc
-    else
-        builtin . "$@"
-    fi
-}
 
 export HOMEBREW_NO_AUTO_UPDATE=1
 
