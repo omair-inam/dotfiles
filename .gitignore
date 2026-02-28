@@ -7,6 +7,9 @@
 # 1Password CLI local plugin config (machine-specific, contains vault/item IDs)
 .op/
 
+# Worktrees
+.worktrees/
+
 # Temp files
 chezmoi_diff.txt
 demo.gif
