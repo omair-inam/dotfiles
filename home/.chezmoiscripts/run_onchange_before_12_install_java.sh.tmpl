@@ -7,11 +7,11 @@ if [[ -f /opt/homebrew/bin/brew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# add Java plugin
-asdf plugin add java
+# install JDK 21 and JDK 24
+mise install java@adoptopenjdk-21
+mise install java@temurin-24
 
-# install JDK 21
-asdf install java adoptopenjdk-21.0.5+11.0.LTS
-asdf install java temurin-24.0.2+12
+# set temurin-24 as the global default
+mise use -g java@temurin-24
 
 {{ end }}
