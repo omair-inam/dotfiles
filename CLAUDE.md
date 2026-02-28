@@ -74,3 +74,4 @@ Current scripts:
 * `run_onchange` scripts re-run when template *output* changes, not just source edits
 * Use `run_before_`/`run_after_` (not `run_onchange_`) for scripts that depend on runtime environment (e.g., monitor count)
 * chezmoi source is available locally at `/Users/omair/libs/chezmoi` for reference
+* `chezmoi apply/diff` always uses the configured source dir, not `$PWD` — in git worktrees, use `--source=<worktree>/home` or the `cmaw`/`cmdw` aliases
