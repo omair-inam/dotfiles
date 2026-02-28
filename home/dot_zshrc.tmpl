@@ -24,9 +24,6 @@ function . {
 
 export HOMEBREW_NO_AUTO_UPDATE=1
 
-### mise — polyglot runtime manager
-eval "$(mise activate zsh)"
-
 # Python SSL Certs
 # export SSL_CERT_FILE=~/all_mac_certs.pem
 # export REQUESTS_CA_BUNDLE=~/all_mac_certs.pem
@@ -105,7 +102,7 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
-  asdf
+  mise
   aws
   # composer
   gcloud
@@ -211,14 +208,11 @@ bindkey -M emacs '^N' history-substring-search-down
 
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
-export JAVA_HOME=$(asdf where java 2>/dev/null)
-
 # Initialize rbenv if it exists
 if command -v rbenv >/dev/null 2>&1; then
   eval "$(rbenv init - zsh)"
 fi
 
-# Created by `pipx` on 2024-06-23 20:44:40
 export PATH="$PATH:$HOME/.local/bin"
 
 # chezmoi customizations 2
