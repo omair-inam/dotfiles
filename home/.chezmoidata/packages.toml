@@ -19,6 +19,7 @@
             "chatgpt",                     # OpenAI ChatGPT desktop app
             "claude",                      # Anthropic Claude desktop app
             "claude-code",                 # Anthropic Claude Code CLI
+            "daisydisk",                   # Disk space analyzer
             "cleanshot",                   # Advanced screenshot and screen recording
             "forklift3",                   # File manager and FTP client
             "ghostty",                     # Terminal emulator
