@@ -68,8 +68,8 @@ During `chezmoi apply` you will be prompted for three values (cached after first
 
 > **Note:** The reversed scroll direction preference is written immediately but requires a
 > **logout or restart** to take effect.
-- Install pipx
-- For work devices: enable automatic macOS updates, install Java 21 + 24 and Python 3.13.1 via asdf
+- Configure uv tool management
+- For work devices: enable automatic macOS updates, install Java 21 + 24 and Python 3.13 via mise
 
 **Work devices — second apply:** The first apply skips 1Password-backed secrets (NPM token,
 Maven credentials) because the `op` CLI isn't available yet. After the first apply installs
