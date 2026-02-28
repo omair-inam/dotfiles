@@ -105,56 +105,79 @@ ZSH_ALIAS_FINDER_AUTOMATIC=true
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
+  # Package managers & tooling
   mise
+  brew
+  chezmoi
+  uv
+
+  # Cloud CLIs
   aws
   # composer
-  gcloud
-  git 
+
+  # Git & GitHub
+  git
   forgit
+  gh
+
+  # Zsh extensions
   aliases
   alias-finder
+  fzf
   zsh-autosuggestions
   zsh-completions
   zsh-eza
   zsh-history-substring-search
-  kubectl
+  zsh-interactive-cd
+
+  # Shell utilities
   colored-man-pages
   bgnotify
+  macos
+  1password
   # copyfile to copy contents of file to system clipboard
   copyfile
-
   # Ctrl-O to copy cmd on terminal to clipboard
   copybuffer
   # Command copies working dir to clipboard
   copypath
   # Ctrl-Shift-Left/Right cycles between directories
   dircycle
-  docker
-  docker-compose
+  # Esc + Esc prepends sudo to command
+  sudo
+
+  # Editors & apps
   # forklift shortcuts
   forklift
   # friendlier curl
   httpie
   # JIRA shortcuts
   # jira
-  # Esc + Esc prepends sudo to command
-  sudo
   sfdx
   sublime
   vscode
   # Adds aliases for searching with Google, Wiki, Bing, YouTube and other popular services.
   # web-search
-  zsh-interactive-cd
 
-  # Python related
+  # Python & build tools
   python
+  mvn
 
-  # zoxide
+  # Navigation & environment
   zoxide
-
   # auto-load .envrc (direnv) and .env (dotenv) per directory
   direnv
   dotenv
+
+  # Kubernetes & containers (work only)
+{{ if .work_device }}
+  kubectl
+  helm
+  kubectx
+  docker
+  docker-compose
+  gcloud
+{{ end }}
 )
 
 autoload -U compinit && compinit
@@ -196,9 +219,6 @@ source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Enable autojump
 [ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
-
-# shell integration for fzf
-source <(fzf --zsh)
 
 if hash jwt > /dev/null; then
   source <(jwt completion zsh)
