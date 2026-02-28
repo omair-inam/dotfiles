@@ -111,6 +111,34 @@ terminal and the `softwareupdate` command.
    > **Note:** work devices have automatic macOS updates configured by `chezmoi apply`,
    > so this step is primarily for personal devices.
 
+#### Set up GitHub CLI authentication via 1Password
+
+The `gh` CLI is authenticated through the 1Password shell plugin (`op plugin run -- gh`).
+To configure it for this repo with your personal GitHub account:
+
+```bash
+cd ~/.local/share/chezmoi
+op plugin init gh --account my.1password.com
+```
+
+When prompted, select your personal GitHub PAT and choose
+**"Use automatically when in this directory or subdirectories"**.
+
+Then fix the file permissions — the `op` CLI silently ignores configs that are world-readable:
+
+```bash
+chmod 600 .op/plugins/gh.json
+```
+
+Verify it works:
+
+```bash
+op plugin run -- gh auth status
+```
+
+> **Note:** The `.op/` directory is gitignored (machine-specific). This setup must be
+> repeated on each new machine.
+
 #### Reactivate software licenses
 
 These apps have per-machine license activations that were deactivated before the wipe.

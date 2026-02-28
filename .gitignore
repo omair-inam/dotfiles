@@ -4,6 +4,9 @@
 # IDE
 .idea/
 
+# 1Password CLI local plugin config (machine-specific, contains vault/item IDs)
+.op/
+
 # Temp files
 chezmoi_diff.txt
 demo.gif
