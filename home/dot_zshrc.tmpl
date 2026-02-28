@@ -20,7 +20,7 @@ export POETRY_VIRTUALENVS_IN_PROJECT=true
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Cached CLI completions (jwt, etc.)
+# Cached CLI completions (op, jwt, etc.)
 fpath=(~/.zsh_completions $fpath)
 
 # Path to your oh-my-zsh installation.
@@ -128,7 +128,7 @@ plugins=(
   colored-man-pages
   bgnotify
   macos
-  1password
+  # 1password  # removed — triggers biometric prompt on every shell start; op completions cached to ~/.zsh_completions/_op
   # copyfile to copy contents of file to system clipboard
   copyfile
   # Ctrl-O to copy cmd on terminal to clipboard
