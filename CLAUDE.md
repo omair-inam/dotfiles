@@ -61,7 +61,6 @@ Scripts in `home/.chezmoiscripts/` run in numbered order, all `run_onchange_befo
 * Aliases file: `home/dot_zsh_aliases.tmpl` — follow existing Oh-My-Zsh naming convention
 
 ### Gotchas
-* `home/.chezmoiignore` excludes `key.txt.age` from apply
 * 1Password must be unlocked for templates using `onepasswordRead` to render
 * `gh` CLI requires 1Password plugin alias; scripts need `GITHUB_TOKEN=$(op plugin run -- gh auth token)`
 * Git commits are GPG-signed via 1Password SSH — signing failures may mean 1Password is locked

@@ -209,6 +209,9 @@ alias cmv="chezmoi verify"
 alias cmec="chezmoi edit-config"
 alias cmh="chezmoi help"
 alias cmdoc="chezmoi doctor"
+# Homebrew cleanup (compare installed packages against chezmoi Brewfile)
+alias cmclean="brew bundle cleanup --file=~/.Brewfile"
+alias cmcleanf="brew bundle cleanup --force --file=~/.Brewfile"
 
 # unset GITHUB_TOKEN from gh's process environment and run gh command.
 # see https://stackoverflow.com/a/41749660 & https://github.com/cli/cli/issues/3799 for more.
