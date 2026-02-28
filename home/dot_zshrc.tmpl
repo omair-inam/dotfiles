@@ -215,11 +215,6 @@ bindkey -M emacs '^N' history-substring-search-down
 
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
-# Initialize rbenv if it exists
-if command -v rbenv >/dev/null 2>&1; then
-  eval "$(rbenv init - zsh)"
-fi
-
 export PATH="$PATH:$HOME/.local/bin"
 
 # chezmoi customizations 2
