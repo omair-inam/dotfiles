@@ -38,7 +38,7 @@
        </profile>
 {{ end }}
    </profiles>
-{{ if .work_device }}
+{{ if and .work_device (lookPath "op") }}
    <servers>
        <server>
            <id>github</id>
