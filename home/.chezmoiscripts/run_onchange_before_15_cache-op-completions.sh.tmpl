@@ -1,0 +1,18 @@
+#!/bin/bash
+# Cache 1Password CLI completions for ZSH so we don't spawn a subprocess on every shell start.
+# The OMZ 1password plugin runs `op completion zsh` on every shell start, which triggers
+# a 1Password biometric auth prompt. This caches the output instead.
+# Regenerates when op binary changes (chezmoi detects via hash comment below).
+# hash: {{ if lookPath "op" }}{{ output "op" "--version" | trim }}{{ else }}not-installed{{ end }}
+
+set -euo pipefail
+
+COMP_DIR="$HOME/.zsh_completions"
+mkdir -p "$COMP_DIR"
+
+if command -v op >/dev/null 2>&1; then
+  echo "Caching 1Password CLI ZSH completions to $COMP_DIR/_op..."
+  op completion zsh > "$COMP_DIR/_op"
+else
+  echo "op not found, skipping completion cache"
+fi

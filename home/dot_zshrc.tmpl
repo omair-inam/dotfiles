@@ -5,22 +5,10 @@ if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-### Alias to list active network interfaces
-alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'"
-alias ssh-hosts="grep -hE 'Host (.+)' ~/.ssh/config | sed 's/Host //'"
 source ~/.zsh_aliases
 
 # Source Claude Code functions
 source ~/.zsh_claude_code_functions
-
-### Typing '.' will source ~/.zshrc
-function . {
-    if [[ $# -eq 0 ]]; then
-        builtin . ~/.zshrc
-    else
-        builtin . "$@"
-    fi
-}
 
 export HOMEBREW_NO_AUTO_UPDATE=1
 
@@ -31,6 +19,13 @@ export POETRY_VIRTUALENVS_IN_PROJECT=true
 
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Cached CLI completions (gh, op, jwt, etc.)
+fpath=(~/.zsh_completions $fpath)
+
+# Complete aliases as if they were the underlying command (needed for
+# gh aliased through op plugin run -- gh)
+setopt completealiases
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
@@ -105,20 +100,23 @@ ZSH_ALIAS_FINDER_AUTOMATIC=true
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
+  # Eval caching (must load first)
+  evalcache
+
   # Package managers & tooling
-  mise
+  # mise  # replaced by _evalcache below
   brew
   chezmoi
   uv
 
   # Cloud CLIs
-  aws
+  # aws  # commented out — re-enable when using AWS completions
   # composer
 
   # Git & GitHub
   git
   forgit
-  gh
+  # gh  # removed — triggers 1Password prompt via op plugin alias; completions cached to ~/.zsh_completions/_gh
 
   # Zsh extensions
   aliases
@@ -134,7 +132,7 @@ plugins=(
   colored-man-pages
   bgnotify
   macos
-  1password
+  # 1password  # removed — triggers biometric prompt on every shell start; op completions cached to ~/.zsh_completions/_op
   # copyfile to copy contents of file to system clipboard
   copyfile
   # Ctrl-O to copy cmd on terminal to clipboard
@@ -153,7 +151,6 @@ plugins=(
   httpie
   # JIRA shortcuts
   # jira
-  sfdx
   sublime
   vscode
   # Adds aliases for searching with Google, Wiki, Bing, YouTube and other popular services.
@@ -164,7 +161,7 @@ plugins=(
   mvn
 
   # Navigation & environment
-  zoxide
+  # zoxide  # replaced by _evalcache below
   # auto-load .envrc (direnv) and .env (dotenv) per directory
   direnv
   dotenv
@@ -180,11 +177,15 @@ plugins=(
 {{ end }}
 )
 
-autoload -U compinit && compinit
-
 # eval "$(register-python-argcomplete pipx)"
 
 source $ZSH/oh-my-zsh.sh
+
+# Cached eval for expensive tool init (see evalcache plugin)
+# These replace the OMZ mise and zoxide plugins with cached versions.
+# Run _evalcache_clear after upgrading these tools.
+_evalcache mise activate zsh
+_evalcache zoxide init zsh
 
 # User configuration
 
@@ -217,13 +218,6 @@ source $ZSH/oh-my-zsh.sh
 
 source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# Enable autojump
-[ -f /opt/homebrew/etc/profile.d/autojump.sh ] && . /opt/homebrew/etc/profile.d/autojump.sh
-
-if hash jwt > /dev/null; then
-  source <(jwt completion zsh)
-fi
-
 bindkey '^[[A' history-substring-search-up
 bindkey '^[[B' history-substring-search-down
 
@@ -231,11 +225,6 @@ bindkey -M emacs '^P' history-substring-search-up
 bindkey -M emacs '^N' history-substring-search-down
 
 export PATH="$PATH":"$HOME/.pub-cache/bin"
-
-# Initialize rbenv if it exists
-if command -v rbenv >/dev/null 2>&1; then
-  eval "$(rbenv init - zsh)"
-fi
 
 export PATH="$PATH:$HOME/.local/bin"
 
