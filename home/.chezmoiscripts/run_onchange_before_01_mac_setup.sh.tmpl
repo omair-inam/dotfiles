@@ -5,9 +5,6 @@ set -eufo pipefail
 # Update dock icon size
 defaults write com.apple.dock tilesize -int 48
 
-# move dock to the left
-defaults write com.apple.dock orientation -string left
-
 # This script changes the macOS system preference for the scroll direction.
 # It sets the "Natural" scrolling direction to false, which means that the scroll direction will be reversed.
 # This is equivalent to unchecking the "Scroll direction: Natural" option in System Preferences > Trackpad.
