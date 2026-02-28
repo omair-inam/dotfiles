@@ -49,7 +49,6 @@
             "act",                         # Run GitHub Actions locally
             "agg",                         # asciinema GIF generator
             "asciinema",                   # Terminal session recorder
-            "asdf",                        # Version manager for multiple languages
             "bash",                        # Bourne Again SHell
             "bat",                         # cat with syntax highlighting
             "chezmoi",                     # Dotfile manager
