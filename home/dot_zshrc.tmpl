@@ -96,6 +96,9 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
+# alias-finder: auto-suggest aliases when typing full commands
+ZSH_ALIAS_FINDER_AUTOMATIC=true
+
 # Which plugins would you like to load?
 # Standard plugins can be found in $ZSH/plugins/
 # Custom plugins may be added to $ZSH_CUSTOM/plugins/
@@ -108,7 +111,7 @@ plugins=(
   gcloud
   git 
   forgit
-  alias-tips
+  alias-finder
   zsh-autosuggestions
   zsh-completions
   zsh-eza

@@ -38,7 +38,6 @@ install_plugin "Powerlevel10k" "https://github.com/romkatv/powerlevel10k.git" "t
 
 # Install custom plugins
 install_plugin "zsh-autosuggestions" "https://github.com/zsh-users/zsh-autosuggestions" "plugins/zsh-autosuggestions"
-install_plugin "alias-tips" "https://github.com/djui/alias-tips.git" "plugins/alias-tips"
 install_plugin "zsh-history-substring-search" "https://github.com/zsh-users/zsh-history-substring-search" "plugins/zsh-history-substring-search"
 install_plugin "forgit" "https://github.com/wfxr/forgit.git" "plugins/forgit"
 install_plugin "zsh-completions" "https://github.com/zsh-users/zsh-completions" "plugins/zsh-completions"
