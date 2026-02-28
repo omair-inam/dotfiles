@@ -96,8 +96,11 @@ ZSH_ALIAS_FINDER_AUTOMATIC=true
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
+  # Eval caching (must load first)
+  evalcache
+
   # Package managers & tooling
-  mise
+  # mise  # replaced by _evalcache below
   brew
   chezmoi
   uv
@@ -154,7 +157,7 @@ plugins=(
   mvn
 
   # Navigation & environment
-  zoxide
+  # zoxide  # replaced by _evalcache below
   # auto-load .envrc (direnv) and .env (dotenv) per directory
   direnv
   dotenv
@@ -173,6 +176,12 @@ plugins=(
 # eval "$(register-python-argcomplete pipx)"
 
 source $ZSH/oh-my-zsh.sh
+
+# Cached eval for expensive tool init (see evalcache plugin)
+# These replace the OMZ mise and zoxide plugins with cached versions.
+# Run _evalcache_clear after upgrading these tools.
+_evalcache mise activate zsh
+_evalcache zoxide init zsh
 
 # User configuration
 
