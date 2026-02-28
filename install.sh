@@ -11,9 +11,14 @@ read -n 1 -r -s -p $'    Press any key to continue or Ctrl+C to abort...\n\n'
 command -v brew >/dev/null 2>&1 || \
   (echo '🍺  Installing Homebrew' && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)")
 
+# Add Homebrew to PATH for the current session (required on Apple Silicon)
+if [[ -f /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # Install Oh My Zsh
 if [ ! -f ~/.oh-my-zsh/oh-my-zsh.sh ]; then
-  (echo '💰  Installing oh-my-zsh' && yes | sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)")
+  (echo '💰  Installing oh-my-zsh' && sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended)
 fi
 
 # Function to install a plugin if it doesn't exist
