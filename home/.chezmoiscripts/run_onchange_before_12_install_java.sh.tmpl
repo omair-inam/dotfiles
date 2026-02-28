@@ -2,6 +2,11 @@
 {{ if .work_device }}
 set -eufo pipefail
 
+# Add Homebrew to PATH for the current session (required on Apple Silicon)
+if [[ -f /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
 # add Java plugin
 asdf plugin add java
 
