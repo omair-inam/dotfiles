@@ -21,6 +21,7 @@
             "claude-code",                 # Anthropic Claude Code CLI
             "daisydisk",                   # Disk space analyzer
             "cleanshot",                   # Advanced screenshot and screen recording
+            "espanso",                     # Cross-platform text expander
             "forklift3",                   # File manager and FTP client
             "ghostty",                     # Terminal emulator
             "google-chrome",               # Google web browser
