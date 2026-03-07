@@ -34,17 +34,19 @@ Create `home/dot_config/mise/config.toml.tmpl`:
 node = "lts"
 
 # npm tools
-"npm:@arizeai/phoenix-cli" = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
 
 # Python CLI tools (pipx backend uses uv when available)
 "pipx:showboat" = "latest"
 "pipx:rodney" = "latest"
 
-{{ if .work_device -}}
-# Work runtimes
-java = ["temurin-24", "temurin-21"]
+# Python runtime
 python = "3.13"
+
+{{ if .work_device -}}
+# Work tools
+"npm:@arizeai/phoenix-cli" = "latest"
+java = ["temurin-24", "temurin-21"]
 {{ end -}}
 
 [settings]

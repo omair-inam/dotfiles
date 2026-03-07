@@ -25,14 +25,14 @@ Replace all three scripts with a single system: chezmoi templates mise's native 
 ```toml
 [tools]
 node = "lts"
-"npm:@arizeai/phoenix-cli" = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
 "pipx:showboat" = "latest"
 "pipx:rodney" = "latest"
+python = "3.13"
 
 {{ if .work_device -}}
+"npm:@arizeai/phoenix-cli" = "latest"
 java = ["temurin-24", "temurin-21"]
-python = "3.13"
 {{ end -}}
 
 [settings]
