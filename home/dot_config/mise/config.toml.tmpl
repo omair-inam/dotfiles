@@ -15,11 +15,11 @@ node = "lts"
 # Python runtime
 python = "3.13"
 
-{{ if .work_device -}}
+{{- if .work_device }}
 # Work tools
 "npm:@arizeai/phoenix-cli" = "latest"
 java = ["temurin-24", "temurin-21"]
-{{ end -}}
+{{ end }}
 
 [settings]
 trusted_config_paths = ["."]
