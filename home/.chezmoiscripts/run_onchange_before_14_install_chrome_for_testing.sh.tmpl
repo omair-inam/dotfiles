@@ -8,6 +8,7 @@ if [[ -f /opt/homebrew/bin/brew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# Install Chrome for Testing (node available globally via mise after script 11)
-pnpm dlx @puppeteer/browsers install chrome@stable
+# Install Chrome for Testing
+# pnpm requires node on PATH; use mise exec to provide it in script context
+mise exec node -- pnpm dlx @puppeteer/browsers install chrome@stable
 {{ end }}
