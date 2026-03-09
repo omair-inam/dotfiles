@@ -18,7 +18,6 @@
             "beyond-compare",              # File and folder comparison tool
             "chatgpt",                     # OpenAI ChatGPT desktop app
             "claude",                      # Anthropic Claude desktop app
-            "claude-code",                 # Anthropic Claude Code CLI
             "daisydisk",                   # Disk space analyzer
             "cleanshot",                   # Advanced screenshot and screen recording
             "espanso",                     # Cross-platform text expander

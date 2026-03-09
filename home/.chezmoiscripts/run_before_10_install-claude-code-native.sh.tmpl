@@ -1,0 +1,12 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+set -eufo pipefail
+
+CLAUDE_BIN="$HOME/.local/bin/claude"
+
+# Install Claude Code natively if not already present
+if [[ ! -x "$CLAUDE_BIN" ]]; then
+  echo "Installing Claude Code via native installer..."
+  curl -fsSL https://claude.ai/install.sh | bash
+fi
+{{ end }}
