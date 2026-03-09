@@ -1,0 +1,17 @@
+[tools]
+# Node runtime (required by npm backend)
+node = "lts"
+
+# Python CLI tools (pipx backend uses uv when available)
+"pipx:showboat" = "latest"
+"pipx:rodney" = "latest"
+
+# Python runtime
+python = "3.13"
+# Work tools
+"npm:@arizeai/phoenix-cli" = "latest"
+java = ["temurin-24", "temurin-21"]
+
+
+[settings]
+trusted_config_paths = ["."]
