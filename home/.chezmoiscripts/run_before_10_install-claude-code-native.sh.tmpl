@@ -2,19 +2,7 @@
 #!/bin/bash
 set -eufo pipefail
 
-# Add Homebrew to PATH (required on Apple Silicon for migration check)
-if [[ -f /opt/homebrew/bin/brew ]]; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
 CLAUDE_BIN="$HOME/.local/bin/claude"
-
-# One-time migration: remove Homebrew cask if still installed
-# TODO: Remove migration block once all machines have transitioned from cask
-if brew list --cask claude-code >/dev/null 2>&1; then
-  echo "Removing Homebrew cask claude-code in favour of native install..."
-  brew uninstall --cask claude-code
-fi
 
 # Install Claude Code natively if not already present
 if [[ ! -x "$CLAUDE_BIN" ]]; then
