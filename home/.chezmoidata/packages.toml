@@ -104,6 +104,7 @@
             "clickup",                     # Project management and productivity
             "figma",                       # Design and prototyping tool
             "gcloud-cli",                  # Google Cloud command-line tools
+            "linear-linear",               # Issue tracker and project management
             "meetingbar",                  # Meeting management in menu bar
         ]
         formulae = [
