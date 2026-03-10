@@ -1,0 +1,22 @@
+{{- /* Unified tool management via mise */ -}}
+{{- /* See docs/plans/2026-03-07-unified-tool-installer-design.md */ -}}
+
+[tools]
+# Node runtime (required by npm backend)
+node = "lts"
+
+# Python CLI tools (pipx backend uses uv when available)
+"pipx:showboat" = "latest"
+"pipx:rodney" = "latest"
+
+# Python runtime
+python = "3.13"
+
+{{- if .work_device }}
+# Work tools
+"npm:@arizeai/phoenix-cli" = "latest"
+java = ["temurin-24", "temurin-21"]
+{{ end }}
+
+[settings]
+trusted_config_paths = ["."]

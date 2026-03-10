@@ -8,9 +8,7 @@ if [[ -f /opt/homebrew/bin/brew ]]; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# Install Node.js LTS via mise
-mise install node@lts
-
-# Install Chrome for Testing using pnpm dlx
-mise exec node@lts -- pnpm dlx @puppeteer/browsers install chrome@stable
+# Install Chrome for Testing
+# pnpm requires node on PATH; use mise exec to provide it in script context
+mise exec node -- pnpm dlx @puppeteer/browsers install chrome@stable
 {{ end }}
