@@ -78,7 +78,6 @@
             "moar",                        # Pager with syntax highlighting
             "nmap",                        # Network mapper
             "oha",                         # HTTP load generator
-            "pnpm",                        # Fast, disk-efficient package manager
             "uv",                          # Fast Python package manager and tool runner
             "postgresql@14",               # PostgreSQL database
             "python@3.13",                 # Python programming language
