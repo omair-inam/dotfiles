@@ -1,0 +1,8 @@
+{
+  "cli": {
+    "enabled": ["claude"],
+    "claude": {
+      "model": "sonnet"
+    }
+  }
+}
