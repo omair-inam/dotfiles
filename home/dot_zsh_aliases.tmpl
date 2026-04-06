@@ -3,6 +3,12 @@ alias ifactive="ifconfig | pcregrep -M -o '^[^\t:]+:([^\n]|\n\t)*status: active'
 alias ssh-hosts="grep -hE 'Host (.+)' ~/.ssh/config | sed 's/Host //'"
 alias kenv='function _k8s_env() { kubectl exec -it $(kubectl get pods -l app=$1 -o jsonpath="{.items[0].metadata.name}") -- env; }; _k8s_env'
 alias yolo="claude --dangerously-skip-permissions"
+alias yoloh="claude --dangerously-skip-permissions --model haiku"
+alias yolos="claude --dangerously-skip-permissions --model sonnet"
+alias yoloo="claude --dangerously-skip-permissions --model opus"
+alias cch="claude --model haiku"
+alias ccs="claude --model sonnet"
+alias cco="claude --model opus"
 
 ### Typing '.' will source ~/.zshrc
 function . {
