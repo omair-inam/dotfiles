@@ -10,6 +10,17 @@ defaults write com.apple.dock tilesize -int 48
 # This is equivalent to unchecking the "Scroll direction: Natural" option in System Preferences > Trackpad.
 defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false
 
+# Disable macOS keyboard shortcuts
+# To find hotkey IDs: defaults read com.apple.symbolichotkeys AppleSymbolicHotKeys
+# To add more: copy the block below, change the ID, comment, and parameters
+
+# Disable "Turn Dock hiding on/off" (⌥⌘D) — hotkey 52; conflicts with cmux "Split Browser Right"
+defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 52 \
+  '<dict><key>enabled</key><false/><key>value</key><dict><key>parameters</key><array><integer>100</integer><integer>2</integer><integer>1572864</integer></array><key>type</key><string>standard</string></dict></dict>'
+
+# Apply keyboard shortcut changes without logout
+/System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
+
 {{ if .work_device }}
 
 # Ensure XProtect is running and updated
