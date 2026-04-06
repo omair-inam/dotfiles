@@ -56,7 +56,7 @@ Current scripts:
 ### Key Managed Files
 * `dot_zshrc.tmpl` — main shell config (Oh-My-Zsh, Powerlevel10k, mise, fzf)
 * `dot_zsh_aliases.tmpl` — aliases: chezmoi (`cm*`), kubernetes (`k*`), 1Password gh plugin
-* `dot_zsh_claude_code_functions.tmpl` — `ccs` (suggest), `cce` (explain), `ccef` (explain failure)
+* `dot_zsh_aliases.tmpl` — Claude Code model aliases: `cch/ccs/cco` (model shortcuts), `yoloh/yolos/yoloo` (dangerous + model)
 * `dot_gitconfig.tmpl` — git config with 1Password SSH signing, Beyond Compare merge tool
 * `private_dot_npmrc.tmpl` — NPM config with 1Password-sourced GitHub token
 * `dot_m2/settings.xml.tmpl` — Maven settings with GitHub packages (work only)
