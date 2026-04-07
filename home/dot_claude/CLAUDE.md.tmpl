@@ -2,6 +2,13 @@
 ## About Me
 * Full name: Omair-Inam Abdul-Matin
 
+## Git Workflow
+* Always create branches from `origin/main`, never from local `main`. Use `git fetch origin && git checkout -b <branch> origin/main` for new branches.
+* Keep PRs focused: before creating a PR, verify the diff only contains changes related to the current task. Run `git diff origin/main --stat` and remove unrelated files.
+
+## Workflow Conventions
+* Create a worktree before committing specs and implementation documents.
+
 ## Dotfile Management
 * To edit a dotfile (e.g. .zshrc):
   1. Check if the file is being managed by chezmoi
@@ -38,6 +45,12 @@ jwt encode [-A|--alg] HS256 [-S|--secret] 1234567890 [-P|--payload] key=value
 * Bash scripts calling `gh` directly bypass the alias and have no credentials
 * In scripts, detect and extract the token: `GITHUB_TOKEN=$(op plugin run -- gh auth token)`
 * Plugin config: `~/.config/op/plugins.sh`, alias sourced via `~/.zsh_aliases`
+
+### 1Password Touch ID / SSH Signing
+* Git commit signing, `gh` auth, and `git push` all require 1Password Touch ID approval
+* If a command fails with `error: 1Password: failed to fill whole buffer` or similar 1Password auth errors, **do NOT retry automatically**
+* Instead, tell the user: "1Password Touch ID authentication failed. Please let me know when you're ready and I'll retry the command."
+* Only retry once after the user confirms — do not loop
 
 ### Pull requests
 - Pull requests created by Claude Code MUST begin with the following alert at the beginning of the description:
