@@ -68,6 +68,7 @@
             "gh",                          # GitHub CLI
             "glow",                        # Terminal Markdown renderer
             "go",                          # Go programming language
+            "googleworkspace-cli",         # Google Workspace CLI
             "hey",                         # HTTP load testing tool
             "jbang",                       # Java scripting tool
             "jq",                          # JSON processor
