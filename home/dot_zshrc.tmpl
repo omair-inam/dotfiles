@@ -17,8 +17,9 @@ export POETRY_VIRTUALENVS_IN_PROJECT=true
 # If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Cached CLI completions (gh, op, jwt, etc.)
-fpath=(~/.zsh_completions $fpath)
+# Cached CLI completions: ~/.zsh_completions (gh, op, jwt, ollama) + ~/.zfunc (_ax)
+# Loaded before oh-my-zsh runs compinit, so no manual re-init is needed.
+fpath=(~/.zsh_completions ~/.zfunc $fpath)
 
 # Complete aliases as if they were the underlying command (needed for
 # gh aliased through op plugin run -- gh)
