@@ -20,7 +20,7 @@
 * `home/dot_local/bin/` — custom executable scripts
 * `home/dot_ssh/` — SSH config and public keys
 * `docs/` — planning documents
-* `migration-kit-backup/` — pre-wipe migration audit trail
+* `migration-kit-backup/` — pre-wipe migration audit trail (local-only, gitignored — contains sensitive Keychain/repo audits; never commit to this public repo)
 
 ### Key Data Files
 * `home/.chezmoidata/packages.toml` — Homebrew formulae, casks, taps, Mac App Store apps
