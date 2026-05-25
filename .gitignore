@@ -17,7 +17,6 @@ fix-zsh-java-init-conversation.md
 
 # Local Claude state and scratch
 .claude/
-cmdiff.txt
 
 # Pre-wipe migration audit (local-only; contains keychain catalog, work repo paths)
 migration-kit-backup/
