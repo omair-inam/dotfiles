@@ -25,6 +25,7 @@
             "forklift3",                   # File manager and FTP client
             "ghostty",                     # Terminal emulator
             "google-chrome",               # Google web browser
+            "homerow",                     # Keyboard shortcuts for on-screen buttons
             "insomnia",                    # API testing and development tool
             "superkey",                    # Keyboard modifier key utility
             "intellij-idea",               # Java IDE
