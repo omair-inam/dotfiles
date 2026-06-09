@@ -12,6 +12,7 @@
 
 # Temp files
 chezmoi_diff.txt
+cmdiff.txt
 demo.gif
 fix-zsh-java-init-conversation.md
 
