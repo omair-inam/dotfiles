@@ -34,4 +34,7 @@ check "ports .ports only"      "be:8012 fe:3002"             "$(payload "$repo" 
 rm "$repo/.ports"
 check "ports none"             ""                            "$(payload "$repo" | bash "$d/ports.sh")"
 
+# --- ponytail.sh --- (smoke: must exist and exit 0; output depends on plugin presence)
+bash "$d/ponytail.sh" </dev/null >/dev/null 2>&1 || { echo "FAIL ponytail runs"; fails=$((fails+1)); }
+
 [ "$fails" -eq 0 ] && echo "ALL OK" || { echo "$fails failing"; exit 1; }
