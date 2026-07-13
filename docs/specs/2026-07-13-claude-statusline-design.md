@@ -53,7 +53,7 @@ Line 2 (telemetry):
 | 3 | WeeklyUsage | Weekly plan usage % |
 | 4 | GitChanges | `+N -M` insertions/deletions, 5s git cache |
 
-Powerline enabled with the stock `` separator, `flexMode` left at `full-minus-40` so line 1 truncates from the right in narrow splits.
+Powerline enabled with the stock `U+E0B0` arrow separator, `flexMode` left at `full-minus-40` so line 1 truncates from the right in narrow splits.
 
 ## Failure modes
 

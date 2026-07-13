@@ -2,17 +2,52 @@
   "version": 3,
   "lines": [
     [
-      { "id": "w1", "type": "custom-command", "commandPath": "bash ~/.claude/statusline.d/ponytail.sh", "preserveColors": false, "timeout": 500, "maxWidth": 14 },
-      { "id": "w2", "type": "custom-command", "commandPath": "bash ~/.claude/statusline.d/whereami.sh", "timeout": 1000 },
-      { "id": "w3", "type": "model" },
-      { "id": "w4", "type": "thinking-effort" },
-      { "id": "w5", "type": "custom-command", "commandPath": "bash ~/.claude/statusline.d/ports.sh", "timeout": 1000 }
+      {
+        "id": "w1",
+        "type": "custom-command",
+        "commandPath": "bash ~/.claude/statusline.d/ponytail.sh",
+        "preserveColors": false,
+        "timeout": 500,
+        "maxWidth": 14
+      },
+      {
+        "id": "w2",
+        "type": "custom-command",
+        "commandPath": "bash ~/.claude/statusline.d/whereami.sh",
+        "timeout": 1000
+      },
+      {
+        "id": "w3",
+        "type": "model"
+      },
+      {
+        "id": "w4",
+        "type": "thinking-effort"
+      },
+      {
+        "id": "w5",
+        "type": "custom-command",
+        "commandPath": "bash ~/.claude/statusline.d/ports.sh",
+        "timeout": 1000
+      }
     ],
     [
-      { "id": "w6", "type": "context-percentage" },
-      { "id": "w7", "type": "reset-timer" },
-      { "id": "w8", "type": "weekly-usage" },
-      { "id": "w9", "type": "git-changes" }
+      {
+        "id": "w6",
+        "type": "context-percentage"
+      },
+      {
+        "id": "w7",
+        "type": "reset-timer"
+      },
+      {
+        "id": "w8",
+        "type": "weekly-usage"
+      },
+      {
+        "id": "w9",
+        "type": "git-changes"
+      }
     ],
     []
   ],
@@ -26,10 +61,16 @@
   "powerline": {
     "enabled": true,
     "theme": "nord",
-    "separators": [""],
-    "separatorInvertBackground": [false],
+    "separators": [
+      ""
+    ],
+    "separatorInvertBackground": [
+      false
+    ],
     "startCaps": [],
-    "endCaps": [""],
+    "endCaps": [
+      ""
+    ],
     "autoAlign": false,
     "continueThemeAcrossLines": true
   }
