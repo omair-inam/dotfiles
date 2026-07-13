@@ -64,7 +64,7 @@ Powerline enabled with the stock `` separator, `flexMode` left at `full-minus-40
 
 ## Config management
 
-`chezmoi add` the three scripts and `~/.config/ccstatusline/settings.json`. `~/.claude/settings.json` stays unmanaged (ccstatusline TUI writes it; it holds machine-local state). Remove the retired `statusline.sh` from chezmoi (`chezmoi forget` + delete).
+`chezmoi add` the three scripts and `~/.config/ccstatusline/settings.json`. `~/.claude/settings.json` is already chezmoi-managed (`home/dot_claude/settings.json`); re-add it after the `statusLine` change so the source captures it. Remove the retired `statusline.sh` from chezmoi (`chezmoi forget` + delete).
 
 ## Testing
 
