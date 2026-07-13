@@ -24,4 +24,14 @@ check "worktree, branch diff"  "myrepo⧸wt2 feature/other"    "$(payload "$repo
 check "non-git dir"            "$(basename "$tmp")"          "$(payload "$tmp" | bash "$d/whereami.sh")"
 check "empty payload"          ""                            "$(printf '{}' | bash "$d/whereami.sh")"
 
+# --- ports.sh ---
+printf 'BACKEND_PORT=8012\nFRONTEND_PORT=3002\n' > "$repo/.ports"
+printf 'ADK_WEB_PORT=8204\n' > "$repo/.ports.adk"
+check "ports both files"       "be:8012 fe:3002 adk:8204"    "$(payload "$repo" | bash "$d/ports.sh")"
+check "ports per-worktree"     ""                            "$(payload "$repo/.worktrees/wt2" | bash "$d/ports.sh")"
+rm "$repo/.ports.adk"
+check "ports .ports only"      "be:8012 fe:3002"             "$(payload "$repo" | bash "$d/ports.sh")"
+rm "$repo/.ports"
+check "ports none"             ""                            "$(payload "$repo" | bash "$d/ports.sh")"
+
 [ "$fails" -eq 0 ] && echo "ALL OK" || { echo "$fails failing"; exit 1; }
