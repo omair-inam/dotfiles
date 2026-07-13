@@ -1,20 +1,16 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "CLAUDE_CODE_NO_FLICKER": "1"
+  },
   "permissions": {
     "defaultMode": "auto"
   },
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "~/.claude/hooks/prevent_unsigned_commits.py"
-          }
-        ]
-      }
-    ]
+  "model": "opus[1m]",
+  "statusLine": {
+    "type": "command",
+    "command": "ccstatusline",
+    "refreshInterval": 10
   },
   "enabledPlugins": {
     "explanatory-output-style@claude-code-plugins": true,
@@ -26,9 +22,12 @@
     "conversation-search@cc-conversation-search": false,
     "claude-md-management@claude-plugins-official": true,
     "episodic-memory@superpowers-marketplace": false,
-    "document-skills@anthropic-agent-skills": true,
+    "document-skills@anthropic-agent-skills": false,
     "slack@claude-plugins-official": true,
-    "frontend-design@claude-plugins-official": true
+    "notes@skills": true,
+    "ponytail@ponytail": true,
+    "frontend-slides@frontend-slides": true,
+    "fullstory@fullstory": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
@@ -36,18 +35,51 @@
         "source": "github",
         "repo": "anthropics/skills"
       }
+    },
+    "skills": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/omair/projects/skills"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    },
+    "launchdarkly-ai-tooling": {
+      "source": {
+        "source": "github",
+        "repo": "launchdarkly/ai-tooling"
+      }
+    },
+    "frontend-slides": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/zarazhangrui/frontend-slides.git"
+      }
+    },
+    "fullstory": {
+      "source": {
+        "source": "github",
+        "repo": "fullstorydev/fullstory-skills"
+      }
     }
   },
   "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
   "skipDangerousModePermissionPrompt": true,
   "verbose": true,
   "autoCompactEnabled": false,
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "env": {
-    "CLAUDE_CODE_NO_FLICKER": "1"
-  },
+  "voiceEnabled": true,
   "feedbackSurveyState": {
     "lastShownTime": 1754064771115
   }
