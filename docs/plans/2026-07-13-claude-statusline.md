@@ -2,7 +2,7 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Replace `~/.claude/statusline.sh` with a two-line powerline status line rendered by a pinned ccstatusline install, per the spec at `docs/specs/2026-07-13-claude-statusline-design.md`.
+**Goal:** Replace `~/.claude/statusline.sh` with a three-line powerline status line (identity, telemetry, full cwd path) rendered by a pinned ccstatusline install, per the spec at `docs/specs/2026-07-13-claude-statusline-design.md`.
 
 **Architecture:** Three small bash scripts in `~/.claude/statusline.d/` feed `CustomCommand` widgets; built-in widgets cover model, thinking effort, and telemetry. ccstatusline reads `~/.config/ccstatusline/settings.json` (version-3 schema) and Claude Code invokes the pinned `ccstatusline` binary. Everything lands in the chezmoi source repo on branch `claude-statusline-spec`.
 
@@ -12,11 +12,11 @@
 
 | # | Task | Status |
 |---|------|--------|
-| 1 | `whereami.sh` + test harness | Not started |
-| 2 | `ports.sh` | Not started |
-| 3 | `ponytail.sh` | Not started |
-| 4 | Pinned install + ccstatusline config + render check | Not started |
-| 5 | Cut over `~/.claude/settings.json`, retire `statusline.sh`, chezmoi capture | Not started |
+| 1 | `whereami.sh` + test harness | Done |
+| 2 | `ports.sh` | Done |
+| 3 | `ponytail.sh` | Done |
+| 4 | Pinned install + ccstatusline config + render check | Done |
+| 5 | Cut over `~/.claude/settings.json`, retire `statusline.sh`, chezmoi capture | Done |
 | 6 | Live verification (manual gate) | Not started |
 
 Update this table and the task-level `Status:` line as tasks complete.
@@ -34,7 +34,7 @@ Update this table and the task-level `Status:` line as tasks complete.
 
 ### Task 1: `whereami.sh` + test harness
 
-**Status:** Not started
+**Status:** Done
 
 **Files:**
 - Create: `~/.claude/statusline.d/whereami.sh` (live), then `chezmoi add`
@@ -134,7 +134,7 @@ git commit -m "statusline: add whereami.sh segment script with self-check"
 
 ### Task 2: `ports.sh`
 
-**Status:** Not started
+**Status:** Done
 
 **Files:**
 - Create: `~/.claude/statusline.d/ports.sh` (live), then `chezmoi add`
@@ -209,7 +209,7 @@ git commit -m "statusline: add ports.sh segment script"
 
 ### Task 3: `ponytail.sh`
 
-**Status:** Not started
+**Status:** Done
 
 **Files:**
 - Create: `~/.claude/statusline.d/ponytail.sh` (live), then `chezmoi add`
@@ -267,7 +267,7 @@ git commit -m "statusline: add ponytail.sh segment script"
 
 ### Task 4: Pinned install + ccstatusline config + render check
 
-**Status:** Not started
+**Status:** Done
 
 **Files:**
 - Modify: `~/.config/ccstatusline/settings.json` (replace the stale single-line config), then `chezmoi add`
@@ -302,7 +302,9 @@ cat > ~/.config/ccstatusline/settings.json <<'EOF'
       { "id": "w8", "type": "weekly-usage" },
       { "id": "w9", "type": "git-changes" }
     ],
-    []
+    [
+      { "id": "w10", "type": "current-working-dir", "rawValue": true, "metadata": { "abbreviateHome": "true" } }
+    ]
   ],
   "flexMode": "full-minus-40",
   "compactThreshold": 60,
@@ -354,7 +356,7 @@ git commit -m "statusline: two-line powerline ccstatusline config"
 
 ### Task 5: Cut over `~/.claude/settings.json`, retire `statusline.sh`
 
-**Status:** Not started
+**Status:** Done
 
 **Files:**
 - Modify: `~/.claude/settings.json` — `statusLine` object only

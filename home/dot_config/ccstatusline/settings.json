@@ -49,7 +49,16 @@
         "type": "git-changes"
       }
     ],
-    []
+    [
+      {
+        "id": "w10",
+        "type": "current-working-dir",
+        "rawValue": true,
+        "metadata": {
+          "abbreviateHome": "true"
+        }
+      }
+    ]
   ],
   "flexMode": "full-minus-40",
   "compactThreshold": 60,

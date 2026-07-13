@@ -4,13 +4,13 @@ Date: 2026-07-13. No Linear ticket (personal tooling).
 
 ## Goal
 
-Replace the hand-rolled `~/.claude/statusline.sh` with a two-line powerline status line rendered by ccstatusline, showing session identity on line 1 and usage telemetry on line 2. Keep the ponytail badge and add the per-worktree dev-server ports.
+Replace the hand-rolled `~/.claude/statusline.sh` with a three-line powerline status line rendered by ccstatusline: session identity on line 1, usage telemetry on line 2, the full cwd path on line 3. Keep the ponytail badge and add the per-worktree dev-server ports.
 
 ## Decisions
 
 | Question | Decision |
 |---|---|
-| Layout | Two lines: identity, then telemetry |
+| Layout | Three lines: identity, telemetry, full cwd path (line 3 added at Omair's request during execution — worktree paths are long and line 1 shows only the worktree name) |
 | Usage widgets | Context %, block reset timer, weekly usage. No per-session cost, no Opus/Sonnet split |
 | Dir/branch | Repo + worktree name; branch only when it differs from the worktree name |
 | Ports | Show `.ports` and `.ports.adk` values when present |
@@ -52,6 +52,12 @@ Line 2 (telemetry):
 | 2 | BlockResetTimer | Time until the 5-hour block resets |
 | 3 | WeeklyUsage | Weekly plan usage % |
 | 4 | GitChanges | `+N -M` insertions/deletions, 5s git cache |
+
+Line 3 (location):
+
+| # | Widget | Content |
+|---|---|---|
+| 1 | CurrentWorkingDir | Full session cwd, home abbreviated to `~` (`rawValue`, `metadata.abbreviateHome`) |
 
 Powerline enabled with the stock `U+E0B0` arrow separator, `flexMode` left at `full-minus-40` so line 1 truncates from the right in narrow splits.
 
