@@ -37,9 +37,11 @@ taps=(
 -}}
 {{ end }}
 
-# Install taps
+# Install taps. Homebrew 6.0+ refuses to load formulae/casks from untrusted
+# third-party taps, so trust each tap we deliberately declare here.
 for tap in "${taps[@]}"; do
     brew tap "$tap"
+    brew trust --tap "$tap"
 done
 
 # Write Brewfile to persistent location for cleanup alias (cmclean)

@@ -34,5 +34,5 @@ Take a single-use prompt and generalize it so it runs correctly every time.
 - Return the rewritten prompt in a code block.
 - Add a short **what-changed** table (original → improved, with the why).
 - If the user wants it permanent, offer to persist it: a recurring task, or a
-  skill via `superpowers:writing-skills` / `skill-creator`. (If it touches
+  skill via poteto-mode's Authoring a skill playbook (`playbooks/authoring-a-skill.md`). (If it touches
   dotfiles, author it under chezmoi, not directly in `~`.)

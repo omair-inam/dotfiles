@@ -1,0 +1,8 @@
+# uv
+export PATH="/Users/omair/.local/bin:$PATH"
+
+# 1Password CLI default account.
+# Overrides `system_auth_latest_signin` (the volatile "last Touch ID unlock")
+# so `op` commands default to omair@i.ai instead of whichever account was
+# last unlocked. Set in .zshenv so non-interactive shells/scripts inherit it.
+export OP_ACCOUNT="iaiteam.1password.com"
