@@ -21,18 +21,6 @@ defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 52 \
 # Apply keyboard shortcut changes without logout
 /System/Library/PrivateFrameworks/SystemAdministration.framework/Resources/activateSettings -u
 
-{{ if .work_device }}
-
-# Ensure XProtect is running and updated
-sudo /usr/sbin/softwareupdate --background-critical
-
-# Enable automatic macOS updates
-sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
-sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticDownload -bool true
-sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate CriticalUpdateInstall -bool true
-sudo defaults write /Library/Preferences/com.apple.commerce AutoUpdate -bool true
-
-# Enable automatic macOS updates
-sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticallyInstallMacOSUpdates -bool true
-
-{{ end }}
+killall Dock
+killall Finder
+killall SystemUIServer
