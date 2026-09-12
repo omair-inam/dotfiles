@@ -1,0 +1,28 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+{{- $settings := include "dot_claude/private_settings.json" | fromJson -}}
+#!/bin/bash
+
+set -euo pipefail
+
+CLAUDE="$HOME/.local/bin/claude"
+[[ -x "$CLAUDE" ]] || { echo "claude not installed; skipping plugin install" >&2; exit 0; }
+
+# Marketplaces and user-scope plugins come from ~/.claude/settings.json
+# (extraKnownMarketplaces and enabledPlugins). Edit that file, not this one.
+{{ range $name, $m := $settings.extraKnownMarketplaces -}}
+{{- if eq $m.source.source "github" }}
+"$CLAUDE" plugin marketplace add {{ $m.source.repo | quote }} 2>/dev/null || true
+{{- else if eq $m.source.source "git" }}
+"$CLAUDE" plugin marketplace add {{ $m.source.url | quote }} 2>/dev/null || true
+{{- else if eq $m.source.source "directory" }}
+[[ -d {{ $m.source.path | quote }} ]] && "$CLAUDE" plugin marketplace add {{ $m.source.path | quote }} 2>/dev/null || true
+{{- end }}
+{{- end }}
+
+installed=$("$CLAUDE" plugin list --json 2>/dev/null || echo "[]")
+{{ range $plugin, $enabled := $settings.enabledPlugins -}}
+{{- if $enabled }}
+grep -q {{ $plugin | quote }} <<<"$installed" || "$CLAUDE" plugin install -y --scope user {{ $plugin | quote }}
+{{- end }}
+{{- end }}
+{{ end }}
