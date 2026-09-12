@@ -1,0 +1,42 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+if ! xcode-select -p >/dev/null 2>&1; then
+  echo "Installing Xcode Command Line Tools"
+  # This marker makes softwareupdate list the CLT package without the GUI prompt.
+  touch /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+  label=$(softwareupdate -l 2>/dev/null | sed -n 's/^\*[[:space:]]*Label: \(Command Line Tools.*\)$/\1/p' | tail -1)
+  softwareupdate -i "$label"
+  rm -f /tmp/.com.apple.dt.CommandLineTools.installondemand.in-progress
+fi
+
+if [[ "$(uname -m)" == arm64 ]] && ! pgrep -q oahd; then
+  echo "Installing Rosetta 2"
+  softwareupdate --install-rosetta --agree-to-license
+fi
+
+if [[ ! -x /opt/homebrew/bin/brew ]]; then
+  echo "Installing Homebrew (asks for your password once)"
+  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+if [[ ! -f "$HOME/.oh-my-zsh/oh-my-zsh.sh" ]]; then
+  echo "Installing Oh My Zsh"
+  RUNZSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
+fi
+
+custom="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+clone() {
+  [[ -d "$custom/$2" ]] || git clone --depth=1 "$1" "$custom/$2"
+}
+clone https://github.com/romkatv/powerlevel10k.git themes/powerlevel10k
+clone https://github.com/zsh-users/zsh-autosuggestions plugins/zsh-autosuggestions
+clone https://github.com/zsh-users/zsh-history-substring-search plugins/zsh-history-substring-search
+clone https://github.com/wfxr/forgit.git plugins/forgit
+clone https://github.com/zsh-users/zsh-completions plugins/zsh-completions
+clone https://github.com/supercrabtree/k plugins/k
+clone https://github.com/z-shell/zsh-eza plugins/zsh-eza
+{{ end }}
