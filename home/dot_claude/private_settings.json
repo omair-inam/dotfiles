@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "cleanupPeriodDays": 99999,
+  "env": {
+    "CLAUDE_CODE_NO_FLICKER": "1"
+  },
+  "permissions": {
+    "defaultMode": "auto"
+  },
+  "model": "opus[1m]",
+  "skillOverrides": {
+    "adk-deploy-guide": "off",
+    "adk-scaffold": "off",
+    "google-agents-cli-adk-code": "off",
+    "google-agents-cli-deploy": "off",
+    "google-agents-cli-eval": "off",
+    "google-agents-cli-observability": "off",
+    "google-agents-cli-publish": "off",
+    "google-agents-cli-scaffold": "off",
+    "google-agents-cli-workflow": "off",
+    "code:analyze-test": "off",
+    "code:analyze:technical-debt": "off",
+    "dev:approve-plan": "off",
+    "dev:create-prd": "off",
+    "dev:generate-tasks": "off",
+    "dev:process-tasks": "off",
+    "dev:tdd": "off",
+    "docs:analyze:explain": "off",
+    "git:push_pr_update": "off",
+    "pr:respond": "off",
+    "pr:review": "off",
+    "pr:update": "off",
+    "sql:trino-query": "off",
+    "clarify": "off",
+    "gws-sheets": "off",
+    "docs:fetch": "off",
+    "git:commit": "off",
+    "git:wt_switch": "off",
+    "browser-automation": "off",
+    "mattpocock-skills:tdd": "off",
+    "mattpocock-skills:diagnosing-bugs": "off",
+    "mattpocock-skills:code-review": "off",
+    "mattpocock-skills:grill-with-docs": "off"
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.claude/hooks/load-direnv.sh\""
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "ccstatusline",
+    "refreshInterval": 10
+  },
+  "enabledPlugins": {
+    "explanatory-output-style@claude-code-plugins": false,
+    "code-review@claude-code-plugins": true,
+    "superpowers@claude-plugins-official": true,
+    "commit-commands@claude-plugins-official": false,
+    "elements-of-style@superpowers-marketplace": true,
+    "example-skills@anthropic-agent-skills": false,
+    "conversation-search@cc-conversation-search": false,
+    "claude-md-management@claude-plugins-official": false,
+    "episodic-memory@superpowers-marketplace": false,
+    "document-skills@anthropic-agent-skills": false,
+    "slack@claude-plugins-official": true,
+    "notes@skills": true,
+    "ponytail@ponytail": true,
+    "frontend-slides@frontend-slides": false,
+    "fullstory@fullstory": true,
+    "mattpocock-skills@mattpocock": true,
+    "codex@openai-codex": true,
+    "diagram-design@diagram-design": true,
+    "pstack@pstack-claude": true
+  },
+  "extraKnownMarketplaces": {
+    "anthropic-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
+    },
+    "skills": {
+      "source": {
+        "source": "directory",
+        "path": "/Users/omair/projects/skills"
+      }
+    },
+    "ponytail": {
+      "source": {
+        "source": "github",
+        "repo": "DietrichGebert/ponytail"
+      }
+    },
+    "launchdarkly-ai-tooling": {
+      "source": {
+        "source": "github",
+        "repo": "launchdarkly/ai-tooling"
+      }
+    },
+    "frontend-slides": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/zarazhangrui/frontend-slides.git"
+      }
+    },
+    "fullstory": {
+      "source": {
+        "source": "github",
+        "repo": "fullstorydev/fullstory-skills"
+      }
+    },
+    "firebase": {
+      "source": {
+        "source": "github",
+        "repo": "firebase/skills"
+      }
+    },
+    "mattpocock": {
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills"
+      }
+    },
+    "openai-codex": {
+      "source": {
+        "source": "github",
+        "repo": "openai/codex-plugin-cc"
+      }
+    },
+    "diagram-design": {
+      "source": {
+        "source": "github",
+        "repo": "cathrynlavery/diagram-design"
+      }
+    },
+    "pstack-claude": {
+      "source": {
+        "source": "github",
+        "repo": "michael-denyer/pstack-claude"
+      }
+    }
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "high",
+  "modelSettings": {
+    "claude-opus-5": {
+      "effortLevel": "high"
+    },
+    "claude-sonnet-5": {
+      "effortLevel": "low"
+    },
+    "claude-fable-5-1": {
+      "effortLevel": "low"
+    }
+  },
+  "voice": {
+    "enabled": true,
+    "mode": "hold"
+  },
+  "autoMemoryEnabled": false,
+  "skipDangerousModePermissionPrompt": true,
+  "verbose": true,
+  "autoCompactEnabled": true,
+  "autoContinueAtUsageLimit": true,
+  "remoteControlAtStartup": true,
+  "agentPushNotifEnabled": true,
+  "skipAutoPermissionPrompt": true,
+  "autoMode": {
+    "allow": [
+      "$defaults",
+      "Bash(uv sync:*) in iv-living-archive",
+      "Bash(make lint-staged:*), Bash(make lint:*), Bash(make test-backend:*) in iv-living-archive",
+      "Bash(make tf-plan-testing:*), Bash(make tf-plan-production:*) in iv-living-archive (read-only plans)"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Bash(make tf-apply-production:*) in iv-living-archive — BREAK-GLASS per CLAUDE.md, normal path is PR + terrateam apply comment",
+      "Bash(make reseed-testing:*) in iv-living-archive — wipes every user document in testing including real team accounts",
+      "gcloud commands targeting project iv-living-archive-poc (production) that are not read-only"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: I-AI-Corp (github.com/I-AI-Corp) — scoped to the iai-explorer repo",
+      "**Cloud provider(s)**: Google Cloud Platform — projects `iv-living-archive-poc` (production) and `iv-living-archive-testing` (testing + previews); region us-central1 (+ global for Gemini 3 preview)",
+      "**Repository visibility**: not queryable here (gh visibility check returned \"not queryable here\") — treat as private per shipped-default fallback (org name and repo naming give no public signal); verify before relying on this",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: 1Password is the source of truth (vaults `iai-explorer-dev`, `iai-explorer-prod`), values referenced via `op://`, never committed; GCP Secret Manager is a derived cache Cloud Run reads; CI/Terrateam secrets synced via `scripts/sync-github-secrets.sh`",
+      "**Default / protected branches**: `main` is the default branch; branch protection via active ruleset (blocks deletions/force-pushes, requires PRs) on `main` — treat `main` as protected even though classic \"Protected branches\" listing showed none, per the rulesets-vs-classic-protection note",
+      "**CI/CD deploy targets**: GitHub Actions + Terrateam (plan-on-PR human gate, merge auto-applies) deploying Terraform-managed infra to GCP projects `iv-living-archive-poc` (production) and `iv-living-archive-testing` (testing/preview); Cloud Run services (e.g. `showboat`, backend) in `us-central1`",
+      "**Network posture**: None configured",
+      "**Source control**: GitHub repo `I-AI-Corp/iai-explorer` (origin/http remotes both point here) and its remote(s) only",
+      "**Trusted internal domains**: testing.explorer.i.ai, explorer.i.ai (this project's testing and production URLs)",
+      "**Trusted cloud buckets**: gs://iv-living-archive-testing/, gs://iv-living-archive-poc/images/ (usage-corroborated: both seen in project transcripts and config scan)",
+      "**Key internal services**: run.googleapis.com, firestore.googleapis.com, aiplatform.googleapis.com (Vertex AI Vector Search), cloudtasks.googleapis.com, storage.googleapis.com, iamcredentials.googleapis.com, iv-explorer-backend Cloud Run service, perception-lab Cloud Run service, Arize AX (prod/preview tracing), turbopuffer.com",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: Firestore user auth/sessions collection, Firestore `sessions` collection, artifact docs under `users/{uid}/artifacts/{artifact_id}`, user memory records under `app/memory/*`, taste profile cache, 1Password vaults `iai-explorer-dev`/`iai-explorer-prod`, CI secrets (LAUNCHDARKLY_ACCESS_TOKEN, OP_SERVICE_ACCOUNT_TOKEN, OP_SERVICE_ACCOUNT_TOKEN_TESTING, TEST_USER_API_KEY) — share only with audiences cleared at the [named+specifics] bar",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any host/namespace/container with `prod` or `production` as a whole word/segment — includes GCP project `iv-living-archive-poc` (production), the `phoenix-db` Cloud SQL instance backing prod ADK sessions, terraform/envs/production/**",
+      "**Protected deployment namespaces / environments**: production GCP project `iv-living-archive-poc`; `make tf-apply-production` is explicitly flagged BREAK-GLASS (normal path is PR + 'terrateam apply' comment); testing project `iv-living-archive-testing` reseed (`make reseed-testing`) wipes all user documents including real team accounts",
+      "**Protected IaC scopes**: `terraform/` for both envs (testing and production), especially `terraform/envs/production/**` and `terraform/modules/environment/iam.tf`; LaunchDarkly flag existence/state is Terraform-owned (`terraform/envs/launchdarkly/`) — never hand-create flags",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development",
+      "**Trusted repo**: /Users/omair/projects/iv-living-archive (working directory) and its remote `origin`/`http` at https://github.com/I-AI-Corp/iai-explorer.git — visibility not confirmed, so confidential material should not be assumed clearable for commit/push until visibility is verified; secrets and sensitive data are never cleared into the repo regardless of visibility",
+      "**Org-specific CLIs**: gcloud, uv, gh, gws, ldcli (LaunchDarkly CLI), op (1Password CLI), showboat, ax, mise, direnv, rclone, tuple, pxe-local",
+      "**Routine under this repo's `.claude/worktrees/` prefix**: worktree creation/entry is routine for this project per CLAUDE.md convention; treat `.claude/worktrees/**` as a normal working area, not a permission-root relocation trigger"
+    ]
+  },
+  "voiceEnabled": true,
+  "feedbackSurveyState": {
+    "lastShownTime": 1754064771115
+  }
+}

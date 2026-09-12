@@ -3,84 +3,111 @@
   "lines": [
     [
       {
-        "id": "w1",
-        "type": "custom-command",
-        "commandPath": "bash ~/.claude/statusline.d/ponytail.sh",
-        "preserveColors": false,
-        "timeout": 500,
-        "maxWidth": 14
+        "id": "1882b377-6236-43ee-b891-ca990aaff55a",
+        "type": "claude-account-email",
+        "rawValue": true
       },
       {
-        "id": "w2",
-        "type": "custom-command",
-        "commandPath": "bash ~/.claude/statusline.d/whereami.sh",
-        "timeout": 1000
-      },
-      {
-        "id": "w3",
-        "type": "model"
-      },
-      {
-        "id": "w4",
-        "type": "thinking-effort"
-      },
-      {
-        "id": "w5",
-        "type": "custom-command",
-        "commandPath": "bash ~/.claude/statusline.d/ports.sh",
-        "timeout": 1000
+        "id": "cf2a5f30-5b6a-4506-861b-53da3202858b",
+        "type": "claude-session-id",
+        "rawValue": true
       }
     ],
     [
       {
-        "id": "w6",
-        "type": "context-percentage"
+        "id": "ecd1f4df-e5c9-4747-b502-22ac18aa1636",
+        "type": "model",
+        "rawValue": true
       },
       {
-        "id": "w7",
-        "type": "reset-timer"
+        "id": "5a0666b0-3955-43d3-bef5-595c65a486f3",
+        "type": "thinking-effort",
+        "rawValue": true
+      },
+      {
+        "id": "d24adaca-da4a-4571-8f00-473170934f2f",
+        "type": "context-bar",
+        "rawValue": false
+      }
+    ],
+    [
+      {
+        "id": "1aa1d1d4-dcaa-489c-b6c9-4af584ae3df4",
+        "type": "session-usage",
+        "rawValue": false
       },
       {
         "id": "w8",
-        "type": "weekly-usage"
+        "type": "weekly-usage",
+        "rawValue": false
+      },
+      {
+        "id": "98eeb5b1-9d25-46fb-b1ba-f143ce3898eb",
+        "type": "fable-weekly-usage",
+        "rawValue": false
+      },
+      {
+        "id": "w7",
+        "type": "reset-timer",
+        "rawValue": false
       },
       {
         "id": "w9",
-        "type": "git-changes"
+        "type": "weekly-reset-timer",
+        "rawValue": false
+      }
+    ],
+    [
+      {
+        "id": "5b8feec8-f064-4e30-9fbe-3d9c18f4173d",
+        "type": "git-branch",
+        "rawValue": true
+      },
+      {
+        "id": "w12",
+        "type": "custom-command",
+        "rawValue": true,
+        "commandPath": "bash ~/.claude/statusline.d/pr.sh"
+      }
+    ],
+    [
+      {
+        "id": "w13",
+        "type": "custom-command",
+        "rawValue": true,
+        "commandPath": "bash ~/.claude/statusline.d/links.sh"
       }
     ],
     [
       {
         "id": "w10",
-        "type": "current-working-dir",
+        "type": "custom-command",
         "rawValue": true,
-        "metadata": {
-          "abbreviateHome": "true"
-        }
+        "commandPath": "bash ~/.claude/statusline.d/whereami.sh"
       }
     ]
   ],
-  "flexMode": "full-minus-40",
+  "flexMode": "full",
   "compactThreshold": 60,
-  "colorLevel": 2,
+  "colorLevel": 3,
+  "defaultPaddingSide": "both",
   "inheritSeparatorColors": false,
   "globalBold": false,
   "gitCacheTtlSeconds": 5,
   "minimalistMode": false,
   "powerline": {
-    "enabled": true,
-    "theme": "nord",
+    "enabled": false,
     "separators": [
-      ""
+      " \u00b7 "
     ],
     "separatorInvertBackground": [
-      false
+      true
     ],
     "startCaps": [],
-    "endCaps": [
-      ""
-    ],
+    "endCaps": [],
+    "theme": "gruvbox",
     "autoAlign": false,
     "continueThemeAcrossLines": true
-  }
+  },
+  "defaultSeparator": " \u00b7 "
 }
