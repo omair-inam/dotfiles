@@ -18,6 +18,8 @@ Produces an honest progress read and a prioritized plan by triangulating what wa
 
 Cadence context: the team runs **Monday = goal-setting, Friday = accomplishments.**
 
+Every mode ends by creating its prioritized list as todos in Things (see **Step 4**).
+
 ## Step 0 — GATE (verify access; do NOT proceed until it passes)
 
 Hard gate — produce evidence, then state `GATE PASSED` / `GATE FAILED`. If a
@@ -67,6 +69,36 @@ declaring status.
 - **monday:** a focused, day-sized shortlist (≈3–6 items) of today's key tasks,
   lead with #1, one line of why + any blocker; park the rest under "later this
   week".
+
+After presenting the list, always proceed to **Step 4** to push it into Things.
+
+## Step 4 — Create the task list in Things (all modes)
+
+Turn the Step 3 prioritized list into Things 3 todos with the `things` CLI.
+
+1. **Precondition (non-fatal):** check `command -v things`. If it's missing, skip
+   this step, keep the Step 3 reply, and tell the user the list wasn't pushed. A
+   Things problem must not invalidate the review.
+2. **Source the todos** from the mode's Step 3 deliverable:
+   - `daily` → the prioritized action list for today.
+   - `monday` → the 3–6 item shortlist (the "later this week" items stay out).
+   - `weekly` → the P0/P1/P2 goals; prefix the priority in the title (`[P0] …`).
+     "Watching"/FYI items are **not** pushed.
+3. **Scheduling (`--when`):** `daily` & `monday` → `today`; `weekly` → the upcoming
+   Monday's date as ISO `YYYY-MM-DD` (compute it relative to today).
+4. **One `things add` per item, in priority order (most important first):**
+   - Title = the action.
+   - `--notes` = the one-line *why* + any blocker/evidence from the Step 2 reconcile.
+   - `--when` per above.
+   - `--tags=work` — harmless; Things applies it only if that tag already exists.
+5. **Create, then report.** Run the commands, then list every todo created with
+   its title, when, and notes. A todo is one click to delete in Things, so the
+   report is the review; do not preview and wait.
+
+```bash
+things add "Wire up retry backoff in publisher" \
+  --when=today --notes="P0 from Fri review; unblocks Datadog alert noise" --tags=work
+```
 
 ## Identities & gotchas
 
