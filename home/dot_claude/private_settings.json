@@ -7,7 +7,7 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "opus[1m]",
+  "model": "claude-fable-5-1[1m]",
   "skillOverrides": {
     "adk-deploy-guide": "off",
     "adk-scaffold": "off",
@@ -147,6 +147,12 @@
         "source": "github",
         "repo": "michael-denyer/pstack-claude"
       }
+    },
+    "superpowers-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "obra/superpowers-marketplace"
+      }
     }
   },
   "alwaysThinkingEnabled": true,
@@ -160,8 +166,12 @@
     },
     "claude-fable-5-1": {
       "effortLevel": "low"
+    },
+    "claude-opus-4-8": {
+      "effortLevel": "high"
     }
   },
+  "tui": "fullscreen",
   "voice": {
     "enabled": true,
     "mode": "hold"
