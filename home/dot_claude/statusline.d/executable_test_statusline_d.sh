@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+# Self-check for statusline.d scripts. Run: bash ~/.claude/statusline.d/test_statusline_d.sh
+set -u
+d=$(cd "$(dirname "$0")" && pwd)
+fails=0
+check() {
+    if [ "$2" = "$3" ]; then echo "ok   $1"; else echo "FAIL $1: expected [$2] got [$3]"; fails=$((fails+1)); fi
+}
+payload() { printf '{"cwd":"%s","workspace":{"current_dir":"%s"}}' "$1" "$1"; }
+
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+
+repo="$tmp/myrepo"
+git init -q -b main "$repo"
+git -C "$repo" -c user.email=t@t -c user.name=t commit -q --allow-empty -m x
+git -C "$repo" worktree add -q -b iai-1-fix "$repo/.worktrees/iai-1-fix"
+git -C "$repo" worktree add -q -b feature/other "$repo/.worktrees/wt2"
+
+# --- whereami.sh --- prints the cwd, $HOME abbreviated to ~
+check "cwd verbatim (non-home)" "$repo"                      "$(payload "$repo" | bash "$d/whereami.sh")"
+check "cwd home-abbreviated"    "~/sub/dir"                  "$(payload "$HOME/sub/dir" | bash "$d/whereami.sh")"
+check "cwd is exactly home"     "~"                          "$(payload "$HOME" | bash "$d/whereami.sh")"
+check "empty payload"           ""                           "$(printf '{}' | bash "$d/whereami.sh")"
+
+# --- ports.sh ---
+printf 'BACKEND_PORT=8012\nFRONTEND_PORT=3002\n' > "$repo/.ports"
+printf 'ADK_WEB_PORT=8204\n' > "$repo/.ports.adk"
+check "ports both files"       "be:8012 fe:3002 adk:8204"    "$(payload "$repo" | bash "$d/ports.sh")"
+check "ports per-worktree"     ""                            "$(payload "$repo/.worktrees/wt2" | bash "$d/ports.sh")"
+rm "$repo/.ports.adk"
+check "ports .ports only"      "be:8012 fe:3002"             "$(payload "$repo" | bash "$d/ports.sh")"
+rm "$repo/.ports"
+check "ports none"             ""                            "$(payload "$repo" | bash "$d/ports.sh")"
+
+# --- ponytail.sh --- (smoke: must exist and exit 0; output depends on plugin presence)
+bash "$d/ponytail.sh" </dev/null >/dev/null 2>&1 || { echo "FAIL ponytail runs"; fails=$((fails+1)); }
+
+[ "$fails" -eq 0 ] && echo "ALL OK" || { echo "$fails failing"; exit 1; }
