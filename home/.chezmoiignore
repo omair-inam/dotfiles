@@ -1,1 +1,7 @@
 .Brewfile
+
+# DNAstack-era Claude Code agents and command. Kept under version control for
+# reference, never written to ~/.claude. Delete the line to install one.
+.claude/agents/build-failure-investigator.md
+.claude/agents/omics-cli-expert.md
+.claude/commands/sql
