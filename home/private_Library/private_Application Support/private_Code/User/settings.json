@@ -1,0 +1,49 @@
+{
+    "terminal.integrated.fontFamily": "MesloLGS NF",
+    "telemetry.telemetryLevel": "off",
+    "java.autobuild.enabled": false,
+    "files.autoSave": "afterDelay",
+    "chat.agent.enabled": true,
+    "github.copilot.chat.agent.thinkingTool": true,
+    "containers.containerClient": "com.microsoft.visualstudio.containers.docker",
+    "github.copilot.nextEditSuggestions.enabled": true,
+    "github.copilot.chat.codesearch.enabled": true,
+    "docker.extension.enableComposeLanguageServer": false,
+    "diffEditor.renderSideBySide": true,
+    "workbench.colorTheme": "Visual Studio Light",
+    "vs-kubernetes": {
+        "vscode-kubernetes.helm-path-mac": "/Users/omair/.vs-kubernetes/tools/helm/darwin-arm64/helm",
+        "vscode-kubernetes.minikube-path-mac": "/Users/omair/.vs-kubernetes/tools/minikube/darwin-arm64/minikube"
+    },
+    "[dockercompose]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.autoIndent": "advanced",
+        "editor.quickSuggestions": {
+            "other": true,
+            "comments": false,
+            "strings": true
+        },
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "[github-actions-workflow]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "security.workspace.trust.untrustedFiles": "open",
+    "github.copilot.enable": {
+        "*": true,
+        "plaintext": false,
+        "markdown": true,
+        "scminput": false
+    },
+    "claudeCode.preferredLocation": "panel",
+    "workbench.startupEditor": "none",
+    "chat.viewSessions.orientation": "stacked",
+    "accessibility.signals.lineHasInlineSuggestion": {
+        "sound": "off"
+    },
+    "git.blame.editorDecoration.enabled": true,
+    "editor.accessibilitySupport": "off",
+    "security.promptForLocalFileProtocolHandling": false,
+    "claudeCode.hideOnboarding": true
+}

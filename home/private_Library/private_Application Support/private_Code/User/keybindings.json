@@ -1,0 +1,13 @@
+// Place your key bindings in this file to override the defaults
+[
+    {
+        "key": "ctrl+shift+alt+cmd+up",
+        "command": "chatEditor.action.navigatePrevious",
+        "when": "chatEdits.hasEditorModifications && chatIsEnabled && editorFocus && !chatEdits.isRequestInProgress"
+    },
+    {
+        "key": "ctrl+shift+alt+cmd+down",
+        "command": "chatEditor.action.navigateNext",
+        "when": "chatEdits.hasEditorModifications && chatIsEnabled && editorFocus && !chatEdits.isRequestInProgress"
+    }
+]
