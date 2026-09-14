@@ -1,20 +1,56 @@
-
 ## About Me
 * Full name: Omair-Inam Abdul-Matin
+
+## Communication style
+ALWAYS use the following style when communicating with me, or when writing documents, specs, or PRs for me:
+
+Terse shorthand is fine between tool calls (that's you thinking out loud, and brevity there is good). Your final summary is different: it's for a reader who didn't see any of that.
+
+If you've been working for a while without the user watching (overnight, across many tool calls, since they last spoke), your final message is their first look at any of it. Write it as a re-grounding, not a continuation of your working thread: the outcome first, then the one or two things you need from them, each explained as if new. The vocabulary you built up while working is yours, not theirs; leave it behind unless you re-introduce it.
+
+When you write the summary at the end, drop the working shorthand. Write complete sentences. Spell out terms. Don't use arrow chains, hyphen-stacked compounds, or labels you made up earlier. When you mention files, commits, flags, or other identifiers, give each one its own plain-language clause. Open with the outcome: one sentence on what happened or what you found. Then the supporting detail. If you have to choose between short and clear, choose clear.
 
 ## Git Workflow
 * Always create branches from `origin/main`, never from local `main`. Use `git fetch origin && git checkout -b <branch> origin/main` for new branches.
 * Keep PRs focused: before creating a PR, verify the diff only contains changes related to the current task. Run `git diff origin/main --stat` and remove unrelated files.
+* Never leave uncommitted edits on local `main`. `gprav` (`git pull --rebase --autostash`) re-applies them after every pull, and an upstream change to the same lines leaves a `UU` conflict that blocks all later pulls. Park such edits on a branch or worktree, or commit them.
+* Personal skill installs mutate the tracked `skills-lock.json`. Install them at user scope (`~/.claude/skills`) or ship them in a PR; never leave that edit uncommitted on `main`.
+
+## Linear
+If I ask to work on a Linear ticket:
+* If it is already assigned, ask me if I want to take it over.
+* If it is unassigned:
+  * Assign the ticket to me.  
+  * Update the ticket's status to "In Progress" 
+  * Add a comment to the ticket.  Include 
+     * the worktree path
+     * the branch name 
+     * the Claude Code session ID
+     * a code block with the command to enter the worktree, and how to reconnect to the session. 
+
+### Images in Linear comments
+* `prepare_attachment_upload` + `create_attachment_from_upload` uploads the file and lists it under the
+  issue's **Attachments**. It does NOT place the image in a comment — a comment with no image markdown
+  renders no image, however many attachments the issue has.
+* To show an image *inside* a comment or the description, put the `assetUrl` returned by
+  `prepare_attachment_upload` into the body as markdown: `![caption](<assetUrl>)`. Pass the bare URL;
+  Linear appends its own `?signature=...` on save, which is the signal it will render.
+* Use `create_attachment_from_upload` as well only when the file should also stand alone in the
+  Attachments list.
 
 ## Workflow Conventions
 * Create a worktree before committing specs and implementation documents.
+* Place git worktrees under `<repo>/.claude/worktrees/<short-branch-name>` (branch from `origin/main`). Make sure `.claude/worktrees/` is ignored by the repo's tooling — add it to `.gitignore`, and to the static-site ignore file when the build input dir is the repo root (e.g. `.eleventyignore` for Eleventy).
+* That directory is required, not a preference: `EnterWorktree` prompts for permission-root relocation on any path outside the repo's `.claude/worktrees/`, and neither an `EnterWorktree` permission rule nor "don't ask again" suppresses it (only `bypassPermissions` does). Never symlink `.claude`, `.claude/worktrees`, or a worktree directory — Claude Code refuses to create a worktree on a symlinked path.
+* Never call `EnterWorktree` for the directory the session is already in; it fails with `Cannot enter worktree: <path> is the current working directory`. Check `pwd` first.
+* Inside a worktree session, the Bash guard refuses any command where `git` follows a `cd`, an `&&` chain it cannot verify statically, a runtime-computed path, or a large heredoc, with "too complex to verify that it stays inside the worktree". Run git as plain separate invocations from the worktree root, and write files with the Write tool rather than a heredoc.
 
 ## Dotfile Management
 * To edit a dotfile (e.g. .zshrc):
-  1. Check if the file is being managed by chezmoi
-  2. If it is not being managed, add it to chezmoi
-  3. If it is being managed, edit the file in chezmoi
-  4. Once editing is complete, prompt the user to apply the chezmoi changes
+  1. Check if file is managed by chezmoi
+  2. If NO, add to chezmoi
+  3. If YES, edit file in chezmoi
+  4. Once editing is complete, prompt user to apply chezmoi changes
 * zsh aliases are managed by chezmoi in ~/.local/share/chezmoi/home/dot_zsh_aliases.tmpl
 
 ## Scripts
@@ -41,10 +77,30 @@ jwt encode [-A|--alg] HS256 [-S|--secret] 1234567890 [-P|--payload] key=value
 
 ## Working with Github
 ### 1Password CLI Plugin for gh
-* The `op plugin init gh` command creates a shell alias (`alias gh="op plugin run -- gh"`) that only works in interactive shells
-* Bash scripts calling `gh` directly bypass the alias and have no credentials
-* In scripts, detect and extract the token: `GITHUB_TOKEN=$(op plugin run -- gh auth token)`
-* Plugin config: `~/.config/op/plugins.sh`, alias sourced via `~/.zsh_aliases`
+* Interactive `gh` is a `gh()` function in `~/.zsh_aliases`: the real binary when `IAI_GH_DIRECT` is set, otherwise `op plugin run -- gh` (Touch ID). Non-interactive shells never see it.
+* Check `GH_TOKEN` first. A repo whose `.envrc` exports it needs no `op` call; run `gh` directly. `I-AI-Corp/iai-explorer` (local checkout `~/projects/iv-living-archive`) does this, and also puts a `gh` shim with a cached token on PATH.
+* Only when `GH_TOKEN` is unset, run `export GH_TOKEN=$(op plugin run -- gh auth token)` once per session. Never prefix individual `gh` commands with it.
+
+### Two GitHub accounts
+
+`omairiai` is work, `omair-inam` is personal. `GH_TOKEN` is the work account, and on a personal repo such as `omair-inam/dotfiles` it reports `viewerPermission: READ`, which is just public access. Read that field before assuming a token can open a PR. The real `gh` binary at `/opt/homebrew/bin/gh` has an empty keyring, so the work token is the only credential a non-interactive shell has.
+
+### What a background session can and cannot do
+
+Push works, the GitHub API does not. Establish both before promising to land anything on a personal repo.
+
+* `SSH_AUTH_SOCK` points at launchd and holds no identities. Export `$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock` and `git fetch`, `push`, and `-S` signing all work with no prompt.
+* `op plugin run` fails with `interactive IO not available`, because it wants a TTY.
+* `op` itself is authenticated as a service account scoped to the work vaults, so a personal-vault item returns `isn't a vault in this account` or `a vault query must be provided when this command is called by a service account`. The personal `gh` token is unreachable from here.
+* So: commit, sign, and push, then hand over `https://github.com/<owner>/<repo>/pull/new/<branch>` and the PR title and body. Do not burn turns hunting for a credential that this session cannot reach.
+
+### Signing outside the work repo
+
+`~/.local/share/chezmoi` sets `gpg.format` and `user.signingkey` but not `commit.gpgsign`, so a plain `git commit` there silently produces an unsigned commit. Always pass `-S`. Verification is separately broken: `gpg.ssh.allowedSignersFile` is unset, so `%G?` prints `N` on a correctly signed commit and `E` on the signed commits already on `main`. Confirm signing by looking for a `gpgsig` header in `git cat-file commit HEAD`, never by `%G?`. Commits on that repo are authored `Omair-Inam Abdul-Matin <omairkhawaja@gmail.com>` while its config sets `user.name=omair-inam`, so pass `--author` to match history.
+
+### Editing a skill under ~/.claude
+
+`~/.claude` is not a git repo, but most of it is chezmoi-managed, so "open a PR" means `omair-inam/dotfiles`. Edit the live file, then `chezmoi add` the exact paths to bring the change into `home/dot_claude/...`; chezmoi encodes the executable bit as an `executable_` filename prefix, so the repo mode stays `100644`. That working tree carries a lot of unrelated modifications, so branch from `origin/main` in a worktree under the already-ignored `.worktrees/`, copy in only the files you touched, and check `git diff origin/main --stat` before committing.
 
 ### 1Password Touch ID / SSH Signing
 * Git commit signing, `gh` auth, and `git push` all require 1Password Touch ID approval
@@ -53,26 +109,15 @@ jwt encode [-A|--alg] HS256 [-S|--secret] 1234567890 [-P|--payload] key=value
 * Only retry once after the user confirms — do not loop
 
 ### Pull requests
-- Pull requests created by Claude Code MUST begin with the following alert at the beginning of the description:
+- Add header below to all pull request descriptions:
 
 ```
 > [!IMPORTANT]
 > *This PR was developed with AI assistance provided by [Claude Code](https://claude.ai/code)* 
 ```
-- If accessing the gh CLI fails with an authentication error, e.g.:
-
-```
-Error: To get started with GitHub CLI, please run:  gh auth login
-     Alternatively, populate the GH_TOKEN environment variable with a GitHub API authentication token.
-```
-
-Show the user the message below:
-```
-Authenticate into github by exiting Claude Code and running ghinit / ghinitdna for a personal / DNAstack repo
-```
 
 #### Review comments
-* Review comments added by Claude Code MUST begin with the following alert at the beginning of the comment body:
+* Add header below to all PR Review comments:
 
 ```
 > [!IMPORTANT]
@@ -151,16 +196,17 @@ gh api \
    -f 'body=Great stuff!'
 ```
 
-## Clickup MCP Server tips
-* Always specify Clickup ticket details using rich formatting
-
 ## Github Actions
 * To run `uv`, refer to the docs here: https://docs.astral.sh/uv/guides/integration/github/
 * To run `uv`'s `ruff` within a Github action, use the official Github action documented here: https://github.com/astral-sh/ruff-action/blob/main/README.md
 
-## Mockito directions
-* Instead of @MockBean (deprecated) use @MockitoBean
-* Instead of @SpyBean (deprecated) use @MockitoSpyBean
+## Writing
+* Apply the `unslop` skill while drafting all prose: chat replies that explain something, documents, specs, plans, tickets, PR descriptions. It shapes the first draft; it is not a cleanup pass.
+* When spawning a subagent that writes prose, tell it to invoke `unslop` before writing.
+* Content in artifacts must earn its place: a section appears only if the request or the document type's template calls for it. Offer extras as a one-line note at the end; never write them unprompted.
+* `unslop` is both the drafting standard and the audit: run its self-audit step over an existing document to strip AI tells. Two of its rules do not apply to this codebase's own vocabulary, where "substrate", "surface", "harness", "scaffolding", and "primitive" name real modules and concepts rather than metaphors.
+
+## Python CLI tools
 - Writing Python CLI tools:
 
 You write Python tools as single files. They always start with this comment:
@@ -177,3 +223,5 @@ These files can include dependencies on libraries such as Click. If they do, tho
 #     "sqlite-utils",
 # ]
 # ///
+@~/.claude/pstack-models.md
+@~/.claude/pstack-overrides.md
