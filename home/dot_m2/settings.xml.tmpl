@@ -43,7 +43,7 @@
        <server>
            <id>github</id>
            <username>omairvalence</username>
-           <password>{{ onepasswordRead .secrets.github.tokens.maven_settings }}</password>
+           <password>{{ onepasswordRead .secrets.github.tokens.maven_settings .secrets.github.account }}</password>
        </server>
    </servers>
 {{ end }}

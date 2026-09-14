@@ -250,4 +250,30 @@ function cmdw() {
 function pbcopystr() { pbcopy <<< "$*"; }
 
 export OP_PLUGIN_ALIASES_SOURCED=1
-alias gh="op plugin run -- gh"
+# Default: route gh through the 1Password plugin (Touch ID) everywhere.
+# Set IAI_GH_DIRECT=1 (e.g. in a repo's .envrc) to use the real gh binary
+# with GH_TOKEN and no prompt.
+# Non-interactive shells (Claude Code tool calls, subagents, scripts, cron)
+# can't reach the 1Password desktop app: the plugin returns an empty
+# credential and every API call 401s. Touch ID only means anything when
+# there's a human at a prompt, so route those to the real binary too.
+gh() {
+  if [[ -n "$IAI_GH_DIRECT" || ! -o interactive ]]; then
+    command gh "$@"            # real binary → GH_TOKEN, else ~/.config/gh/hosts.yml
+  else
+    op plugin run -- gh "$@"   # normal Touch ID path everywhere else
+  fi
+}
+# Autostash conflicts after `git pull --rebase --autostash` only print a
+# hint, and every later pull then fails with "unmerged files". Fail loudly.
+unalias gprav 2>/dev/null
+gprav() {
+  git pull --rebase --autostash -v "$@"
+  local rc=$?
+  if [[ -n "$(git ls-files -u)" ]]; then
+    echo "gprav: autostash conflict, resolve these then 'git add' and 'git stash drop stash@{0}':" >&2
+    git diff --name-only --diff-filter=U >&2
+    return 1
+  fi
+  return $rc
+}

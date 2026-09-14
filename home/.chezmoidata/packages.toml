@@ -1,7 +1,6 @@
 [packages.homebrew]
     to_remove = []
     taps = [
-        "derailed/popeye",
         "mike-engel/jwt-cli",
         "omair-inam/tap",
         "raine/claude-history",
@@ -23,7 +22,8 @@
             "cleanshot",                   # Advanced screenshot and screen recording
             "forklift3",                   # File manager and FTP client
             "ghostty",                     # Terminal emulator
-            "google-chrome",               # Google web browser
+            # google-chrome: unmanaged — Chrome's built-in updater keeps it current;
+            # brew cask upgrades fight the self-updater and fail. Reinstall via brew only if desired.
             "homerow",                     # Keyboard shortcuts for on-screen buttons
             "insomnia",                    # API testing and development tool
             "superkey",                    # Keyboard modifier key utility
@@ -115,7 +115,6 @@
             "bcftools",                    # Bioinformatics SAM/BAM/VCF tools
             "cloud-sql-proxy",             # Google Cloud SQL proxy
             "k9s",                         # Kubernetes CLI manager
-            "derailed/popeye/popeye",      # Kubernetes cluster sanitizer
             "docker",                      # Container platform
             "helm",                        # Kubernetes package manager
             "k6",                          # Load testing tool
