@@ -25,7 +25,6 @@
             "cursor",                      # AI code editor
             "forklift3",                   # File manager and FTP client
             "ghostty",                     # Terminal emulator
-            "hyperkey",                    # Caps Lock as hyper key
             # google-chrome: unmanaged — Chrome's built-in updater keeps it current;
             # brew cask upgrades fight the self-updater and fail. Reinstall via brew only if desired.
             "homerow",                     # Keyboard shortcuts for on-screen buttons
@@ -41,7 +40,6 @@
             "ollama-app",                  # Local AI model runner
             "onedrive",                    # Microsoft cloud storage
             "orbstack",                    # Docker and Linux container runtime
-            "pycharm",                     # Python IDE
             "raycast",                     # Productivity launcher
             "rectangle-pro",               # Window management utility
             "slack",                       # Team communication
