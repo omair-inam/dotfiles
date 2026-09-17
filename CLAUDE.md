@@ -26,9 +26,6 @@
 * `home/.chezmoidata/packages.toml` — Homebrew formulae, casks, taps, Mac App Store apps
   - Consumed by `run_onchange_before_10_install-packages.sh.tmpl`
   - Split into `common`, `work`, `personal`; merged based on device flags
-* `home/.chezmoidata/onepassword.toml` — 1Password secret references
-  - e.g., `secrets.github.tokens.maven_settings = "op://Employee/Github PAT/credential"`
-  - Used in `private_dot_npmrc.tmpl` and `dot_m2/settings.xml.tmpl` via `onepasswordRead`
 
 ### Script Execution Order
 Scripts in `home/.chezmoiscripts/` run in alphabetical order within each phase:
@@ -45,25 +42,22 @@ Current scripts:
 * `run_onchange_before_14_*`, `15_*`, `16_*` — cached jwt, op, gh completions
 * `run_onchange_after_11_install_tools` — `mise install` for everything in `dot_config/mise/config.toml.tmpl`. An `after` script, because a `before` script runs before chezmoi writes `~/.config/mise/config.toml` and installs nothing on a fresh machine
 * `run_onchange_after_14_install_chrome_for_testing` — Chrome for Testing via `mise exec node -- pnpm` (needs node from 11)
-* `run_after_98_check_secrets` — warns when `~/.npmrc` has no token (work only; means run apply again)
 
 `sudo` never appears in a script. Anything that needs it is a manual step in `README.md`.
 
 ### Template Conventions
 * `{{ if .work_device }}` / `{{ if .personal_device }}` gate sections
 * `concat`, `sortAlpha`, `uniq` — merge and deduplicate lists
-* `onepasswordRead` — fetch secrets from 1Password
 * `promptBool`, `promptStringOnce` — user prompts (cached after first run)
 * `{{- }}` trims whitespace; `{{ $var := ... }}` for local variables
-* Data accessed as `.packages.*`, `.secrets.*`, `.email`, `.chezmoi.os`
+* Data accessed as `.packages.*`, `.email`, `.chezmoi.os`
 
 ### Key Managed Files
 * `dot_zshrc.tmpl` — main shell config (Oh-My-Zsh, Powerlevel10k, mise, fzf)
 * `dot_zsh_aliases.tmpl` — aliases: chezmoi (`cm*`), kubernetes (`k*`), 1Password gh plugin
 * `dot_zsh_aliases.tmpl` — Claude Code model aliases: `cch/ccs/cco` (model shortcuts), `yoloh/yolos/yoloo` (dangerous + model), `cca/ccah/ccas/ccao` (auto-mode + model)
 * `dot_gitconfig.tmpl` — git config with 1Password SSH signing, Beyond Compare merge tool
-* `private_dot_npmrc.tmpl` — NPM config with 1Password-sourced GitHub token
-* `dot_m2/settings.xml.tmpl` — Maven settings with GitHub packages (work only)
+* `dot_m2/settings.xml.tmpl` — Maven settings pinned to HTTPS Maven Central
 
 ### Editing Workflow
 * Edit files here (chezmoi source dir), NOT in `~/` directly
@@ -72,7 +66,6 @@ Current scripts:
 * Aliases file: `home/dot_zsh_aliases.tmpl` — follow existing Oh-My-Zsh naming convention
 
 ### Gotchas
-* 1Password must be unlocked for templates using `onepasswordRead` to render
 * `gh` CLI requires 1Password plugin alias; scripts need `GITHUB_TOKEN=$(op plugin run -- gh auth token)`
 * Git commits are GPG-signed via 1Password SSH — signing failures may mean 1Password is locked
 * `run_onchange` scripts re-run when template *output* changes, not just source edits

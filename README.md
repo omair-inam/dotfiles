@@ -16,8 +16,7 @@
     fail. Make sure your SSH key is added to the agent.
   - **Integrate with 1Password CLI** — lets the `op` CLI authenticate through the
     desktop app instead of requiring a separate sign-in. This is required for
-    `chezmoi apply` to render templates that call `onepasswordRead` (NPM token, Maven
-    credentials) and for the `gh` CLI plugin (`op plugin run -- gh`).
+    the `gh` CLI plugin (`op plugin run -- gh`).
 - **1Password must be signed in and unlocked** for Powerlevel10k and many zsh plugins to
   load correctly. The shell config (`.zshrc`) sources files rendered by chezmoi templates
   that depend on 1Password-backed secrets. If 1Password is locked or signed out when you
@@ -58,11 +57,6 @@ During `chezmoi apply` you will be prompted for three values (cached after first
 
 > **Note:** The reversed scroll direction preference is written immediately but requires a
 > **logout or restart** to take effect.
-
-**Work devices — second apply:** The first apply skips 1Password-backed secrets (NPM token,
-Maven credentials) because the `op` CLI isn't available yet, and it ends with a message
-telling you so. Open 1Password, sign in, enable **Settings > Developer > Integrate with
-1Password CLI**, then run `chezmoi apply` again to populate those secrets.
 
 ### 3. Post-install: commands requiring authentication
 
