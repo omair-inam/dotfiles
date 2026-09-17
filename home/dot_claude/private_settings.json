@@ -79,15 +79,11 @@
     "mattpocock-skills@mattpocock": true,
     "codex@openai-codex": true,
     "diagram-design@diagram-design": true,
-    "pstack@pstack-claude": true
+    "pstack@pstack-claude": true,
+    "agent-browser@agent-browser": true,
+    "reflex@reflex-agent-skills": true
   },
   "extraKnownMarketplaces": {
-    "claude-code-plugins": {
-      "source": {
-        "source": "github",
-        "repo": "anthropics/claude-code"
-      }
-    },
     "anthropic-agent-skills": {
       "source": {
         "source": "github",
@@ -154,6 +150,30 @@
         "repo": "michael-denyer/pstack-claude"
       }
     },
+    "agent-browser": {
+      "source": {
+        "source": "github",
+        "repo": "vercel-labs/agent-browser"
+      }
+    },
+    "reflex-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "reflex-dev/agent-skills"
+      }
+    },
+    "claude-code-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-code"
+      }
+    },
+    "claude-plugins-official": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-plugins-official"
+      }
+    },
     "superpowers-marketplace": {
       "source": {
         "source": "github",
@@ -165,13 +185,13 @@
   "effortLevel": "high",
   "modelSettings": {
     "claude-opus-5": {
-      "effortLevel": "high"
+      "effortLevel": "low"
     },
     "claude-sonnet-5": {
-      "effortLevel": "low"
+      "effortLevel": "medium"
     },
     "claude-fable-5-1": {
-      "effortLevel": "low"
+      "effortLevel": "medium"
     },
     "claude-opus-4-8": {
       "effortLevel": "high"
