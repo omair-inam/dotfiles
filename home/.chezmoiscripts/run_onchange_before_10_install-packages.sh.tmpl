@@ -6,13 +6,6 @@ set -eufo pipefail
 # Add Homebrew to PATH for the current session (required on Apple Silicon)
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
-{{ $taps := .packages.homebrew.taps -}}
-taps=(
-{{ range $taps -}}
-	{{ . }}
-{{ end -}}
-)
-
 {{ $brews := .packages.homebrew.common.formulae -}}
 
 {{ $casks := .packages.homebrew.common.casks -}}
@@ -35,15 +28,14 @@ taps=(
 -}}
 {{ end }}
 
-# Install taps. Homebrew 6.0+ refuses to load formulae/casks from untrusted
-# third-party taps, so trust each tap we deliberately declare here.
-for tap in "${taps[@]}"; do
-    brew tap "$tap"
-    brew trust --tap "$tap"
-done
-
-# Write Brewfile to persistent location for cleanup alias (cmclean)
+# Write Brewfile to persistent location for cleanup alias (cmclean).
+# Homebrew 6.0+ refuses to load formulae/casks from untrusted third-party taps,
+# so each declared tap is trusted. Declaring taps and trust here also stops
+# `brew bundle cleanup` from untapping them or wiping the trust store.
 cat > "$HOME/.Brewfile" << EOF
+{{ range .packages.homebrew.taps -}}
+tap "{{ . }}", trusted: true
+{{ end -}}
 {{ range .packages.mas.common.apps -}}
 mas "{{ .name }}", id: {{ .id }}
 {{ end -}}
@@ -67,4 +59,8 @@ cask "{{ . }}"
 EOF
 
 brew bundle --file="$HOME/.Brewfile"
+
+# Remove packages, casks, taps, and Mac App Store apps no longer in the Brewfile.
+# brew lists them and asks before removing; declining exits 1, so don't fail the apply.
+brew bundle cleanup --file="$HOME/.Brewfile" || echo "Skipped brew bundle cleanup; run cmclean to retry."
 {{ end }}
