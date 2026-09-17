@@ -66,8 +66,8 @@ Current scripts:
 * Aliases file: `home/dot_zsh_aliases.tmpl` — follow existing Oh-My-Zsh naming convention
 
 ### Gotchas
-* `gh` CLI requires 1Password plugin alias; scripts need `GITHUB_TOKEN=$(op plugin run -- gh auth token)`
-* Git commits are GPG-signed via 1Password SSH — signing failures may mean 1Password is locked
+* Interactive `gh` goes through the 1Password plugin alias. Non-interactive shells get `GH_TOKEN` for the `omair-inam` account from `.envrc`, which reads it with a 1Password service account token stored in the Keychain. Git ignores `GH_TOKEN`, so push over HTTPS with `git -c credential.helper= -c 'credential.helper=!gh auth git-credential' push`
+* Git commits are SSH-signed through the 1Password agent. `Couldn't find key in agent?` does not mean 1Password is locked. It means `SSH_AUTH_SOCK` points at the empty launchd agent. Set it to `$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock` and rerun.
 * `run_onchange` scripts re-run when template *output* changes, not just source edits
 * Use `run_before_`/`run_after_` (not `run_onchange_`) for scripts that depend on runtime environment (e.g., monitor count)
 * chezmoi source is available locally at `/Users/omair/libs/chezmoi` for reference
