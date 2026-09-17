@@ -85,7 +85,7 @@ jwt encode [-A|--alg] HS256 [-S|--secret] 1234567890 [-P|--payload] key=value
 
 `omairiai` is work, `omair-inam` is personal. `GH_TOKEN` comes from the `.envrc` of the repo the session starts in, so its account changes by repo. Before promising a push or PR, run `gh api user --jq .login` and `gh repo view <owner>/<repo> --json viewerPermission`. A work token on a personal repo reports `READ`, which is only public access. The real `gh` binary at `/opt/homebrew/bin/gh` has an empty keyring, so `GH_TOKEN` is the only credential a non-interactive shell has.
 
-In `~/.local/share/chezmoi` (`omair-inam/dotfiles`), `.envrc` reads a personal-account 1Password service account token from the macOS Keychain (account `op-service-account`, service `1password-omair-inam-dotfiles`) into `OP_SERVICE_ACCOUNT_TOKEN`. It then sets `GH_TOKEN` from `op://Claude Code/op-gh-cli-omair-inam/token`. That token is `omair-inam` with `ADMIN` on the repo, so push, `gh pr create`, and the rest of the API work with no prompt.
+`.envrc` in `~/.local/share/chezmoi`, the checkout of `omair-inam/dotfiles`, loads a service account token for the personal 1Password account into `OP_SERVICE_ACCOUNT_TOKEN`. The token lives in the macOS Keychain under account `op-service-account` and service `1password-omair-inam-dotfiles`. `.envrc` then reads `GH_TOKEN` from `op://Claude Code/op-gh-cli-omair-inam/token`. That GitHub token belongs to `omair-inam` and has `ADMIN` on the repo, so pushes, `gh pr create`, and other API calls work without a prompt.
 
 ### What a background session can and cannot do
 
@@ -103,7 +103,7 @@ In `~/.local/share/chezmoi` (`omair-inam/dotfiles`), `.envrc` reads a personal-a
 `~/.claude` is not a git repo, but most of it is chezmoi-managed, so "open a PR" means `omair-inam/dotfiles`. Edit the live file, then `chezmoi add` the exact paths to bring the change into `home/dot_claude/...`; chezmoi encodes the executable bit as an `executable_` filename prefix, so the repo mode stays `100644`. That working tree carries a lot of unrelated modifications, so branch from `origin/main` in a worktree under the already-ignored `.worktrees/`, copy in only the files you touched, and check `git diff origin/main --stat` before committing.
 
 ### 1Password Touch ID / SSH Signing
-* `error: Couldn't find key in agent?` is not a Touch ID failure. Git asked the empty launchd agent. Rerun at once with `SSH_AUTH_SOCK` set to the 1Password agent socket above; the retry rule below does not apply.
+* `error: Couldn't find key in agent?` is not a Touch ID failure. Git asked the empty launchd agent for the key. Rerun right away with `SSH_AUTH_SOCK` set to the 1Password agent socket above. The retry rule below does not apply to this error.
 * Git commit signing, `gh` auth, and `git push` all require 1Password Touch ID approval
 * If a command fails with `error: 1Password: failed to fill whole buffer` or similar 1Password auth errors, **do NOT retry automatically**
 * Instead, tell the user: "1Password Touch ID authentication failed. Please let me know when you're ready and I'll retry the command."
