@@ -22,7 +22,8 @@ CLAUDE="$HOME/.local/bin/claude"
 installed=$("$CLAUDE" plugin list --json 2>/dev/null || echo "[]")
 {{ range $plugin, $enabled := $settings.enabledPlugins -}}
 {{- if $enabled }}
-grep -q {{ $plugin | quote }} <<<"$installed" || "$CLAUDE" plugin install -y --scope user {{ $plugin | quote }}
+grep -q {{ $plugin | quote }} <<<"$installed" || "$CLAUDE" plugin install -y --scope user {{ $plugin | quote }} \
+  || echo "warning: could not install {{ $plugin }}" >&2
 {{- end }}
 {{- end }}
 {{ end }}
