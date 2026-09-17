@@ -29,10 +29,12 @@
 ### 1. Install chezmoi and apply dotfiles
 
 ```bash
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply omair-inam
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply --use-builtin-git=true omair-inam
 ```
 
-This installs chezmoi into `./bin`, clones this repo, and runs the first apply. The
+This installs chezmoi into `./bin`, clones this repo, and runs the first apply.
+`--use-builtin-git=true` makes chezmoi clone with its own git. On a Mac without Xcode
+Command Line Tools, `/usr/bin/git` only opens the install dialog and exits with an error. The
 bootstrap script installs Xcode Command Line Tools, Rosetta 2, Homebrew, Oh My Zsh,
 Powerlevel10k, and the zsh plugins before any package is installed. Later applies use the
 Homebrew `chezmoi` that the package step installs.
