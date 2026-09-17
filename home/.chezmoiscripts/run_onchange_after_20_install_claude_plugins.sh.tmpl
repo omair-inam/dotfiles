@@ -22,6 +22,11 @@ CLAUDE="$HOME/.local/bin/claude"
 installed=$("$CLAUDE" plugin list --json 2>/dev/null || echo "[]")
 {{ range $plugin, $enabled := $settings.enabledPlugins -}}
 {{- if $enabled }}
+{{- $m := index $settings.extraKnownMarketplaces (index (splitList "@" $plugin) 1) }}
+{{- if and $m (eq $m.source.source "directory") }}
+[[ -d {{ $m.source.path | quote }} ]] || echo "skipping {{ $plugin }}: {{ $m.source.path }} not found" >&2
+[[ ! -d {{ $m.source.path | quote }} ]] ||
+{{- end }}
 grep -q {{ $plugin | quote }} <<<"$installed" || "$CLAUDE" plugin install -y --scope user {{ $plugin | quote }} \
   || echo "warning: could not install {{ $plugin }}" >&2
 {{- end }}
