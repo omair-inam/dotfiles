@@ -83,16 +83,16 @@ jwt encode [-A|--alg] HS256 [-S|--secret] 1234567890 [-P|--payload] key=value
 
 ### Two GitHub accounts
 
-`omairiai` is work, `omair-inam` is personal. `GH_TOKEN` is the work account, and on a personal repo such as `omair-inam/dotfiles` it reports `viewerPermission: READ`, which is just public access. Read that field before assuming a token can open a PR. The real `gh` binary at `/opt/homebrew/bin/gh` has an empty keyring, so the work token is the only credential a non-interactive shell has.
+`omairiai` is work, `omair-inam` is personal. `GH_TOKEN` comes from the `.envrc` of the repo the session starts in, so its account changes by repo. Before promising a push or PR, run `gh api user --jq .login` and `gh repo view <owner>/<repo> --json viewerPermission`. A work token on a personal repo reports `READ`, which is only public access. The real `gh` binary at `/opt/homebrew/bin/gh` has an empty keyring, so `GH_TOKEN` is the only credential a non-interactive shell has.
+
+In `~/.local/share/chezmoi` (`omair-inam/dotfiles`), `.envrc` reads a personal-account 1Password service account token from the macOS Keychain (account `op-service-account`, service `1password-omair-inam-dotfiles`) into `OP_SERVICE_ACCOUNT_TOKEN`. It then sets `GH_TOKEN` from `op://Claude Code/op-gh-cli-omair-inam/token`. That token is `omair-inam` with `ADMIN` on the repo, so push, `gh pr create`, and the rest of the API work with no prompt.
 
 ### What a background session can and cannot do
 
-Push works, the GitHub API does not. Establish both before promising to land anything on a personal repo.
-
 * `SSH_AUTH_SOCK` points at launchd and holds no identities. Export `$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock` and `git fetch`, `push`, and `-S` signing all work with no prompt.
+* Git does not read `GH_TOKEN`. To push over an HTTPS remote, which `omair-inam/dotfiles` uses, run `git -c credential.helper= -c 'credential.helper=!gh auth git-credential' push -u origin <branch>`.
 * `op plugin run` fails with `interactive IO not available`, because it wants a TTY.
-* `op` itself is authenticated as a service account scoped to the work vaults, so a personal-vault item returns `isn't a vault in this account` or `a vault query must be provided when this command is called by a service account`. The personal `gh` token is unreachable from here.
-* So: commit, sign, and push, then hand over `https://github.com/<owner>/<repo>/pull/new/<branch>` and the PR title and body. Do not burn turns hunting for a credential that this session cannot reach.
+* `op` runs as whichever service account `OP_SERVICE_ACCOUNT_TOKEN` holds, and `op user get --me` names it. An item outside that account's vaults returns `isn't a vault in this account` or `a vault query must be provided when this command is called by a service account`.
 
 ### Signing outside the work repo
 
@@ -103,6 +103,7 @@ Push works, the GitHub API does not. Establish both before promising to land any
 `~/.claude` is not a git repo, but most of it is chezmoi-managed, so "open a PR" means `omair-inam/dotfiles`. Edit the live file, then `chezmoi add` the exact paths to bring the change into `home/dot_claude/...`; chezmoi encodes the executable bit as an `executable_` filename prefix, so the repo mode stays `100644`. That working tree carries a lot of unrelated modifications, so branch from `origin/main` in a worktree under the already-ignored `.worktrees/`, copy in only the files you touched, and check `git diff origin/main --stat` before committing.
 
 ### 1Password Touch ID / SSH Signing
+* `error: Couldn't find key in agent?` is not a Touch ID failure. Git asked the empty launchd agent. Rerun at once with `SSH_AUTH_SOCK` set to the 1Password agent socket above; the retry rule below does not apply.
 * Git commit signing, `gh` auth, and `git push` all require 1Password Touch ID approval
 * If a command fails with `error: 1Password: failed to fill whole buffer` or similar 1Password auth errors, **do NOT retry automatically**
 * Instead, tell the user: "1Password Touch ID authentication failed. Please let me know when you're ready and I'll retry the command."
