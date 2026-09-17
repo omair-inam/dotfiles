@@ -18,8 +18,9 @@ if [[ "$(uname -m)" == arm64 ]] && ! pgrep -q oahd; then
 fi
 
 if [[ ! -x /opt/homebrew/bin/brew ]]; then
-  echo "Installing Homebrew (asks for your password once)"
-  NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  echo "Installing Homebrew (asks for RETURN and your password once)"
+  # NONINTERACTIVE=1 would make the installer run `sudo -n`, which aborts without a cached ticket.
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
