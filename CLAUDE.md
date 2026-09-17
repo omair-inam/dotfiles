@@ -37,13 +37,16 @@ Scripts in `home/.chezmoiscripts/` run in alphabetical order within each phase:
 * **`run_after_`** — runs every `chezmoi apply`, after file updates (restart services)
 
 Current scripts:
-* `run_before_00_dock_position` — auto-position Dock based on monitor count
-* `run_onchange_before_01_mac_setup` — Dock tile size, scroll direction, macOS updates (work only)
-* `10_install-packages` — Homebrew taps + `brew bundle` (common + device-specific)
-* `11_install_python` — uv tool management
-* `12_install_java` — mise java, JDK 21/24 (work only)
-* `13_install_python` — mise python, Python 3.13 (work only)
-* `run_after_99_restart_ui` — restart Dock, Finder, SystemUIServer
+* `run_before_00_bootstrap` — Xcode CLT, Rosetta 2, Homebrew, Oh My Zsh + plugins (all guarded, idempotent)
+* `run_before_00_dock_position` — Dock orientation by monitor count; restarts Dock only on change
+* `run_before_10_install-claude-code-native` — Claude Code native installer
+* `run_onchange_before_01_mac_setup` — Dock tile size, scroll direction, hotkeys; restarts Dock/Finder/SystemUIServer
+* `run_onchange_before_10_install-packages` — Homebrew taps + `brew bundle` (common + device-specific)
+* `run_onchange_before_11_install_tools` — `mise install` for everything in `dot_config/mise/config.toml.tmpl`
+* `run_onchange_before_14_*`, `15_*`, `16_*` — Chrome for Testing; cached jwt, op, gh completions
+* `run_after_98_check_secrets` — warns when `~/.npmrc` has no token (work only; means run apply again)
+
+`sudo` never appears in a script. Anything that needs it is a manual step in `README.md`.
 
 ### Template Conventions
 * `{{ if .work_device }}` / `{{ if .personal_device }}` gate sections

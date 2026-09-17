@@ -4,8 +4,8 @@
 
 ### Prerequisites
 
-- **Xcode Command Line Tools** will be installed automatically by Homebrew if not present.
-  You may see a prompt to accept a license — click Install when asked.
+- **Xcode Command Line Tools, Rosetta 2, Homebrew, and Oh My Zsh** are installed by the
+  first `chezmoi apply` (`run_before_00_bootstrap`). Homebrew asks you to press RETURN and enter your password once.
 - **1Password** is installed automatically by `chezmoi apply` on work devices. After the
   first apply completes, open 1Password, sign in, and unlock it, then run `chezmoi apply`
   a second time to populate secrets (NPM token, Maven credentials). See Step 2 below.
@@ -26,30 +26,16 @@
   sign in with your Apple ID. `chezmoi apply` uses `mas` to install Things 3 and Yubico
   Authenticator; if you are not signed in, `mas` will silently skip those installs.
 
-### 1. Install Homebrew, chezmoi, Oh My Zsh, and plugins
+### 1. Install chezmoi and apply dotfiles
 
 ```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/omair-inam/dotfiles/refs/heads/main/install.sh)"
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply omair-inam
 ```
 
-This script installs: Homebrew, Oh My Zsh, Powerlevel10k, zsh plugins (autosuggestions, forgit, completions, etc.), and chezmoi.
-
-After the script completes, add Homebrew to your current shell session so that
-`chezmoi` (and `brew`) are available:
-
-```bash
-eval "$(/opt/homebrew/bin/brew shellenv)"
-```
-
-This is only needed once — after `chezmoi apply` configures your shell, new
-terminals will have Homebrew on PATH automatically.
-
-### 2. Initialise and apply dotfiles
-
-```bash
-chezmoi init https://github.com/omair-inam/dotfiles.git
-chezmoi apply
-```
+This installs chezmoi into `./bin`, clones this repo, and runs the first apply. The
+bootstrap script installs Xcode Command Line Tools, Rosetta 2, Homebrew, Oh My Zsh,
+Powerlevel10k, and the zsh plugins before any package is installed. Later applies use the
+Homebrew `chezmoi` that the package step installs.
 
 During `chezmoi apply` you will be prompted for three values (cached after first run):
 
@@ -61,20 +47,20 @@ During `chezmoi apply` you will be prompted for three values (cached after first
 
 `chezmoi apply` will then:
 - Install Homebrew packages (formulae and casks) and Mac App Store apps (Things 3, Yubico Authenticator)
-- Configure macOS defaults: move Dock to the left (size 48px), reverse scroll direction to non-natural
-- Restart the Dock, Finder, and SystemUIServer to apply Dock changes
-- Install Node.js LTS via mise (polyglot runtime manager)
+- Configure macOS defaults: Dock size 48px, Dock position by monitor count, reverse scroll
+  direction to non-natural, then restart the Dock, Finder, and SystemUIServer (only when
+  those defaults change)
+- Install every tool declared in `~/.config/mise/config.toml` (node, and on work devices
+  Java 21 + 24, terraform, and the npm and pipx tools)
 - Install Chrome for Testing via `pnpm dlx @puppeteer/browsers`
 
 > **Note:** The reversed scroll direction preference is written immediately but requires a
 > **logout or restart** to take effect.
-- Configure uv tool management
-- For work devices: enable automatic macOS updates, install Java 21 + 24 and Python 3.13 via mise
 
 **Work devices — second apply:** The first apply skips 1Password-backed secrets (NPM token,
-Maven credentials) because the `op` CLI isn't available yet. After the first apply installs
-1Password, open it, sign in, and unlock your vault, then run `chezmoi apply` again to
-populate those secrets.
+Maven credentials) because the `op` CLI isn't available yet, and it ends with a message
+telling you so. Open 1Password, sign in, enable **Settings > Developer > Integrate with
+1Password CLI**, then run `chezmoi apply` again to populate those secrets.
 
 ### 3. Post-install: commands requiring authentication
 
@@ -86,6 +72,19 @@ To enable FileVault disk encryption on macOS, use the `fdesetup` command. This s
 
 ```bash
 sudo fdesetup status | grep -q "FileVault is On." || sudo fdesetup enable
+```
+
+#### Enable automatic macOS updates (work devices)
+
+These need `sudo`, so they are not run by `chezmoi apply`:
+
+```bash
+sudo softwareupdate --background-critical
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticDownload -bool true
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate CriticalUpdateInstall -bool true
+sudo defaults write /Library/Preferences/com.apple.SoftwareUpdate AutomaticallyInstallMacOSUpdates -bool true
+sudo defaults write /Library/Preferences/com.apple.commerce AutoUpdate -bool true
 ```
 
 #### Update macOS software
@@ -107,9 +106,6 @@ terminal and the `softwareupdate` command.
    Once all updates are downloaded, the command will finish (or appear to hang briefly).
    Check **System Settings > General > Software Update** to monitor progress and restart
    when prompted.
-
-   > **Note:** work devices have automatic macOS updates configured by `chezmoi apply`,
-   > so this step is primarily for personal devices.
 
 #### Set up GitHub CLI authentication via 1Password
 
