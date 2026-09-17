@@ -42,8 +42,9 @@ Current scripts:
 * `run_before_10_install-claude-code-native` — Claude Code native installer
 * `run_onchange_before_01_mac_setup` — Dock tile size, scroll direction, hotkeys; restarts Dock/Finder/SystemUIServer
 * `run_onchange_before_10_install-packages` — Homebrew taps + `brew bundle` (common + device-specific)
-* `run_onchange_before_11_install_tools` — `mise install` for everything in `dot_config/mise/config.toml.tmpl`
-* `run_onchange_before_14_*`, `15_*`, `16_*` — Chrome for Testing; cached jwt, op, gh completions
+* `run_onchange_before_14_*`, `15_*`, `16_*` — cached jwt, op, gh completions
+* `run_onchange_after_11_install_tools` — `mise install` for everything in `dot_config/mise/config.toml.tmpl`. An `after` script, because a `before` script runs before chezmoi writes `~/.config/mise/config.toml` and installs nothing on a fresh machine
+* `run_onchange_after_14_install_chrome_for_testing` — Chrome for Testing via `mise exec node -- pnpm` (needs node from 11)
 * `run_after_98_check_secrets` — warns when `~/.npmrc` has no token (work only; means run apply again)
 
 `sudo` never appears in a script. Anything that needs it is a manual step in `README.md`.
