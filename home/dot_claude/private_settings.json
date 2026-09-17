@@ -82,6 +82,12 @@
     "pstack@pstack-claude": true
   },
   "extraKnownMarketplaces": {
+    "claude-code-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/claude-code"
+      }
+    },
     "anthropic-agent-skills": {
       "source": {
         "source": "github",
