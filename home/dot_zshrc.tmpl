@@ -179,6 +179,9 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
+# The OMZ git plugin aliases gprav, which hides the gprav() function in ~/.zsh_aliases.
+unalias gprav 2>/dev/null
+
 # Cached eval for expensive tool init (see evalcache plugin)
 # These replace the OMZ mise and zoxide plugins with cached versions.
 # Run _evalcache_clear after upgrading these tools.
