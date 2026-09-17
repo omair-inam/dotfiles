@@ -12,9 +12,6 @@ When you write the summary at the end, drop the working shorthand. Write complet
 
 ## Git Workflow
 * Always create branches from `origin/main`, never from local `main`. Use `git fetch origin && git checkout -b <branch> origin/main` for new branches.
-* Keep PRs focused: before creating a PR, verify the diff only contains changes related to the current task. Run `git diff origin/main --stat` and remove unrelated files.
-* Never leave uncommitted edits on local `main`. `gprav` (`git pull --rebase --autostash`) re-applies them after every pull, and an upstream change to the same lines leaves a `UU` conflict that blocks all later pulls. Park such edits on a branch or worktree, or commit them.
-* Personal skill installs mutate the tracked `skills-lock.json`. Install them at user scope (`~/.claude/skills`) or ship them in a PR; never leave that edit uncommitted on `main`.
 
 ## Linear
 If I ask to work on a Linear ticket:
@@ -37,13 +34,6 @@ If I ask to work on a Linear ticket:
   Linear appends its own `?signature=...` on save, which is the signal it will render.
 * Use `create_attachment_from_upload` as well only when the file should also stand alone in the
   Attachments list.
-
-## Workflow Conventions
-* Create a worktree before committing specs and implementation documents.
-* Place git worktrees under `<repo>/.claude/worktrees/<short-branch-name>` (branch from `origin/main`). Make sure `.claude/worktrees/` is ignored by the repo's tooling — add it to `.gitignore`, and to the static-site ignore file when the build input dir is the repo root (e.g. `.eleventyignore` for Eleventy).
-* That directory is required, not a preference: `EnterWorktree` prompts for permission-root relocation on any path outside the repo's `.claude/worktrees/`, and neither an `EnterWorktree` permission rule nor "don't ask again" suppresses it (only `bypassPermissions` does). Never symlink `.claude`, `.claude/worktrees`, or a worktree directory — Claude Code refuses to create a worktree on a symlinked path.
-* Never call `EnterWorktree` for the directory the session is already in; it fails with `Cannot enter worktree: <path> is the current working directory`. Check `pwd` first.
-* Inside a worktree session, the Bash guard refuses any command where `git` follows a `cd`, an `&&` chain it cannot verify statically, a runtime-computed path, or a large heredoc, with "too complex to verify that it stays inside the worktree". Run git as plain separate invocations from the worktree root, and write files with the Write tool rather than a heredoc.
 
 ## Dotfile Management
 * To edit a dotfile (e.g. .zshrc):
@@ -76,39 +66,6 @@ jwt encode [-A|--alg] HS256 [-S|--secret] 1234567890 [-P|--payload] key=value
 ```
 
 ## Working with Github
-### 1Password CLI Plugin for gh
-* Interactive `gh` is a `gh()` function in `~/.zsh_aliases`: the real binary when `IAI_GH_DIRECT` is set, otherwise `op plugin run -- gh` (Touch ID). Non-interactive shells never see it.
-* Check `GH_TOKEN` first. A repo whose `.envrc` exports it needs no `op` call; run `gh` directly. `I-AI-Corp/iai-explorer` (local checkout `~/projects/iv-living-archive`) does this, and also puts a `gh` shim with a cached token on PATH.
-* Only when `GH_TOKEN` is unset, run `export GH_TOKEN=$(op plugin run -- gh auth token)` once per session. Never prefix individual `gh` commands with it.
-
-### Two GitHub accounts
-
-`omairiai` is work, `omair-inam` is personal. `GH_TOKEN` comes from the `.envrc` of the repo the session starts in, so its account changes by repo. Before promising a push or PR, run `gh api user --jq .login` and `gh repo view <owner>/<repo> --json viewerPermission`. A work token on a personal repo reports `READ`, which is only public access. The real `gh` binary at `/opt/homebrew/bin/gh` has an empty keyring, so `GH_TOKEN` is the only credential a non-interactive shell has.
-
-`.envrc` in `~/.local/share/chezmoi`, the checkout of `omair-inam/dotfiles`, loads a service account token for the personal 1Password account into `OP_SERVICE_ACCOUNT_TOKEN`. The token lives in the macOS Keychain under account `op-service-account` and service `1password-omair-inam-dotfiles`. `.envrc` then reads `GH_TOKEN` from `op://Claude Code/op-gh-cli-omair-inam/token`. That GitHub token belongs to `omair-inam` and has `ADMIN` on the repo, so pushes, `gh pr create`, and other API calls work without a prompt.
-
-### What a background session can and cannot do
-
-* `SSH_AUTH_SOCK` points at launchd and holds no identities. Export `$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock` and `git fetch`, `push`, and `-S` signing all work with no prompt.
-* Git does not read `GH_TOKEN`. To push over an HTTPS remote, which `omair-inam/dotfiles` uses, run `git -c credential.helper= -c 'credential.helper=!gh auth git-credential' push -u origin <branch>`.
-* `op plugin run` fails with `interactive IO not available`, because it wants a TTY.
-* `op` runs as whichever service account `OP_SERVICE_ACCOUNT_TOKEN` holds, and `op user get --me` names it. An item outside that account's vaults returns `isn't a vault in this account` or `a vault query must be provided when this command is called by a service account`.
-
-### Signing outside the work repo
-
-`~/.local/share/chezmoi` sets `gpg.format` and `user.signingkey` but not `commit.gpgsign`, so a plain `git commit` there silently produces an unsigned commit. Always pass `-S`. Verification is separately broken: `gpg.ssh.allowedSignersFile` is unset, so `%G?` prints `N` on a correctly signed commit and `E` on the signed commits already on `main`. Confirm signing by looking for a `gpgsig` header in `git cat-file commit HEAD`, never by `%G?`. Commits on that repo are authored `Omair-Inam Abdul-Matin <omairkhawaja@gmail.com>` while its config sets `user.name=omair-inam`, so pass `--author` to match history.
-
-### Editing a skill under ~/.claude
-
-`~/.claude` is not a git repo, but most of it is chezmoi-managed, so "open a PR" means `omair-inam/dotfiles`. Edit the live file, then `chezmoi add` the exact paths to bring the change into `home/dot_claude/...`; chezmoi encodes the executable bit as an `executable_` filename prefix, so the repo mode stays `100644`. That working tree carries a lot of unrelated modifications, so branch from `origin/main` in a worktree under the already-ignored `.worktrees/`, copy in only the files you touched, and check `git diff origin/main --stat` before committing.
-
-### 1Password Touch ID / SSH Signing
-* `error: Couldn't find key in agent?` is not a Touch ID failure. Git asked the empty launchd agent for the key. Rerun right away with `SSH_AUTH_SOCK` set to the 1Password agent socket above. The retry rule below does not apply to this error.
-* Git commit signing, `gh` auth, and `git push` all require 1Password Touch ID approval
-* If a command fails with `error: 1Password: failed to fill whole buffer` or similar 1Password auth errors, **do NOT retry automatically**
-* Instead, tell the user: "1Password Touch ID authentication failed. Please let me know when you're ready and I'll retry the command."
-* Only retry once after the user confirms — do not loop
-
 ### Pull requests
 - Add header below to all pull request descriptions:
 
@@ -124,88 +81,6 @@ jwt encode [-A|--alg] HS256 [-S|--secret] 1234567890 [-P|--payload] key=value
 > [!IMPORTANT]
 > *This review comment was developed with AI assistance provided by [Claude Code](https://claude.ai/code)* 
 ```
-
-* When asked to list, get, update, delete, create or reply to PR review comment, use the commands below: 
-
-Examples:
-* List review comments in a repo in ascending order by ID:
-```shell
-gh api \
-  -H "Accept: application/vnd.github+json" \
-  -H "X-GitHub-Api-Version: 2022-11-28" \
-  /repos/OWNER/REPO/pulls/comments
-```
-
-* Get a review comment for a PR
-
-```shell
-gh api \
-  -H "Accept: application/vnd.github+json" \
-  -H "X-GitHub-Api-Version: 2022-11-28" \
-  /repos/OWNER/REPO/pulls/comments/COMMENT_ID
-```
-
-* Update a review comment for a PR
-
-```shell
-gh api \
-  --method PATCH \
-  -H "Accept: application/vnd.github+json" \
-  -H "X-GitHub-Api-Version: 2022-11-28" \
-  /repos/OWNER/REPO/pulls/comments/COMMENT_ID \
-   -f 'body=I like this too!'
-```
-
-* Delete a review comment for a PR
-
-```shell
-gh api \
-  --method DELETE \
-  -H "Accept: application/vnd.github+json" \
-  -H "X-GitHub-Api-Version: 2022-11-28" \
-  /repos/OWNER/REPO/pulls/comments/COMMENT_ID
-```
-
-* List review comments on a PR
-
-```shell
-gh api \
-  -H "Accept: application/vnd.github+json" \
-  -H "X-GitHub-Api-Version: 2022-11-28" \
-  /repos/OWNER/REPO/pulls/PULL_NUMBER/comments
-```
-
-* Create a review comment on a PR
-
-```shell
-gh api \
-  --method POST \
-  -H "Accept: application/vnd.github+json" \
-  -H "X-GitHub-Api-Version: 2022-11-28" \
-  /repos/OWNER/REPO/pulls/PULL_NUMBER/comments \
-   -f 'body=Great stuff!' -f 'commit_id=6dcb09b5b57875f334f61aebed695e2e4193db5e' -f 'path=file1.txt' -F "start_line=1" -f 'start_side=RIGHT' -F "line=2" -f 'side=RIGHT'
-```
-
-* Create a reply to a review comment on a PR
-
-```shell
-gh api \
-  --method POST \
-  -H "Accept: application/vnd.github+json" \
-  -H "X-GitHub-Api-Version: 2022-11-28" \
-  /repos/OWNER/REPO/pulls/PULL_NUMBER/comments/COMMENT_ID/replies \
-   -f 'body=Great stuff!'
-```
-
-## Github Actions
-* To run `uv`, refer to the docs here: https://docs.astral.sh/uv/guides/integration/github/
-* To run `uv`'s `ruff` within a Github action, use the official Github action documented here: https://github.com/astral-sh/ruff-action/blob/main/README.md
-
-## Writing
-* Apply the `unslop` skill while drafting all prose: chat replies that explain something, documents, specs, plans, tickets, PR descriptions. It shapes the first draft; it is not a cleanup pass.
-* When spawning a subagent that writes prose, tell it to invoke `unslop` before writing.
-* Content in artifacts must earn its place: a section appears only if the request or the document type's template calls for it. Offer extras as a one-line note at the end; never write them unprompted.
-* `unslop` is both the drafting standard and the audit: run its self-audit step over an existing document to strip AI tells. Two of its rules do not apply to this codebase's own vocabulary, where "substrate", "surface", "harness", "scaffolding", and "primitive" name real modules and concepts rather than metaphors.
 
 ## Python CLI tools
 - Writing Python CLI tools:
