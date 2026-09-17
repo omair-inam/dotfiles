@@ -34,6 +34,8 @@ clone() {
   [[ -d "$custom/$2" ]] || git clone --depth=1 "$1" "$custom/$2"
 }
 clone https://github.com/romkatv/powerlevel10k.git themes/powerlevel10k
+clone https://github.com/mroth/evalcache.git plugins/evalcache
+clone https://github.com/djui/alias-tips.git plugins/alias-tips
 clone https://github.com/zsh-users/zsh-autosuggestions plugins/zsh-autosuggestions
 clone https://github.com/zsh-users/zsh-history-substring-search plugins/zsh-history-substring-search
 clone https://github.com/wfxr/forgit.git plugins/forgit
