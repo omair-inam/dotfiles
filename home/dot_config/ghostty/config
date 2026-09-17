@@ -44,6 +44,11 @@
 keybind = shift+enter=text:\n
 keybind = cmd+r=prompt_surface_title
 # theme = light:GruvboxLight,dark:GruvboxDark
-theme = GitHub Dark Default
+# theme = GitHub Dark Default
+# light themes
+#theme = Modus Operandi Tinted
+# theme = Adwaita
+theme = Birds of Paradise
+
 desktop-notifications = true
 macos-option-as-alt = true
