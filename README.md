@@ -6,9 +6,8 @@
 
 - **Xcode Command Line Tools, Rosetta 2, Homebrew, and Oh My Zsh** are installed by the
   first `chezmoi apply` (`run_before_00_bootstrap`). Homebrew asks you to press RETURN and enter your password once.
-- **1Password** is installed automatically by `chezmoi apply` on work devices. After the
-  first apply completes, open 1Password, sign in, and unlock it, then run `chezmoi apply`
-  a second time to populate secrets (NPM token, Maven credentials). See Step 2 below.
+- **1Password** is installed automatically by `chezmoi apply`. After the first apply
+  completes, open 1Password, sign in, and unlock it.
 - **1Password Developer settings** — before your first git commit, open
   **1Password > Settings > Developer** and enable both of the following:
   - **Use the SSH Agent** — allows git to use SSH keys stored in 1Password for commit
@@ -17,10 +16,6 @@
   - **Integrate with 1Password CLI** — lets the `op` CLI authenticate through the
     desktop app instead of requiring a separate sign-in. This is required for
     the `gh` CLI plugin (`op plugin run -- gh`).
-- **1Password must be signed in and unlocked** for Powerlevel10k and many zsh plugins to
-  load correctly. The shell config (`.zshrc`) sources files rendered by chezmoi templates
-  that depend on 1Password-backed secrets. If 1Password is locked or signed out when you
-  open a new terminal, some plugins may fail to initialise or display errors.
 - **Sign in to the Mac App Store** before running `chezmoi apply`. Open the App Store and
   sign in with your Apple ID. `chezmoi apply` uses `mas` to install Things 3 and Yubico
   Authenticator; if you are not signed in, `mas` will silently skip those installs.
