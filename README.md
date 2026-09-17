@@ -6,9 +6,8 @@
 
 - **Xcode Command Line Tools, Rosetta 2, Homebrew, and Oh My Zsh** are installed by the
   first `chezmoi apply` (`run_before_00_bootstrap`). Homebrew asks you to press RETURN and enter your password once.
-- **1Password** is installed automatically by `chezmoi apply` on work devices. After the
-  first apply completes, open 1Password, sign in, and unlock it, then run `chezmoi apply`
-  a second time to populate secrets (NPM token, Maven credentials). See Step 2 below.
+- **1Password** is installed automatically by `chezmoi apply`. After the first apply
+  completes, open 1Password, sign in, and unlock it.
 - **1Password Developer settings** — before your first git commit, open
   **1Password > Settings > Developer** and enable both of the following:
   - **Use the SSH Agent** — allows git to use SSH keys stored in 1Password for commit
@@ -16,12 +15,7 @@
     fail. Make sure your SSH key is added to the agent.
   - **Integrate with 1Password CLI** — lets the `op` CLI authenticate through the
     desktop app instead of requiring a separate sign-in. This is required for
-    `chezmoi apply` to render templates that call `onepasswordRead` (NPM token, Maven
-    credentials) and for the `gh` CLI plugin (`op plugin run -- gh`).
-- **1Password must be signed in and unlocked** for Powerlevel10k and many zsh plugins to
-  load correctly. The shell config (`.zshrc`) sources files rendered by chezmoi templates
-  that depend on 1Password-backed secrets. If 1Password is locked or signed out when you
-  open a new terminal, some plugins may fail to initialise or display errors.
+    the `gh` CLI plugin (`op plugin run -- gh`).
 - **Sign in to the Mac App Store** before running `chezmoi apply`. Open the App Store and
   sign in with your Apple ID. `chezmoi apply` uses `mas` to install Things 3 and Yubico
   Authenticator; if you are not signed in, `mas` will silently skip those installs.
@@ -58,11 +52,6 @@ During `chezmoi apply` you will be prompted for three values (cached after first
 
 > **Note:** The reversed scroll direction preference is written immediately but requires a
 > **logout or restart** to take effect.
-
-**Work devices — second apply:** The first apply skips 1Password-backed secrets (NPM token,
-Maven credentials) because the `op` CLI isn't available yet, and it ends with a message
-telling you so. Open 1Password, sign in, enable **Settings > Developer > Integrate with
-1Password CLI**, then run `chezmoi apply` again to populate those secrets.
 
 ### 3. Post-install: commands requiring authentication
 
