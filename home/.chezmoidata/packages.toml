@@ -1,5 +1,4 @@
 [packages.homebrew]
-    to_remove = []
     taps = [
         "manaflow-ai/cmux",
         "mike-engel/jwt-cli",
