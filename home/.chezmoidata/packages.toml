@@ -44,11 +44,13 @@
             "rectangle-pro",               # Window management utility
             "slack",                       # Team communication
             "stats",                       # System monitoring in menu bar
+            "t3-code",                     # Minimal GUI for AI code agents
             "tableplus",                   # Database management tool
             "thingsmacsandboxhelper",      # Things 3 helper app
             "tower",                       # Git client
             "via",                         # Keyboard configuration tool
             "visual-studio-code",          # Code editor
+            "wispr-flow",                  # AI-powered voice-to-text dictation
             "zoom"                         # Video conferencing
         ]
         formulae = [
