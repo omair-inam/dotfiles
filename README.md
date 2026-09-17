@@ -5,7 +5,7 @@
 ### Prerequisites
 
 - **Xcode Command Line Tools, Rosetta 2, Homebrew, and Oh My Zsh** are installed by the
-  first `chezmoi apply` (`run_before_00_bootstrap`). Homebrew asks for your password once.
+  first `chezmoi apply` (`run_before_00_bootstrap`). Homebrew asks you to press RETURN and enter your password once.
 - **1Password** is installed automatically by `chezmoi apply` on work devices. After the
   first apply completes, open 1Password, sign in, and unlock it, then run `chezmoi apply`
   a second time to populate secrets (NPM token, Maven credentials). See Step 2 below.
