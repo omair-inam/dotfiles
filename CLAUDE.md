@@ -48,6 +48,11 @@ Current scripts:
   `.envrc` files read it. Validates what is already stored by authenticating with it, so a
   truncated or rotated token is replaced rather than trusted. The token is fetched at run time,
   never rendered into the script, so `chezmoi diff` and chezmoi's script-state hash never see it
+* `run_after_91_gh-keyring` — keeps gh's own keyring logged in and switched to the account named in
+  `onepassword.toml` `[secrets.gh_keyring_tokens]`, re-reading that account's PAT with the
+  service-account token script 90 stores whenever the keyring cannot authenticate as it. GUI apps
+  such as T3 Code run `gh auth token`, which returns whichever account is active and ignores
+  direnv, so a working token for the wrong account still gets a 404 on a private repo
 * `run_onchange_after_11_install_tools` — `mise install` for everything in `dot_config/mise/config.toml.tmpl`. An `after` script, because a `before` script runs before chezmoi writes `~/.config/mise/config.toml` and installs nothing on a fresh machine
 * `run_onchange_after_14_install_chrome_for_testing` — Chrome for Testing via `mise exec node -- pnpm` (needs node from 11)
 
@@ -78,6 +83,9 @@ Current scripts:
 * The service account exported as `OP_SERVICE_ACCOUNT_TOKEN` can only read the `Claude Code`
   vault. Anything reading another vault, including `run_after_90_keychain-op-service-accounts`,
   must unset that variable and go through the 1Password desktop app integration
+* gh's keyring holds several accounts and `gh auth token` returns only the active one, so any
+  tool that shells out to gh without `GH_TOKEN` gets that account. `omairiai` is the active one
+  because it is the account with access to the private `I-AI-Corp` repos
 * Git commits are SSH-signed through the 1Password agent. `Couldn't find key in agent?` does not mean 1Password is locked. It means `SSH_AUTH_SOCK` points at the empty launchd agent. Set it to `$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock` and rerun.
 * `run_onchange` scripts re-run when template *output* changes, not just source edits
 * Use `run_before_`/`run_after_` (not `run_onchange_`) for scripts that depend on runtime environment (e.g., monitor count)
