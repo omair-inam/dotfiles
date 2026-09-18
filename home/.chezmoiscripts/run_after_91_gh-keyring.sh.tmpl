@@ -1,0 +1,65 @@
+{{- if and (eq .chezmoi.os "darwin") .secrets.gh_keyring_tokens -}}
+#!/bin/bash
+# Keeps gh's own keyring logged in and switched to the account that can see the
+# private repos. GUI apps run `gh auth token`, which returns whichever account
+# is active, so a working token for the wrong account still fails. Tokens are
+# fetched at run time, never rendered into this script.
+set -uo pipefail
+
+if ! command -v op >/dev/null 2>&1 || ! command -v gh >/dev/null 2>&1; then
+  echo "chezmoi: op or gh not installed, skipping gh keyring" >&2
+  exit 0
+fi
+
+# Only the keyring is under test, so an ambient GH_TOKEN must not answer for it,
+# and a repo's direnv gh shim on PATH must not answer for the binary.
+GH_BIN=/opt/homebrew/bin/gh
+[[ -x "$GH_BIN" ]] || GH_BIN=$(command -v gh)
+gh_keyring() {
+  env -u GH_TOKEN -u GITHUB_TOKEN -u GH_ENTERPRISE_TOKEN -u GITHUB_ENTERPRISE_TOKEN \
+    "$GH_BIN" "$@"
+}
+
+op_sa() {
+  local sa
+  sa=$(security find-generic-password -a op-service-account -s 1password-iai-explorer-dev -w 2>/dev/null)
+  [[ -n "$sa" ]] || return 1
+  env -u OP_ACCOUNT OP_SERVICE_ACCOUNT_TOKEN="$sa" op "$@"
+}
+
+active_login() {
+  gh_keyring api user --hostname "$1" -q .login 2>/dev/null
+}
+
+ensure_gh_account() {
+  local host="$1" login="$2" ref="$3" token
+
+  gh_keyring auth switch -h "$host" -u "$login" >/dev/null 2>&1
+  if [[ "$(active_login "$host")" == "$login" ]]; then
+    echo "chezmoi: gh keyring on $host is active as $login"
+    return 0
+  fi
+
+  echo "chezmoi: refreshing gh keyring for $host from $ref"
+  token=$(op_sa read "$ref" 2>/dev/null)
+  if [[ -z "$token" ]]; then
+    echo "chezmoi: could not read $ref, check the service-account token stored by run_after_90" >&2
+    return 1
+  fi
+
+  printf '%s' "$token" | gh_keyring auth login -h "$host" --with-token || return 1
+  gh_keyring auth switch -h "$host" -u "$login" >/dev/null 2>&1
+
+  if [[ "$(active_login "$host")" != "$login" ]]; then
+    echo "chezmoi: gh keyring on $host was written but is not active as $login" >&2
+    return 1
+  fi
+  echo "chezmoi: gh keyring on $host is active as $login"
+}
+
+# A failure here must not abort the rest of the apply.
+{{ range $host, $cfg := .secrets.gh_keyring_tokens -}}
+ensure_gh_account {{ $host | quote }} {{ $cfg.login | quote }} {{ $cfg.ref | quote }} || true
+{{ end }}
+exit 0
+{{ end -}}
