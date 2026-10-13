@@ -137,7 +137,6 @@
     [packages.homebrew.personal]
         casks = [
             "discord",                    # Voice and text chat for gaming
-            "insomnia2023",               # Legacy API testing tool
             "signal",                     # Private messaging
             "steam",                      # Gaming platform
             "whatsapp"                    # Messaging app
