@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "lines": [
     [
       {
@@ -98,7 +98,7 @@
   "powerline": {
     "enabled": false,
     "separators": [
-      " \u00b7 "
+      " · "
     ],
     "separatorInvertBackground": [
       true
@@ -109,5 +109,5 @@
     "autoAlign": false,
     "continueThemeAcrossLines": true
   },
-  "defaultSeparator": " \u00b7 "
+  "defaultSeparator": " · "
 }
