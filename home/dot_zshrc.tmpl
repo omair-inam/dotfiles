@@ -188,6 +188,12 @@ unalias gprav 2>/dev/null
 _evalcache mise activate zsh
 _evalcache zoxide init zsh
 
+# Rex exports REX_BIN_DIR in the shells it launches but leaves it off PATH.
+if [[ -n $REX_BIN_DIR ]]; then
+  path+=("$REX_BIN_DIR")
+  _evalcache rex completion zsh
+fi
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"
