@@ -7,7 +7,7 @@
   "permissions": {
     "defaultMode": "auto"
   },
-  "model": "claude-fable-5-1[1m]",
+  "model": "opus",
   "skillOverrides": {
     "adk-deploy-guide": "off",
     "adk-scaffold": "off",
@@ -81,7 +81,8 @@
     "diagram-design@diagram-design": true,
     "pstack@pstack-claude": true,
     "agent-browser@agent-browser": true,
-    "reflex@reflex-agent-skills": true
+    "reflex@reflex-agent-skills": true,
+    "typesafe@typesafe-ai": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
@@ -179,6 +180,12 @@
         "source": "github",
         "repo": "obra/superpowers-marketplace"
       }
+    },
+    "typesafe-ai": {
+      "source": {
+        "source": "github",
+        "repo": "typesafe-ai/skills"
+      }
     }
   },
   "alwaysThinkingEnabled": true,
@@ -195,8 +202,12 @@
     },
     "claude-opus-4-8": {
       "effortLevel": "high"
+    },
+    "claude-opus-5-5": {
+      "effortLevel": "high"
     }
   },
+  "askUserQuestionTimeout": "never",
   "tui": "fullscreen",
   "voice": {
     "enabled": true,
@@ -204,7 +215,8 @@
   },
   "autoMemoryEnabled": false,
   "skipDangerousModePermissionPrompt": true,
-  "verbose": true,
+  "editorMode": "normal",
+  "verbose": false,
   "autoCompactEnabled": true,
   "autoContinueAtUsageLimit": true,
   "remoteControlAtStartup": true,
