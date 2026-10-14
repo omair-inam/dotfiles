@@ -45,5 +45,6 @@
     "git.blame.editorDecoration.enabled": true,
     "editor.accessibilitySupport": "off",
     "security.promptForLocalFileProtocolHandling": false,
-    "claudeCode.hideOnboarding": true
+    "claudeCode.hideOnboarding": true,
+    "security.promptForRemoteFileProtocolHandling": false
 }
