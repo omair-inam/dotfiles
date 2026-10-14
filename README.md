@@ -126,6 +126,22 @@ op plugin run -- gh auth status
 > **Note:** The `.op/` directory is gitignored (machine-specific). This setup must be
 > repeated on each new machine.
 
+#### Sign in to the Codex CLI
+
+`mise` installs the `codex` binary, but the login is per-machine and interactive.
+The `codex@openai-codex` Claude Code plugin shells out to it, so its skills fail
+until this is done:
+
+```bash
+codex login
+```
+
+Verify:
+
+```bash
+codex login status
+```
+
 #### Reactivate software licenses
 
 These apps have per-machine license activations that were deactivated before the wipe.
