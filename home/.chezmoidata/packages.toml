@@ -1,7 +1,6 @@
 [packages.homebrew]
     to_remove = []
     taps = [
-        "manaflow-ai/cmux",
         "mike-engel/jwt-cli",
         "omair-inam/tap",
         "raine/claude-history",
@@ -21,10 +20,8 @@
             "claude",                      # Anthropic Claude desktop app
             "daisydisk",                   # Disk space analyzer
             "cleanshot",                   # Advanced screenshot and screen recording
-            "manaflow-ai/cmux/cmux",       # Terminal multiplexer (mac_setup frees ⌥⌘D for it)
             "cursor",                      # AI code editor
             "forklift3",                   # File manager and FTP client
-            "ghostty",                     # Terminal emulator
             # google-chrome: unmanaged — Chrome's built-in updater keeps it current;
             # brew cask upgrades fight the self-updater and fail. Reinstall via brew only if desired.
             "homerow",                     # Keyboard shortcuts for on-screen buttons

@@ -16,7 +16,7 @@
 * `home/dot_*` → `~/.*`, `private_dot_*` → `~/.*` (mode 0600)
 * `.tmpl` suffix — Go template files rendered by chezmoi
 * `home/dot_claude/` — Claude Code global config (commands, agents, CLAUDE.md.tmpl)
-* `home/dot_config/` — app configs (ghostty, lnav, 1password)
+* `home/dot_config/` — app configs (lnav, 1password)
 * `home/dot_local/bin/` — custom executable scripts
 * `home/dot_ssh/` — SSH config and public keys
 * `docs/` — planning documents
@@ -37,7 +37,7 @@ Current scripts:
 * `run_before_00_bootstrap` — Xcode CLT, Rosetta 2, Homebrew, Oh My Zsh + plugins (all guarded, idempotent)
 * `run_before_00_dock_position` — Dock orientation by monitor count; restarts Dock only on change
 * `run_before_10_install-claude-code-native` — Claude Code native installer
-* `run_onchange_before_01_mac_setup` — Dock tile size, scroll direction, hotkeys; restarts Dock/Finder/SystemUIServer
+* `run_onchange_before_01_mac_setup` — Dock tile size, scroll direction; restarts Dock/Finder/SystemUIServer
 * `run_onchange_before_10_install-packages` — Homebrew taps + `brew bundle` (common + device-specific)
 * `run_onchange_before_14_*`, `15_*`, `16_*` — cached jwt, op, gh completions
 * `run_onchange_after_11_install_tools` — `mise install` for everything in `dot_config/mise/config.toml.tmpl`. An `after` script, because a `before` script runs before chezmoi writes `~/.config/mise/config.toml` and installs nothing on a fresh machine
