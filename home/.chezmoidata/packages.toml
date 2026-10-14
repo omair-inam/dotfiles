@@ -80,6 +80,7 @@
             "go",                          # Go programming language
             "googleworkspace-cli",         # Google Workspace CLI
             "hey",                         # HTTP load testing tool
+            "hunk",                        # Terminal diff viewer (chezmoi diff pager)
             "jbang",                       # Java scripting tool
             "jq",                          # JSON processor
             "lnav",                        # Log file navigator
