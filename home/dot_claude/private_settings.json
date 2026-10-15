@@ -73,7 +73,7 @@
     "document-skills@anthropic-agent-skills": false,
     "slack@claude-plugins-official": true,
     "notes@skills": true,
-    "ponytail@ponytail": true,
+    "ponytail@ponytail": false,
     "frontend-slides@frontend-slides": false,
     "fullstory@fullstory": true,
     "mattpocock-skills@mattpocock": true,
