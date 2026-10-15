@@ -47,8 +47,7 @@
             "tower",                       # Git client
             "via",                         # Keyboard configuration tool
             "visual-studio-code",          # Code editor
-            "wispr-flow",                  # AI-powered voice-to-text dictation
-            "zoom"                         # Video conferencing
+            "wispr-flow"                   # AI-powered voice-to-text dictation
         ]
         formulae = [
             "act",                         # Run GitHub Actions locally
