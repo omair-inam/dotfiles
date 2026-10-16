@@ -16,7 +16,8 @@ things upcoming
 things projects
 things areas
 things tasks --search "dentist" --json
-things show --project "Project name"
+things show "Project name"
+things tasks --project "Project name" --json
 things show --id <uuid> --recursive --json
 ```
 
@@ -72,4 +73,4 @@ Confirm with Omair before any `delete`.
   ```
 
   In Rex the shells run under `/Applications/Rex Beta.app/Contents/Helpers/Rex Server.app`, not `Rex Beta.app`, so the helper needs the grant and the Rex server needs a restart. Claude Code's sandbox is not the cause; don't retry with it disabled. Tell Omair what to grant; don't hunt for the database path yourself.
-- `Things auth token: not set`: writes other than `add` need the token from Things, Settings, General, Things URLs. Omair sets `THINGS_AUTH_TOKEN` or runs `things auth`. Never ask him to paste the token into the chat.
+- `Things auth token: not set`: `update` needs the token from Things, Settings, General, Things URLs. Omair sets `THINGS_AUTH_TOKEN` or runs `things auth`. Never ask him to paste the token into the chat.
