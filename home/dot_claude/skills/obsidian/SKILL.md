@@ -9,13 +9,13 @@ The `obsidian` CLI (`/usr/local/bin/obsidian`) talks to the running Obsidian app
 
 ## Syntax
 
-Arguments are `key=value`; quote any value with spaces. In `content=`, `\n` is a newline and `\t` a tab. `file=` resolves a name the way a wikilink does (`file="Claim state map"`); `path=` is exact from the vault root (`path="Projects/I.AI/Claim state map.md"`). `obsidian help` lists every command.
+Arguments are `key=value`; quote any value with spaces. In `content=`, `\n` is a newline and `\t` a tab. `file=` resolves a name the way a wikilink does (`file="Claim state map"`); `path=` is exact from the vault root (`path="1. Projects/I.AI/Claim state map.md"`). `obsidian help` lists every command.
 
 Content goes through the shell, so wrap it in single quotes when it contains backticks, `$`, or `!`.
 
 ## Vault conventions
 
-- New standalone notes live at the vault root unless Omair names a folder. Other folders: `Projects/I.AI/` for work project notes, `Pages/` for reference pages.
+- New standalone notes live at the vault root unless Omair names a folder. Other folders: `1. Projects/I.AI/` for work project notes, `Pages/` for reference pages.
 - Daily notes: `Daily Notes/YYYY/YYYY-MM-DD.md`.
 - Notes use `###` headings and `* ` bullets, with tab-indented sub-bullets. Link other notes as `[[Note name]]`.
 
@@ -23,7 +23,7 @@ Content goes through the shell, so wrap it in single quotes when it contains bac
 
 ```shell
 obsidian create name="Note title" content="* first point\n* second point"
-obsidian create path="Projects/I.AI/Note title.md" content="..."
+obsidian create path="1. Projects/I.AI/Note title.md" content="..."
 ```
 
 `create` does not fail when the note exists: it silently writes `Note title 1.md` beside it. Check first with `obsidian file file="Note title"`; if it exists, ask whether to append to it or pick a new title. Pass `overwrite` only when Omair asks to replace the note. Add `open` to show it in Obsidian.
@@ -44,7 +44,7 @@ obsidian search query="turbopuffer" format=json        # matching file paths onl
 obsidian read file="Migrate embeddings to Turbopuffer" # full note
 ```
 
-Search is case-insensitive unless you pass `case`. Narrow with `path="Daily Notes/2026"` or `path=Projects`. Start with `search:context`, since the matched lines usually answer the question; `read` the notes that look relevant before summarising. Cite each note by name so Omair can open it.
+Search is case-insensitive unless you pass `case`. Narrow with `path="Daily Notes/2026"` or `path="1. Projects"`. Start with `search:context`, since the matched lines usually answer the question; `read` the notes that look relevant before summarising. Cite each note by name so Omair can open it.
 
 Related lookups: `tags counts`, `tag name=<tag> verbose`, `backlinks file=<name>`, `tasks todo daily`.
 
