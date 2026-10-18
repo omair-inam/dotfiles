@@ -2,6 +2,7 @@
     taps = [
         "mike-engel/jwt-cli",
         "omair-inam/tap",
+        "ossianhempel/tap",
         "raine/claude-history"
     ]
     
@@ -95,6 +96,7 @@
             "summarize",                   # AI-powered text summarization CLI
             "tailscale",                   # Mesh VPN
             "tealdeer",                    # Fast tldr client
+            "ossianhempel/tap/things3-cli",  # Things 3 CLI
             "tree",                        # Display directory tree structure
             "watch",                       # Run commands periodically
             "wget",                        # Web content retriever

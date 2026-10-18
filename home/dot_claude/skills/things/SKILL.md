@@ -5,7 +5,7 @@ description: Work with Omair's Things 3 task list through the `things` CLI. Use 
 
 # Things
 
-`things` (`/usr/local/bin/things`, the `things3-cli` project) reads the local Things 3 database and writes through the Things URL scheme. The full flag reference ships with the CLI at `/Users/omair/libs/things3-cli/skills/things/SKILL.md`; read it for anything not covered here, or run `things <command> --help`.
+`things` (the `things3-cli` project, installed from the `ossianhempel/tap` Homebrew tap) reads the local Things 3 database and writes through the Things URL scheme. For anything not covered here, run `things <command> --help` or read the upstream guide at https://github.com/ossianhempel/things3-cli/blob/main/skills/things/SKILL.md.
 
 ## Read
 
@@ -72,5 +72,5 @@ Confirm with Omair before any `delete`.
   p=$$; while p=$(ps -o ppid= -p $p | tr -d ' '); [ -n "$p" ] && [ "$p" != 1 ]; do ps -o pid=,comm= -p $p; done
   ```
 
-  In Rex the shells run under `/Applications/Rex Beta.app/Contents/Helpers/Rex Server.app`, not `Rex Beta.app`, so the helper needs the grant and the Rex server needs a restart. Claude Code's sandbox is not the cause; don't retry with it disabled. Tell Omair what to grant; don't hunt for the database path yourself.
+  In Rex the shells run under `Rex Server.app` in `~/Library/Application Support/com.superlogical.rex/RexServer/Versions/<n>/`, not `Rex Beta.app`, so that helper needs the grant and the Rex server needs a restart. A Rex update moves the helper to a new version folder, so the grant can stop working after an update. Claude Code's sandbox is not the cause; don't retry with it disabled. Tell Omair what to grant; don't hunt for the database path yourself.
 - `Things auth token: not set`: `update` needs the token from Things, Settings, General, Things URLs. Omair sets `THINGS_AUTH_TOKEN` or runs `things auth`. Never ask him to paste the token into the chat.
