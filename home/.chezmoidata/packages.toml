@@ -2,8 +2,7 @@
     taps = [
         "mike-engel/jwt-cli",
         "omair-inam/tap",
-        "raine/claude-history",
-        "steipete/tap"
+        "raine/claude-history"
     ]
     
     [packages.homebrew.common]
@@ -93,7 +92,7 @@
             "ripgrep",                     # Fast text search tool
             "ripgrep-all",                 # ripgrep with support for various file types
             "shellcheck",                  # Shell script linter
-            "steipete/tap/summarize",      # AI-powered text summarization CLI
+            "summarize",                   # AI-powered text summarization CLI
             "tailscale",                   # Mesh VPN
             "tealdeer",                    # Fast tldr client
             "tree",                        # Display directory tree structure
