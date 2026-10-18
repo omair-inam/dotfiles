@@ -66,5 +66,5 @@ cask "{{ . }}"
 
 EOF
 
-brew bundle --file="$HOME/.Brewfile"
+brew bundle --no-upgrade --file="$HOME/.Brewfile"
 {{ end }}
