@@ -38,7 +38,7 @@ Current scripts:
 * `run_before_00_dock_position` — Dock orientation by monitor count; restarts Dock only on change
 * `run_before_10_install-claude-code-native` — Claude Code native installer
 * `run_onchange_before_01_mac_setup` — Dock tile size, scroll direction; restarts Dock/Finder/SystemUIServer
-* `run_onchange_before_10_install-packages` — Homebrew taps + `brew bundle` (common + device-specific)
+* `run_onchange_before_10_install-packages` — Homebrew taps + `brew bundle --no-upgrade` (common + device-specific). Skips upgrading outdated packages; upgrade with `brew upgrade`
 * `run_onchange_before_14_*`, `15_*`, `16_*` — cached jwt, op, gh completions
 * `run_onchange_after_11_install_tools` — `mise install` for everything in `dot_config/mise/config.toml.tmpl`. An `after` script, because a `before` script runs before chezmoi writes `~/.config/mise/config.toml` and installs nothing on a fresh machine
 * `run_onchange_after_14_install_chrome_for_testing` — Chrome for Testing via `mise exec node -- pnpm` (needs node from 11)
