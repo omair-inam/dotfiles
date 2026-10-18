@@ -7,7 +7,7 @@
   - `.personal_device` (bool) — personal apps/configs
   - `.work_device` (bool) — work apps/configs (DNAstack)
   - `.email` (string) — user email
-* These are set in `home/.chezmoi.toml.tmpl` via `promptBool`/`promptStringOnce`
+* These are set in `home/.chezmoi.toml.tmpl` via `promptBoolOnce`/`promptStringOnce`
 
 ### Repository Structure
 * `home/` — chezmoi source dir; maps to `~/`
@@ -48,7 +48,7 @@ Current scripts:
 ### Template Conventions
 * `{{ if .work_device }}` / `{{ if .personal_device }}` gate sections
 * `concat`, `sortAlpha`, `uniq` — merge and deduplicate lists
-* `promptBool`, `promptStringOnce` — user prompts (cached after first run)
+* `promptBoolOnce`, `promptStringOnce` — user prompts, asked once and then read back from the existing config
 * `{{- }}` trims whitespace; `{{ $var := ... }}` for local variables
 * Data accessed as `.packages.*`, `.email`, `.chezmoi.os`
 

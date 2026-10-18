@@ -3,8 +3,8 @@
 {{- $work_device := false -}}{{/* true if this machine should have work setup */}}
 {{- "" -}}
 
-{{- $personal_device = promptBool "personal_device" -}}
-{{- $work_device = promptBool "work_device" -}}
+{{- $personal_device = promptBoolOnce . "personal_device" "Is this a personal device" -}}
+{{- $work_device = promptBoolOnce . "work_device" "Is this a work device" -}}
 {{- $email := promptStringOnce . "email" "What is your email address?" -}}
 
 [data]
