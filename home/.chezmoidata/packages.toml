@@ -1,5 +1,4 @@
 [packages.homebrew]
-    to_remove = []
     taps = [
         "mike-engel/jwt-cli",
         "omair-inam/tap",
@@ -25,7 +24,6 @@
             # google-chrome: unmanaged — Chrome's built-in updater keeps it current;
             # brew cask upgrades fight the self-updater and fail. Reinstall via brew only if desired.
             "homerow",                     # Keyboard shortcuts for on-screen buttons
-            "insomnia",                    # API testing and development tool
             "superkey",                    # Keyboard modifier key utility
             "intellij-idea",               # Java IDE
             "logitech-g-hub",              # Logitech gaming peripheral software
@@ -118,12 +116,10 @@
             "meetingbar",                  # Meeting management in menu bar
         ]
         formulae = [
-            "azure-cli",                   # Azure command-line interface
             "bats-core",                   # Bash Automated Testing System
             "bcftools",                    # Bioinformatics SAM/BAM/VCF tools
             "cloud-sql-proxy",             # Google Cloud SQL proxy
             "k9s",                         # Kubernetes CLI manager
-            "docker",                      # Container platform
             "helm",                        # Kubernetes package manager
             "k6",                          # Load testing tool
             "kubectx",                     # Kubernetes context switcher
