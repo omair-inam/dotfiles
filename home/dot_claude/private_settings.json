@@ -88,10 +88,10 @@
     "mattpocock-skills@mattpocock": true,
     "codex@openai-codex": true,
     "diagram-design@diagram-design": true,
-    "pstack@pstack-claude": true,
     "agent-browser@agent-browser": true,
     "reflex@reflex-agent-skills": true,
-    "typesafe@typesafe-ai": true
+    "typesafe@typesafe-ai": true,
+    "pstack@cursor-plugins": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
@@ -154,12 +154,6 @@
         "repo": "cathrynlavery/diagram-design"
       }
     },
-    "pstack-claude": {
-      "source": {
-        "source": "github",
-        "repo": "michael-denyer/pstack-claude"
-      }
-    },
     "agent-browser": {
       "source": {
         "source": "github",
@@ -194,6 +188,12 @@
       "source": {
         "source": "github",
         "repo": "typesafe-ai/skills"
+      }
+    },
+    "cursor-plugins": {
+      "source": {
+        "source": "github",
+        "repo": "cursor/plugins"
       }
     }
   },
