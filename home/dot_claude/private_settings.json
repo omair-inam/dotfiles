@@ -91,7 +91,8 @@
     "agent-browser@agent-browser": true,
     "reflex@reflex-agent-skills": true,
     "typesafe@typesafe-ai": true,
-    "pstack@cursor-plugins": true
+    "pstack@cursor-plugins": true,
+    "turbopuffer@turbopuffer-skills": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
@@ -194,6 +195,12 @@
       "source": {
         "source": "github",
         "repo": "cursor/plugins"
+      }
+    },
+    "turbopuffer-skills": {
+      "source": {
+        "source": "github",
+        "repo": "turbopuffer/skills"
       }
     }
   },
