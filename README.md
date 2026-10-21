@@ -98,6 +98,17 @@ terminal and the `softwareupdate` command.
    Check **System Settings > General > Software Update** to monitor progress and restart
    when prompted.
 
+#### 1Password service-account tokens in the Keychain
+
+Some repos authenticate `op` non-interactively from their `.envrc` using a 1Password
+service-account token read out of the login Keychain. `chezmoi apply` keeps those items
+in sync from `home/.chezmoidata/onepassword.toml`, so there is nothing to paste by hand.
+
+The first apply on a new machine needs 1Password unlocked with **Integrate with
+1Password CLI** enabled, and you have to approve the authorization prompt. If it was
+locked, the apply prints what to do and carries on. Run `chezmoi apply` again once
+1Password is ready.
+
 #### Set up GitHub CLI authentication via 1Password
 
 The `gh` CLI is authenticated through the 1Password shell plugin (`op plugin run -- gh`).
