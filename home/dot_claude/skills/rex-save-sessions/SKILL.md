@@ -5,6 +5,8 @@ description: Snapshot every running Rex session, window, split layout, and the C
 
 # Save Rex sessions
 
+For Rex CLI usage, read `~/.claude/skills/rex/SKILL.md`.
+
 1. Run:
 
    ```bash
@@ -13,7 +15,7 @@ description: Snapshot every running Rex session, window, split layout, and the C
 
    It writes `~/.local/state/rex-snapshots/<timestamp>.json`, copies it to `latest.json`, and prints each session with its blocks. A block running Claude Code shows `claude <session-id>`.
 
-2. Check the printout against `rex ls`. Every session must appear. A block that should be running Claude but prints a shell name means its Claude process has exited, so its conversation will not come back. Tell Omair which one.
+2. Check the printout against the running Rex sessions. Every session must appear. A block that should be running Claude but prints a shell name means its Claude process has exited, so its conversation will not come back. Tell Omair which one.
 
 3. Tell Omair the snapshot path, then tell him it is safe to upgrade or restart the server. To restore later, use the `rex-restore-sessions` skill.
 
