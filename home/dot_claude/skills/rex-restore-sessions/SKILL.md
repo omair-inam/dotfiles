@@ -5,6 +5,8 @@ description: Recreate Rex sessions, windows, and split layouts from a snapshot m
 
 # Restore Rex sessions
 
+For Rex CLI usage, read `~/.claude/skills/rex/SKILL.md`.
+
 The script is shared with `rex-save-sessions`. It lives at `~/.claude/skills/rex-save-sessions/scripts/rexsnap.py`.
 
 1. Dry run:
@@ -15,7 +17,7 @@ The script is shared with `rex-save-sessions`. It lives at `~/.claude/skills/rex
 
    This reads `~/.local/state/rex-snapshots/latest.json`. To use an older snapshot, pass its path. The output prints every `rex` command it would run. It skips any session whose label is already running, so reruns never duplicate.
 
-2. Confirm that `claude` resolves in a login shell with `zsh -lc 'command -v claude'`. Rex starts block commands through the login environment, so an alias defined only in `.zshrc` will not work.
+2. Confirm that `claude` resolves in a login shell with `zsh -lc 'command -v claude'`. An alias defined only in `.zshrc` does not count.
 
 3. Apply:
 
@@ -25,8 +27,8 @@ The script is shared with `rex-save-sessions`. It lives at `~/.claude/skills/rex
 
    Add `--only LABEL` (repeatable) to restore a subset. The script waits 8 seconds, then runs `verify`. `verify` checks that every session exists, that window counts match, and that every saved Claude session ID is held by a live process. It exits non-zero on any mismatch.
 
-4. If a session was half-created, for example a window failed, kill it with `rex kill <label>` and rerun step 3 with `--only <label>`.
+4. If a session was half-created, for example a window failed, kill that Rex session and rerun step 3 with `--only <label>`.
 
-5. Report each restored session to Omair, with its window count and Claude session IDs. Rex session, window, and block IDs are new. Labels and Claude conversations carry over.
+5. Report each restored session to Omair, with its window count and Claude session IDs. Labels and Claude conversations carry over. Rex IDs do not.
 
 To re-check later without restoring anything, run `rexsnap.py verify`.
