@@ -233,7 +233,7 @@
   "skipDangerousModePermissionPrompt": true,
   "editorMode": "normal",
   "verbose": false,
-  "autoCompactEnabled": true,
+  "autoCompactEnabled": false,
   "autoContinueAtUsageLimit": true,
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
