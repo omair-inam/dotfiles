@@ -1,0 +1,26 @@
+{{- /* Single-file skills and agents from cursor/plugins, refreshed weekly. */ -}}
+{{- $base := "https://raw.githubusercontent.com/cursor/plugins/main" -}}
+{{- $refresh := "168h" -}}
+{{- range list "deslop" "fix-ci" "fix-merge-conflicts" "get-pr-comments" "make-pr-easy-to-review" "what-did-i-get-done" }}
+[".claude/skills/{{ . }}/SKILL.md"]
+    type = "file"
+    url = "{{ $base }}/cursor-team-kit/skills/{{ . }}/SKILL.md"
+    refreshPeriod = "{{ $refresh }}"
+{{ end }}
+{{- range list "thermos" "thermo-nuclear-review" "thermo-nuclear-code-quality-review" }}
+[".claude/skills/{{ . }}/SKILL.md"]
+    type = "file"
+    url = "{{ $base }}/thermos/skills/{{ . }}/SKILL.md"
+    refreshPeriod = "{{ $refresh }}"
+{{- if ne . "thermos" }}
+    # The thermo subagents load these rubrics through the Skill tool, which refuses skills marked disable-model-invocation.
+    filter.command = "sed"
+    filter.args = ["/^disable-model-invocation:/d"]
+{{- end }}
+{{ end }}
+{{- range list "thermo-nuclear-review-subagent" "thermo-nuclear-code-quality-review-subagent" }}
+[".claude/agents/{{ . }}.md"]
+    type = "file"
+    url = "{{ $base }}/thermos/agents/{{ . }}.md"
+    refreshPeriod = "{{ $refresh }}"
+{{ end }}
