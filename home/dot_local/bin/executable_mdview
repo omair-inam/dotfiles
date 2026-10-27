@@ -1,0 +1,67 @@
+#!/usr/bin/env -S uv run --script
+# /// script
+# requires-python = ">=3.14"
+# ///
+"""View a markdown file in glow's pager, wrapped at the terminal's full width.
+
+glow 3.0 keeps the source file's hard line breaks, so a file wrapped at 100 columns
+renders with ragged lines. This joins each paragraph and list item into one line first.
+
+Usage: mdview FILE [extra glow flags]
+"""
+
+import os
+import re
+import subprocess
+import sys
+import time
+
+BLOCK_START = re.compile(r"\s*([-*+]|\d+\.)\s")
+FENCE = re.compile(r"\s*(```|~~~)")
+RULE = re.compile(r"\s*([-=*_])(\s*\1)*\s*$")
+
+
+def unwrap(text: str) -> str:
+    out: list[str] = []
+    fence = False
+    joinable = False
+    for line in text.splitlines():
+        if FENCE.match(line):
+            fence = not fence
+            out.append(line)
+            joinable = False
+        elif fence or not line.strip() or line.lstrip().startswith(("#", "|", ">")) or RULE.match(line):
+            out.append(line)
+            joinable = False
+        elif joinable and not BLOCK_START.match(line):
+            out[-1] = f"{out[-1]} {line.lstrip()}"
+        else:
+            out.append(line)
+            joinable = True
+        joinable = joinable and not out[-1].endswith("  ")
+    return "\n".join(out) + "\n"
+
+
+def terminal_columns() -> int:
+    with open("/dev/tty") as tty:
+        size = os.get_terminal_size(tty.fileno())
+        # A fresh Rex pane starts at 80x24 and is resized a moment later;
+        # wait once for that. A real 80x24 terminal pays a 0.5s delay.
+        if (size.columns, size.lines) == (80, 24):
+            time.sleep(0.5)
+            size = os.get_terminal_size(tty.fileno())
+    return size.columns
+
+
+def main() -> None:
+    if len(sys.argv) < 2:
+        sys.exit(__doc__.strip().splitlines()[-1])
+    path, *glow_args = sys.argv[1:]
+    with open(path) as f:
+        text = unwrap(f.read())
+    width = str(terminal_columns())
+    sys.exit(subprocess.run(["glow", "-p", "-w", width, *glow_args, "-"], input=text, text=True).returncode)
+
+
+if __name__ == "__main__":
+    main()
