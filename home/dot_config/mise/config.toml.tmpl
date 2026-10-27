@@ -20,6 +20,12 @@ node = "lts"
 # Python runtime
 python = "3.13"
 
+# Rust toolchain (the cargo backend builds with it)
+rust = "stable"
+
+# Rex session save and restore (rev pinned in .chezmoidata/rexurrect.toml)
+"cargo:https://github.com/cemcatik/rexurrect" = "rev:{{ .rexurrect.rev }}"
+
 {{- if .work_device }}
 # Work tools
 "npm:@arizeai/phoenix-cli" = "latest"

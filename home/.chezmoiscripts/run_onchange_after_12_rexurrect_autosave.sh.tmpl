@@ -1,0 +1,15 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+# Add Homebrew to PATH for the current session (required on Apple Silicon)
+if [[ -f /opt/homebrew/bin/brew ]]; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# The agent pins the binary's path, so reinstall it after each upgrade.
+# rexurrect rev: {{ .rexurrect.rev }}
+# Unset REX_SERVER so the agent always saves the Rex app's server, not the block apply ran in.
+env -u REX_SERVER "$(mise which rexurrect)" autosave install
+{{ end }}

@@ -27,6 +27,7 @@
 * `home/.chezmoidata/packages.toml` — Homebrew formulae, casks, taps, Mac App Store apps
   - Consumed by `run_onchange_before_10_install-packages.sh.tmpl`
   - Split into `common`, `work`, `personal`; merged based on device flags
+* `home/.chezmoidata/rexurrect.toml` — the rexurrect commit that mise builds, the zsh recorder external fetches, and `init.lua` points at
 
 ### Script Execution Order
 Scripts in `home/.chezmoiscripts/` run in alphabetical order within each phase:
@@ -42,6 +43,7 @@ Current scripts:
 * `run_onchange_before_10_install-packages` — Homebrew taps + `brew bundle --no-upgrade` (common + device-specific). Skips upgrading outdated packages; upgrade with `brew upgrade`
 * `run_onchange_before_14_*`, `15_*`, `16_*` — cached jwt, op, gh completions
 * `run_onchange_after_11_install_tools` — `mise install` for everything in `dot_config/mise/config.toml.tmpl`. An `after` script, because a `before` script runs before chezmoi writes `~/.config/mise/config.toml` and installs nothing on a fresh machine
+* `run_onchange_after_12_rexurrect_autosave` — `rexurrect autosave install` (launchd agent that saves Rex sessions every 15 minutes); re-runs when the rexurrect rev changes
 * `run_onchange_after_14_install_chrome_for_testing` — Chrome for Testing via `mise exec node -- pnpm` (needs node from 11)
 
 `sudo` never appears in a script. Anything that needs it is a manual step in `README.md`.
