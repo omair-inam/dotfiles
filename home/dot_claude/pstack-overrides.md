@@ -2,7 +2,7 @@
 
 Rules that adjust pstack skills without editing the plugin. User instructions outrank skill text, so where these conflict with a skill, these win. Sections are keyed by the skill they adjust. Keep each entry to the rule and the command. Plugin files are never edited and upstream PRs are not an option; a lesson that cannot be written as a rule here does not get applied.
 
-## GitHub status reads (babysit, opening-a-pr, shipping)
+## GitHub status reads (babysit, opening-a-pr, shipping, fix-ci)
 
 The `gh` token from the 1Password plugin is a fine-grained personal access token. GitHub does not grant the Checks permission to that token type at all, whatever the REST docs say (github.com/orgs/community/discussions/129512). Only a GitHub App or a classic PAT can read check runs.
 
