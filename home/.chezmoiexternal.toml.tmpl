@@ -24,3 +24,6 @@
     url = "{{ $base }}/thermos/agents/{{ . }}.md"
     refreshPeriod = "{{ $refresh }}"
 {{ end }}
+[".oh-my-zsh/custom/plugins/rexurrect/rexurrect.plugin.zsh"]
+    type = "file"
+    url = "https://raw.githubusercontent.com/cemcatik/rexurrect/{{ .rexurrect.rev }}/rexurrect.plugin.zsh"

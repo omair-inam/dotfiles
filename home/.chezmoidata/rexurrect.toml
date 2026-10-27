@@ -1,0 +1,4 @@
+# rexurrect has no releases, so it is pinned to a commit. Bumping rev rebuilds the binary,
+# fetches the matching zsh recorder, and reinstalls the autosave agent.
+[rexurrect]
+rev = "5f82470803fb33e3ab3dc8ba7f005780672751d3"

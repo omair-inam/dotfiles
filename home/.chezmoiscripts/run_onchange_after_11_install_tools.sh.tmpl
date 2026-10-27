@@ -9,10 +9,13 @@ if [[ -f /opt/homebrew/bin/brew ]]; then
 fi
 
 # mise config hash (triggers run_onchange when tools change):
-# {{ include "dot_config/mise/config.toml.tmpl" | sha256sum }}
+# {{ includeTemplate "dot_config/mise/config.toml.tmpl" . | sha256sum }}
 
 # Bootstrap node (required by npm backend before mise install)
 mise install node
+
+# Bootstrap rust (required by cargo backend before mise install)
+mise install rust
 
 # Install all tools declared in ~/.config/mise/config.toml
 mise install

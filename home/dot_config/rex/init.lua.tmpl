@@ -1,0 +1,4 @@
+{{- $bin := printf "%s/.local/share/mise/installs/cargo-https-github-com-cemcatik-rexurrect/rev-%s/bin/rexurrect" .chezmoi.homeDir .rexurrect.rev -}}
+-- Restore saved Rex sessions when the server starts. Generated from `rexurrect auto-restore --print-hook`;
+-- the path is where mise installs the pinned rev, because the server runs this with a bare PATH.
+do local r = rex.exec({ [[{{ $bin }}]], "auto-restore" }, { env = { REXURRECT_STATE_DIR = [[{{ .chezmoi.homeDir }}/.local/state/rexurrect]] } }) if r then io.stderr:write(r.stderr) end end
