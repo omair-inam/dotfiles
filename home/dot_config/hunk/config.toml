@@ -1,0 +1,4 @@
+# chezmoi diff pipes into `hunk patch -`, which hunk treats as pager mode and
+# hides the menu bar. The [patch] section applies only to `hunk patch`.
+[patch]
+menu_bar = true
