@@ -43,7 +43,27 @@
     "mattpocock-skills:grill-with-docs": "off"
   },
   "hooks": {
+    "PreCompact": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.claude/hooks/pause-safely-on-compact.sh\"",
+            "timeout": 600
+          }
+        ]
+      }
+    ],
     "SessionStart": [
+      {
+        "matcher": "compact",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$HOME/.claude/hooks/pause-safely-on-compact.sh\""
+          }
+        ]
+      },
       {
         "matcher": "startup|resume",
         "hooks": [
