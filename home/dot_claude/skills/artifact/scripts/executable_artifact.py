@@ -2,7 +2,7 @@
 # /// script
 # requires-python = ">=3.14"
 # ///
-"""Publish, read, list, and move claude.ai artifacts as any of Omair's Claude accounts, by alias.
+"""Publish, read, list, and move claude.ai artifacts as any of the user's Claude accounts, by alias.
 
 Every artifact call runs in a headless `claude -p` launched by `cswap run <slot>`, so the
 account named by the alias owns what it publishes, whichever account runs this script.
@@ -607,7 +607,7 @@ def cmd_setup(args, state: State) -> dict:
         ]
         raise Failure(
             "needs_input",
-            "Ask Omair, for every account, for a short lowercase alias or to exclude it, and which alias is the "
+            "Ask the user, for every account, for a short lowercase alias or to exclude it, and which alias is the "
             "default. Then run `setup --alias <name>=<number> ... --default <name>`.",
             {"accounts": accounts},
         )
@@ -823,9 +823,9 @@ def cmd_move(args, state: State) -> dict:
             f"The copy is private: open {url}, use Share, and choose the organization. The source still exists. "
             + (
                 "It belongs to the account this session runs on, so this session's own delete tool can remove it "
-                "once Omair confirms."
+                "once the user confirms."
                 if in_session_account
-                else f"Omair must delete it on claude.ai while signed in as {got.account.label}."
+                else f"The user must delete it on claude.ai while signed in as {got.account.label}."
             )
         ),
     }
