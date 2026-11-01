@@ -1,6 +1,7 @@
 ---
 name: artifact
-description: Publish, read, list, or move claude.ai artifacts as any of the user's Claude accounts, chosen by alias (for example work or personal). Use when the user says "publish to the team", "share this with the team", "publish as <alias>", or names an account for an artifact; when they paste a claude.ai artifact link this session cannot open; when they ask to move an artifact from one account to another ("move <link> from work to personal"); or when they type /artifact. Default route for any artifact meant for teammates.
+description: Publish, read, list, or move claude.ai artifacts between different Claude accounts.
+disable-model-invocation: true
 ---
 
 # Artifact
