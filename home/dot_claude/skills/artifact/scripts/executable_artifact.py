@@ -289,7 +289,7 @@ def auth_status(slot: int) -> dict:
         )
 
 
-def relogin_steps(slot: int, who: str, email: str, org_name: str) -> str:
+def relogin_steps(slot: int, account: Account) -> str:
     active = cswap_listing().get("activeAccountNumber")
     back = (
         f"`cswap switch {active}`"
@@ -297,8 +297,8 @@ def relogin_steps(slot: int, who: str, email: str, org_name: str) -> str:
         else "a switch back to your usual default account"
     )
     return (
-        f"Log {who} back in. Run `cswap run {slot}`, type /login and sign in as {email} "
-        f"(organization {org_name}), then exit. Then run `cswap switch {slot}` followed by {back}. "
+        f"Log {account.alias} back in. Run `cswap run {slot}`, type /login and sign in as {account.email} "
+        f"(organization {account.org_name}), then exit. Then run `cswap switch {slot}` followed by {back}. "
         "The switch is what copies the new login into cswap's stored copy; without it the next "
         "`cswap run` reseeds the profile from the old, dead login."
     )
@@ -326,7 +326,7 @@ def session(account: Account) -> tuple[int, str | None]:
     if not status.get("loggedIn"):
         raise Failure(
             "logged_out",
-            relogin_steps(slot, account.alias, account.email, account.org_name),
+            relogin_steps(slot, account),
         )
     if (status.get("email"), status.get("orgId")) != (account.email, account.org_id):
         raise Failure(
@@ -377,7 +377,7 @@ def run_as(account: Account, prompt: str, cwd: Path) -> list[Call]:
         if LOGIN_RE.search(detail):
             raise Failure(
                 "logged_out",
-                relogin_steps(slot, account.alias, account.email, account.org_name),
+                relogin_steps(slot, account),
             )
         raise Failure(
             "tool_failed", f"Headless claude as {account.alias} failed: {detail}"
@@ -729,11 +729,7 @@ def cmd_read(args, state: State) -> dict:
     else:
         source = str(Path(args.target).expanduser().resolve())
         records = state.artifacts.get(source, {})
-        preferred = (
-            state.account(args.from_).org_id
-            if args.from_
-            else state.account(None).org_id
-        )
+        preferred = state.account(args.from_).org_id
         org = (
             preferred
             if preferred in records
