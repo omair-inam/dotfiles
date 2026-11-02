@@ -13,7 +13,7 @@
 * `home/` — chezmoi source dir; maps to `~/`
 * `home/.chezmoidata/` — TOML data files auto-loaded into template context
 * `home/.chezmoiscripts/` — scripts run by `chezmoi apply`
-* `home/.chezmoiexternal.toml.tmpl` — Claude skills and agents downloaded from `cursor/plugins`, refreshed weekly
+* `home/.chezmoiexternal.toml.tmpl` — Claude skills and agents downloaded from `cursor/plugins` and Google's skill repos, refreshed weekly. Dropping an entry leaves its folder on disk, so also list the path in `home/.chezmoiremove`
 * `home/dot_*` → `~/.*`, `private_dot_*` → `~/.*` (mode 0600)
 * `.tmpl` suffix — Go template files rendered by chezmoi
 * `home/dot_claude/` — Claude Code global config (commands, agents, CLAUDE.md.tmpl)
