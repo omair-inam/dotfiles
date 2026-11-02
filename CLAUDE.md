@@ -45,6 +45,7 @@ Current scripts:
 * `run_onchange_after_11_install_tools` — `mise install` for everything in `dot_config/mise/config.toml.tmpl`. An `after` script, because a `before` script runs before chezmoi writes `~/.config/mise/config.toml` and installs nothing on a fresh machine
 * `run_onchange_after_12_rexurrect_autosave` — `rexurrect autosave install` (launchd agent that saves Rex sessions every 15 minutes); re-runs when the rexurrect rev changes
 * `run_onchange_after_14_install_chrome_for_testing` — Chrome for Testing via `mise exec node -- pnpm` (needs node from 11)
+* `run_onchange_after_30_load_skills_refresh_agent` — loads a launchd agent that runs `chezmoi apply` on `~/.claude/skills` and `~/.claude/agents` daily at 9:00, so externals refresh once their `refreshPeriod` lapses without a manual apply. Logs go to `~/Library/Logs/chezmoi-refresh-skills.log`
 
 `sudo` never appears in a script. Anything that needs it is a manual step in `README.md`.
 
