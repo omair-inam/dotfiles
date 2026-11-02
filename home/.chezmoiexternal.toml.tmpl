@@ -1,4 +1,4 @@
-{{- /* Single-file skills and agents from cursor/plugins, refreshed weekly. */ -}}
+{{- /* Dropping an entry leaves its folder on disk, so also list the path in .chezmoiremove. */ -}}
 {{- $base := "https://raw.githubusercontent.com/cursor/plugins/main" -}}
 {{- $refresh := "168h" -}}
 {{- range list "deslop" "fix-ci" "fix-merge-conflicts" "get-pr-comments" "make-pr-easy-to-review" "what-did-i-get-done" }}
@@ -27,3 +27,38 @@
 [".oh-my-zsh/custom/plugins/rexurrect/rexurrect.plugin.zsh"]
     type = "file"
     url = "https://raw.githubusercontent.com/cemcatik/rexurrect/{{ .rexurrect.rev }}/rexurrect.plugin.zsh"
+
+{{- /* include matches paths inside the archive, before stripComponents. */}}
+{{ range list "google-cloud-waf-reliability" "google-cloud-waf-performance-optimization" "google-cloud-waf-operational-excellence" "google-cloud-waf-security" "google-cloud-waf-cost-optimization" "cloud-run-alert-configuration" "google-cloud-slo-alert-configuration" "cloud-monitoring-notification-channels-configuration" "cloud-run-basics" "cloud-sql-basics" "google-cloud-global-frontend-configuration" "cloud-logging-query-generation" "cloud-monitoring-metric-selection" "cloud-monitoring-promql-query" "iam-helper-for-troubleshooting" "cloud-logging-finops" "gemini-api" }}
+[".claude/skills/{{ . }}"]
+    type = "archive"
+    url = "https://github.com/google/skills/archive/main.tar.gz"
+    exact = true
+    stripComponents = 4
+    include = ["*/skills/cloud/{{ . }}/**"]
+    refreshPeriod = "{{ $refresh }}"
+{{ end }}
+{{- range list "google-agents-cli-workflow" "google-agents-cli-adk-code" "google-agents-cli-deploy" "google-agents-cli-eval" "google-agents-cli-observability" }}
+[".claude/skills/{{ . }}"]
+    type = "archive"
+    url = "https://github.com/google/agents-cli/archive/main.tar.gz"
+    exact = true
+    stripComponents = 3
+    include = ["*/skills/{{ . }}/**"]
+    refreshPeriod = "{{ $refresh }}"
+{{ end }}
+[".claude/skills/gcs-security-assessment"]
+    type = "archive"
+    url = "https://github.com/GoogleCloudPlatform/google-cloud-storage-plugin/archive/main.tar.gz"
+    exact = true
+    stripComponents = 3
+    include = ["*/skills/gcs-security-assessment/**"]
+    refreshPeriod = "{{ $refresh }}"
+
+[".claude/skills/firebase-firestore"]
+    type = "archive"
+    url = "https://github.com/firebase/agent-skills/archive/main.tar.gz"
+    exact = true
+    stripComponents = 3
+    include = ["*/skills/firebase-firestore/**"]
+    refreshPeriod = "{{ $refresh }}"
