@@ -1,0 +1,11 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+set -euo pipefail
+
+# plist hash: {{ include "private_Library/private_LaunchAgents/io.github.omair-inam.chezmoi-refresh-skills.plist.tmpl" | sha256sum }}
+label=io.github.omair-inam.chezmoi-refresh-skills
+plist="$HOME/Library/LaunchAgents/$label.plist"
+launchctl bootout "gui/$(id -u)/$label" 2>/dev/null || true
+launchctl bootstrap "gui/$(id -u)" "$plist"
+{{ end }}

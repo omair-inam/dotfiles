@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- A file edited in place makes chezmoi prompt. With no stdin the prompt fails with EOF,
+     and keep-going logs that error, leaves the file as is, and applies the rest. -->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>io.github.omair-inam.chezmoi-refresh-skills</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/bin/sh</string>
+		<string>-c</string>
+		<string>date; exec "$0" apply --no-tty --keep-going "$HOME/.claude/skills" "$HOME/.claude/agents" &lt;/dev/null</string>
+		<string>{{ .chezmoi.executable }}</string>
+	</array>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+	<key>StartCalendarInterval</key>
+	<dict>
+		<key>Hour</key>
+		<integer>9</integer>
+		<key>Minute</key>
+		<integer>0</integer>
+	</dict>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>StandardOutPath</key>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/chezmoi-refresh-skills.log</string>
+	<key>StandardErrorPath</key>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/chezmoi-refresh-skills.log</string>
+</dict>
+</plist>
