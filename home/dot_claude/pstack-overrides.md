@@ -32,7 +32,7 @@ The `gh` token from the 1Password plugin is a fine-grained personal access token
 
 ## how
 
-- Before spawning explorers, read the repo's CLAUDE.md skill table and load any repo skill it maps to the paths the change will touch (for iv-living-archive: `iai:agents`, `iai:feature-flags`, `iai:memory-subsystem`, and the rest). The skill carries constraints greps do not surface and costs less than one explorer.
+- Before spawning explorers, read the repo's CLAUDE.md skill table and load any repo skill it maps to the paths the change will touch. The skill carries constraints greps do not surface and costs less than one explorer.
 
 ## trunk claims (every skill)
 
