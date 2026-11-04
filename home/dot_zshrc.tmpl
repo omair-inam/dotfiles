@@ -181,6 +181,9 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
+# rex-restore-sessions resumes Claude by conversation ID, so rexurrect should not type `claude` back.
+REXURRECT_IGNORE+=(claude)
+
 # The OMZ git plugin aliases gprav, which hides the gprav() function in ~/.zsh_aliases.
 unalias gprav 2>/dev/null
 
