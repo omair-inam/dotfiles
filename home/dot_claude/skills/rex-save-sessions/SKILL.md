@@ -7,6 +7,10 @@ description: Snapshot every running Rex session, window, split layout, and the C
 
 For Rex CLI usage, read `~/.claude/skills/rex/SKILL.md`.
 
+A launchd agent, `io.github.omair-inam.rexsnap-autosave`, already runs `rexsnap.py save --auto` every 15 minutes and logs to `~/Library/Logs/rexsnap-autosave.log`. A manual save is still worth running right before a planned restart, so the snapshot is current to the minute.
+
+The scheduled save deletes snapshots older than 7 days. After a Rex server restart, it keeps writing timestamped snapshots but leaves `latest.json` alone while a conversation in it is not running, so the reopened, Claude-less blocks never overwrite what restore needs. It resumes replacing `latest.json` once restore succeeds, a manual save runs, or every saved conversation is running again.
+
 1. Run:
 
    ```bash

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!-- Saves Rex sessions and their Claude conversation IDs every 15 minutes for rex-restore-sessions. -->
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>io.github.omair-inam.rexsnap-autosave</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/opt/homebrew/bin/uv</string>
+		<string>run</string>
+		<string>--quiet</string>
+		<string>--script</string>
+		<string>{{ .chezmoi.homeDir }}/.claude/skills/rex-save-sessions/scripts/rexsnap.py</string>
+		<string>save</string>
+		<string>--auto</string>
+	</array>
+	<key>EnvironmentVariables</key>
+	<dict>
+		<key>PATH</key>
+		<string>/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+	</dict>
+	<key>StartInterval</key>
+	<integer>900</integer>
+	<key>ProcessType</key>
+	<string>Background</string>
+	<key>StandardOutPath</key>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/rexsnap-autosave.log</string>
+	<key>StandardErrorPath</key>
+	<string>{{ .chezmoi.homeDir }}/Library/Logs/rexsnap-autosave.log</string>
+</dict>
+</plist>

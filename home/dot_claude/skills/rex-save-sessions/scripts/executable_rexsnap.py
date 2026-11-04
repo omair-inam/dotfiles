@@ -5,6 +5,8 @@
 """Save every Rex session to a JSON snapshot, and restore it with each Claude Code conversation resumed.
 
   rexsnap.py save                      write a snapshot, print its path
+  rexsnap.py save --auto               the scheduled save: quiet, prunes old snapshots, and
+                                       never replaces latest.json with a not-yet-restored state
   rexsnap.py restore [SNAPSHOT]        print the restore plan (dry run)
   rexsnap.py restore [SNAPSHOT] --apply [--only LABEL ...]
 
@@ -30,6 +32,9 @@ from pathlib import Path
 
 SNAPSHOT_DIR = Path.home() / ".local/state/rex-snapshots"
 LATEST = SNAPSHOT_DIR / "latest.json"
+# The Rex server instance that latest.json may be replaced from by an automatic save.
+RESTORED_INSTANCE = SNAPSHOT_DIR / "restored-instance"
+AUTO_KEEP_DAYS = 7
 DEFAULT_CLAUDE_DIR = Path.home() / ".claude"
 REX_FALLBACKS = [
     "~/Library/Application Support/com.superlogical.rex/RexServer/Versions/*/Rex Server.app/Contents/MacOS/rex",
@@ -108,8 +113,11 @@ def rex_bin() -> str:
     sys.exit("rex binary not found on PATH or in the Rex app bundles")
 
 
+AUTOSTART = ["--autostart=true"]
+
+
 def rex(*args: str) -> dict:
-    out = subprocess.run([rex_bin(), *args], check=True, capture_output=True, text=True).stdout
+    out = subprocess.run([rex_bin(), *AUTOSTART, *args], check=True, capture_output=True, text=True).stdout
     return json.loads(out) if out.strip() else {}
 
 
@@ -138,7 +146,9 @@ def read_layout(sid: str, node: dict, labels: dict[str, str]) -> Node:
     return Split(s["direction"], s["ratio"], read_layout(sid, s["before"], labels), read_layout(sid, s["after"], labels))
 
 
-def save() -> Path:
+def save(auto: bool = False) -> Path | None:
+    whoami = rex("whoami", "--json")
+    instance = whoami.get("instance_id")
     sessions = []
     for ref in rex("ls", "--json")["sessions"]:
         listing = rex("window", "ls", "-s", ref["session_id"], "--json")
@@ -146,22 +156,37 @@ def save() -> Path:
         for w in listing["windows"]:
             tiled = [layer for layer in w["layers"] if layer["kind"] == "tiled"]
             for layer in w["layers"]:
-                if layer["kind"] != "tiled":
+                if layer["kind"] != "tiled" and not auto:
                     print(f"warning: {ref['label']}/{w['label']}: skipping {layer['kind']} layer", file=sys.stderr)
             labels = {b["block_id"]: b["label"] for layer in tiled for b in layer["blocks"]}
             windows.append(Window(w["label"], read_layout(ref["session_id"], tiled[0]["layout"], labels)))
         active = next(i for i, w in enumerate(listing["windows"]) if w["window_id"] == listing["active_window_id"])
         sessions.append(Session(ref["label"], active, windows))
+    if auto and not sessions:
+        print("no sessions; nothing saved")
+        return None
     snapshot = {
         "version": 1,
         "captured_at": datetime.now().astimezone().isoformat(timespec="seconds"),
-        "rex": {"path": rex_bin(), "version": rex("whoami", "--json").get("rex_version")},
+        "rex": {"path": rex_bin(), "version": whoami.get("rex_version"), "instance_id": instance},
         "sessions": [asdict(s) for s in sessions],
     }
     SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
     path = SNAPSHOT_DIR / f"{datetime.now():%Y%m%d-%H%M%S}.json"
     path.write_text(json.dumps(snapshot, indent=2))
+    claudes = sum(1 for s in sessions for w in s.windows for b in blocks(w.layout) if b.claude)
+    if auto:
+        prune()
+        # After a server restart, the reopened blocks hold shells until restore runs.
+        # Replacing latest.json then would lose the Claude conversations it still has to resume.
+        if instance and instance not in (latest_instance(), read_restored_instance()) and unresumed():
+            print(f"{path.name}: {len(sessions)} sessions, {claudes} claude; latest.json kept (awaiting restore)")
+            return path
+        shutil.copyfile(path, LATEST)
+        print(f"{path.name}: {len(sessions)} sessions, {claudes} claude")
+        return path
     shutil.copyfile(path, LATEST)
+    mark_restored(instance)
     for s in sessions:
         print(f"{s.label}: {len(s.windows)} window(s)")
         for w in s.windows:
@@ -169,6 +194,38 @@ def save() -> Path:
                 who = f"claude {b.claude.session_id}" if b.claude else (b.foreground or "shell")
                 print(f"  {b.cwd}  {who}")
     return path
+
+
+def latest_instance() -> str | None:
+    if not LATEST.exists():
+        return None
+    return json.loads(LATEST.read_text()).get("rex", {}).get("instance_id")
+
+
+def unresumed() -> bool:
+    """Whether latest.json holds a Claude conversation that is not running now."""
+    if not LATEST.exists():
+        return False
+    running = live_claude_ids()
+    return any(b.claude and b.claude.session_id not in running
+               for s in load(LATEST) for w in s.windows for b in blocks(w.layout))
+
+
+def read_restored_instance() -> str | None:
+    return RESTORED_INSTANCE.read_text().strip() if RESTORED_INSTANCE.exists() else None
+
+
+def mark_restored(instance: str | None) -> None:
+    if instance:
+        SNAPSHOT_DIR.mkdir(parents=True, exist_ok=True)
+        RESTORED_INSTANCE.write_text(instance + "\n")
+
+
+def prune() -> None:
+    cutoff = time.time() - AUTO_KEEP_DAYS * 86400
+    for f in SNAPSHOT_DIR.glob("[0-9]*-[0-9]*.json"):
+        if f.stat().st_mtime < cutoff:
+            f.unlink()
 
 
 def parse_node(d: dict) -> Node:
@@ -321,7 +378,10 @@ def restore(path: Path, apply: bool, only: list[str]) -> None:
     if apply:
         time.sleep(8)
         retry_unstarted(run, sent)
-        sys.exit(verify(path, only))
+        code = verify(path, only)
+        if code == 0 and not only:
+            mark_restored(rex("whoami", "--json").get("instance_id"))
+        sys.exit(code)
     print("\ndry run only; rerun with --apply")
 
 
@@ -363,7 +423,7 @@ def verify(path: Path, only: list[str]) -> int:
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = p.add_subparsers(dest="cmd", required=True)
-    sub.add_parser("save")
+    sub.add_parser("save").add_argument("--auto", action="store_true")
     for name in ("restore", "verify"):
         sp = sub.add_parser(name)
         sp.add_argument("snapshot", nargs="?", type=Path, default=LATEST)
@@ -372,6 +432,13 @@ def main() -> None:
             sp.add_argument("--apply", action="store_true")
     a = p.parse_args()
     if a.cmd == "save":
+        if a.auto:
+            AUTOSTART[0] = "--autostart=false"
+            try:
+                save(auto=True)
+            except subprocess.CalledProcessError as e:
+                print(f"rex unavailable, nothing saved: {(e.stderr or '').strip()}")
+            return
         print(save())
     elif a.cmd == "restore":
         restore(a.snapshot, a.apply, a.only)

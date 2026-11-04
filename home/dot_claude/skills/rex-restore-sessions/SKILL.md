@@ -15,7 +15,7 @@ The script is shared with `rex-save-sessions`. It lives at `~/.claude/skills/rex
    ~/.claude/skills/rex-save-sessions/scripts/rexsnap.py restore
    ```
 
-   This reads `~/.local/state/rex-snapshots/latest.json`. To use an older snapshot, pass its path. The output prints every `rex` command it would run.
+   This reads `~/.local/state/rex-snapshots/latest.json`. To use an older snapshot, pass its path. The scheduled save (see `rex-save-sessions`) keeps `latest.json` frozen after a restart until restore succeeds, so it is the pre-restart state. The output prints every `rex` command it would run.
 
    A session whose label is already live is adopted, not recreated. Rex (through rexurrect) usually reopens the sessions and windows after a restart but leaves each block at a shell prompt, often with the last command, such as `claude`, typed but not run. For each saved Claude conversation not already running, the script matches the live window by position and the block by layout order. If that block's foreground is a shell, it sends Ctrl-C to discard the typed text, then types `claude --resume <id>` and Enter. A block running anything else is skipped and reported. Saved windows missing from a live session are created. Conversations already running are skipped, so reruns never duplicate.
 
