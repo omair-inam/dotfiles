@@ -7,6 +7,9 @@
   rexsnap.py save                      write a snapshot, print its path
   rexsnap.py restore [SNAPSHOT]        print the restore plan (dry run)
   rexsnap.py restore [SNAPSHOT] --apply [--only LABEL ...]
+
+A session whose label is already live (reopened by Rex or rexurrect) is adopted:
+each saved Claude conversation is resumed in the matching block's idle shell.
   rexsnap.py verify [SNAPSHOT]         check live state against a snapshot
 """
 
@@ -33,6 +36,9 @@ REX_FALLBACKS = [
     "/Applications/Rex*.app/Contents/Helpers/Rex Server.rex/Contents/MacOS/rex",
 ]
 DEFAULT_WINDOW_LABEL = re.compile(r"^Window [0-9a-f]{8}$")
+SHELLS = {"zsh", "bash", "sh", "fish", "login"}
+# Ctrl-C discards whatever is already typed at the prompt (rexurrect types the last command back).
+CLEAR_LINE = "\x03"
 DEFAULT_BLOCK_LABEL = "shell"
 
 
@@ -216,40 +222,105 @@ def build(run: Runner, sid: str, wid: str, node: Node, anchor: str) -> None:
     build(run, sid, wid, node.after, created["block_ids"][0])
 
 
+def add_window(run: Runner, sid: str, w: Window) -> str:
+    head = first_block(w.layout)
+    created = run("run", "-s", sid, "--focus=false", *block_flags(head), "--", *head.command())
+    wid, bid = created["window_id"], created["block_ids"][0]
+    if not DEFAULT_WINDOW_LABEL.match(w.label):
+        run("window", "rename", "-s", sid, wid, w.label)
+    build(run, sid, wid, w.layout, bid)
+    return wid
+
+
 def restore_session(run: Runner, s: Session) -> None:
-    window_ids = []
-    for i, w in enumerate(s.windows):
-        head = first_block(w.layout)
-        if i == 0:
-            created = run("new", s.label, "-c", head.cwd, "--keep-open", "--json", "--", *head.command())
-            sid = created["session_id"]
-            first = created["initial_windows"][0]
-            wid, bid = first["window_id"], first["block_ids"][0]
-            if head.label != DEFAULT_BLOCK_LABEL:
-                run("block", "rename", "-s", sid, bid, head.label)
-        else:
-            created = run("run", "-s", sid, "--focus=false", *block_flags(head), "--", *head.command())
-            wid, bid = created["window_id"], created["block_ids"][0]
-        if not DEFAULT_WINDOW_LABEL.match(w.label):
-            run("window", "rename", "-s", sid, wid, w.label)
-        build(run, sid, wid, w.layout, bid)
-        window_ids.append(wid)
+    head = first_block(s.windows[0].layout)
+    created = run("new", s.label, "-c", head.cwd, "--keep-open", "--json", "--", *head.command())
+    sid = created["session_id"]
+    first = created["initial_windows"][0]
+    wid, bid = first["window_id"], first["block_ids"][0]
+    if head.label != DEFAULT_BLOCK_LABEL:
+        run("block", "rename", "-s", sid, bid, head.label)
+    if not DEFAULT_WINDOW_LABEL.match(s.windows[0].label):
+        run("window", "rename", "-s", sid, wid, s.windows[0].label)
+    build(run, sid, wid, s.windows[0].layout, bid)
+    window_ids = [wid] + [add_window(run, sid, w) for w in s.windows[1:]]
     run("window", "focus", "-s", sid, window_ids[s.active_window])
 
 
+def layout_block_ids(node: dict) -> list[str]:
+    if "block_id" in node:
+        return [node["block_id"]]
+    s = node["split"]
+    return layout_block_ids(s["before"]) + layout_block_ids(s["after"])
+
+
+def resume_in_block(run: Runner, sid: str, bid: str, b: Block, tag: str) -> bool:
+    """Type the resume command into an idle shell, clearing anything already typed. False if the block is busy."""
+    fg = rex("block", "call", "-s", sid, "-b", bid, "process").get("foreground") or {}
+    if fg.get("name") not in SHELLS:
+        print(f"  skip {tag}: block is running {fg.get('name')}, not a shell")
+        return False
+    cmd = " ".join(_quote(a) for a in b.command())
+    if os.path.realpath(fg.get("cwd") or "") != os.path.realpath(b.cwd):
+        cmd = f"cd {_quote(b.cwd)} && {cmd}"
+    run("send", "-s", sid, "-b", bid, CLEAR_LINE)
+    if run.apply:
+        time.sleep(0.3)
+    run("send", "-s", sid, "-b", bid, cmd + "\r")
+    return True
+
+
+def adopt_session(run: Runner, sid: str, s: Session, running: set[str]) -> list[tuple[str, str, Block, str]]:
+    """Resume saved conversations in the windows Rex already reopened; add any windows it did not."""
+    live_windows = rex("window", "ls", "-s", sid, "--json")["windows"]
+    sent = []
+    for i, w in enumerate(s.windows):
+        if i >= len(live_windows):
+            add_window(run, sid, w)
+            continue
+        tiled = [layer for layer in live_windows[i]["layers"] if layer["kind"] == "tiled"][0]
+        live_ids, saved = layout_block_ids(tiled["layout"]), blocks(w.layout)
+        if len(live_ids) != len(saved):
+            print(f"  warning: window {i} has {len(live_ids)} block(s), snapshot has {len(saved)}; matching in order")
+        for bid, b in zip(live_ids, saved, strict=False):
+            if not b.claude:
+                continue
+            tag = f"window {i} claude {b.claude.session_id}"
+            if b.claude.session_id in running:
+                print(f"  skip {tag}: already running")
+            elif resume_in_block(run, sid, bid, b, tag):
+                sent.append((sid, bid, b, tag))
+    return sent
+
+
+def retry_unstarted(run: Runner, sent: list[tuple[str, str, Block, str]]) -> None:
+    """Resend once to blocks whose shell is still idle, e.g. because text arrived at the prompt after the first send."""
+    running = live_claude_ids()
+    retry = [x for x in sent if x[2].claude.session_id not in running]
+    for sid, bid, b, tag in retry:
+        print(f"retrying {tag}")
+        resume_in_block(run, sid, bid, b, tag)
+    if retry:
+        time.sleep(8)
+
+
 def restore(path: Path, apply: bool, only: list[str]) -> None:
-    live = {s["label"] for s in rex("ls", "--json")["sessions"]}
+    live = {s["label"]: s["session_id"] for s in rex("ls", "--json")["sessions"]}
+    running = live_claude_ids()
     run = Runner(apply)
+    sent = []
     for s in load(path):
         if only and s.label not in only:
             continue
         if s.label in live:
-            print(f"skip {s.label}: a session with this label is already running")
+            print(f"{'adopting' if apply else 'would adopt'} live session {s.label}")
+            sent += adopt_session(run, live[s.label], s, running)
             continue
         print(f"{'restoring' if apply else 'would restore'} {s.label}")
         restore_session(run, s)
     if apply:
         time.sleep(8)
+        retry_unstarted(run, sent)
         sys.exit(verify(path, only))
     print("\ndry run only; rerun with --apply")
 
