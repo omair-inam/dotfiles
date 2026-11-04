@@ -10,7 +10,7 @@ The `gh` token from the 1Password plugin is a fine-grained personal access token
 - Red or green comes from `gh pr view <n> --json mergeStateStatus`. `UNSTABLE` or `BLOCKED` means something is red.
 - CI detail comes from the Actions API: `gh run list --branch <branch> --json databaseId,name,status,conclusion,headSha`, then `gh run view <id> --json jobs`, `gh run view <id> --log-failed`, and `gh run watch <id> --exit-status` to block until a run ends.
 - Never trust `repos/<o>/<r>/commits/<sha>/status`. It omits GitHub Actions and reports `success` on a commit whose workflow failed.
-- Scripts and the pstack watcher do not see the shell function. Check `GH_TOKEN` first: when it is already exported (`I-AI-Corp/iai-explorer`'s `.envrc`, checked out at `~/projects/iv-living-archive`, does this and the SessionStart hook loads it), run `gh` directly with no `op` call. Only when it is unset, run `export GH_TOKEN=$(op plugin run -- gh auth token)` once, never as a per-command prefix.
+- Scripts and the pstack watcher do not see the shell function. Check `GH_TOKEN` first: when it is already exported, run `gh` directly with no `op` call. Only when it is unset, run `export GH_TOKEN=$(op plugin run -- gh auth token)` once, never as a per-command prefix.
 
 ## babysit
 
