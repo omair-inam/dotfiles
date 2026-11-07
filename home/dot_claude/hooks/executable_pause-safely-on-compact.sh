@@ -2,9 +2,11 @@
 # PreCompact and SessionStart(compact) hook: run pstack's pause-safely playbook
 # before a compaction, then point the compacted session at the resume note.
 #
-# PreCompact hooks cannot add context for Claude, so the playbook runs in a
-# headless `claude -p` that reads the conversation from the transcript. The
-# SessionStart hook that fires after compaction hands Claude the note's path.
+# The playbook runs in a headless `claude -p` that reads the conversation from
+# the transcript. The compacted session hears about the note twice. PreCompact
+# stdout asks the summarizer to open the summary with a pointer, which is what
+# makes the session read the note. SessionStart stdout repeats the pointer
+# because it does not depend on the summarizer.
 #
 # Every failure exits 1: Claude Code shows stderr and compaction still runs.
 export PATH="/opt/homebrew/bin:/usr/local/bin:$HOME/.local/bin:$PATH"
@@ -23,12 +25,15 @@ note="$dir/$session_id.md"
 case "$(field hook_event_name)" in
 SessionStart)
   [ -s "$note" ] || exit 0
-  echo "Before this compaction, the pstack pause-safely playbook wrote a resume note for this session at $note. It records the intent, progress, verified state, next steps, key files, and gotchas from before the compaction."
+  echo "A resume note for this session was written just before this compaction, at $note. Read that file with the Read tool before doing anything else, including before replying. It records intent, progress, verified state, next steps, key files, and gotchas, in more detail than the summary. If it conflicts with the summary or a newer user message, those win."
   exit 0
   ;;
 PreCompact) ;;
 *) exit 0 ;;
 esac
+
+mkdir -p "$dir"
+rm -f "$note"
 
 playbook=$(ls -d "$HOME"/.claude/plugins/cache/cursor-plugins/pstack/*/skills/poteto-mode/playbooks/pause-safely.md 2>/dev/null | sort -V | tail -1)
 [ -n "$playbook" ] || { echo "pause-safely: pstack playbook not found" >&2; exit 1; }
@@ -36,8 +41,6 @@ transcript=$(field transcript_path)
 [ -r "$transcript" ] || { echo "pause-safely: cannot read transcript $transcript" >&2; exit 1; }
 cwd=$(field cwd)
 
-mkdir -p "$dir"
-rm -f "$note"
 excerpt="$dir/$session_id.transcript.md"
 # Since the last compaction (its summary included): user text, assistant text,
 # and one line per tool call. Tool results and thinking are dropped to fit.
@@ -82,3 +85,5 @@ PAUSE_SAFELY_HOOK=1 claude -p "$prompt" \
   >&2 || { echo "pause-safely: headless claude failed" >&2; exit 1; }
 
 [ -s "$note" ] || { echo "pause-safely: no resume note written to $note" >&2; exit 1; }
+
+echo "Begin the summary with this exact line: Resume note: $note holds this session's pre-compaction checkpoint. Read it before doing anything else."
