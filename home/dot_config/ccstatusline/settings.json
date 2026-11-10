@@ -32,11 +32,6 @@
     ],
     [
       {
-        "id": "1aa1d1d4-dcaa-489c-b6c9-4af584ae3df4",
-        "type": "session-usage",
-        "rawValue": false
-      },
-      {
         "id": "w8",
         "type": "weekly-usage",
         "rawValue": false
@@ -44,11 +39,6 @@
       {
         "id": "98eeb5b1-9d25-46fb-b1ba-f143ce3898eb",
         "type": "fable-weekly-usage",
-        "rawValue": false
-      },
-      {
-        "id": "w7",
-        "type": "reset-timer",
         "rawValue": false
       },
       {
