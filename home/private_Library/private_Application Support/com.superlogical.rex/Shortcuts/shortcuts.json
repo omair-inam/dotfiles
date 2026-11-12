@@ -1,0 +1,40 @@
+{
+  "layer" : {
+    "bindings" : [
+      {
+        "action" : "session.refresh",
+        "keys" : [
+          "alt+cmd+r"
+        ],
+        "source" : "settings"
+      },
+      {
+        "action" : "session.rename",
+        "keys" : [
+          "shift+cmd+r"
+        ],
+        "source" : "settings"
+      },
+      {
+        "action" : "client.tab.rename",
+        "keys" : [
+          "cmd+r"
+        ],
+        "source" : "settings"
+      }
+    ],
+    "name" : "settings",
+    "removals" : [
+      {
+        "action" : "session.refresh",
+        "keys" : [
+          "cmd+r"
+        ]
+      }
+    ]
+  },
+  "migrations" : [
+    "bracket-characters"
+  ],
+  "version" : 1
+}
