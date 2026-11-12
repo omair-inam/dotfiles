@@ -63,6 +63,7 @@ Current scripts:
 * `dot_zsh_aliases.tmpl` — Claude Code model aliases: `cch/ccs/cco` (model shortcuts), `yoloh/yolos/yoloo` (dangerous + model), `cca/ccah/ccas/ccao` (auto-mode + model)
 * `dot_gitconfig.tmpl` — git config with 1Password SSH signing, Beyond Compare merge tool
 * `dot_m2/settings.xml.tmpl` — Maven settings pinned to HTTPS Maven Central
+* `private_Library/private_Application Support/com.superlogical.rex/Shortcuts/shortcuts.json` — Rex keyboard shortcuts, written by the Rex app. After changing a shortcut in Rex Settings, run `chezmoi re-add` on `~/Library/Application Support/com.superlogical.rex/Shortcuts/shortcuts.json`, or `chezmoi apply` will revert it
 
 ### Editing Workflow
 * Edit files here (chezmoi source dir), NOT in `~/` directly
