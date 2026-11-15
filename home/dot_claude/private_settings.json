@@ -65,15 +65,6 @@
         ]
       },
       {
-        "matcher": "startup|resume",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "sh \"$HOME/.claude/hooks/load-direnv.sh\""
-          }
-        ]
-      },
-      {
         "hooks": [
           {
             "type": "command",
