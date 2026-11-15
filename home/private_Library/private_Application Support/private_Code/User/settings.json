@@ -1,4 +1,5 @@
 {
+    "terminal.integrated.enableImages": true,
     "terminal.integrated.fontFamily": "MesloLGS NF",
     "telemetry.telemetryLevel": "off",
     "java.autobuild.enabled": false,
